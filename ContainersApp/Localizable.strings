@@ -1,0 +1,28 @@
+
+"userDefaults.key" = "Urls";
+
+"Screens.Welcome.title" = "Welcome to Containers App";
+"Screens.Welcome.instructionsLabelText" = "Enter a URL endpoint where scans be sent";
+"Screens.Welcome.textFieldDefaultPlaceholder" = "VAV";
+"Screens.Welcome.textFieldAlertPlaceholder" = "This field must be filled with URL";
+"Screens.Welcome.buttonTitle" = "SCAN";
+
+"Screens.ContainerList.navigationTitle" = "Scanned Containers";
+"Screens.ContainerList.textFieldDefaultPlaceholder" = "VAV";
+"Screens.ContainerList.textFieldAlertPlaceholder" = "Please enter a valid URL in the text field.";
+"Screens.ContainerList.scanButtonTitle" = "START SCANNING";
+"Screens.ContainerList.allFilterButtonTitle" = "All";
+"Screens.ContainerList.notSendButtonTitle" = "Not Send";
+"Screens.ContainerList.notIdentifiedButtonTitle" = "Not Identified";
+"Screens.ContainerList.rightSwipeActionTitle" = "Send to server";
+
+"Screens.Scan.CameraPermissionDenied.allertTitle" = "Camera Permissions Denied";
+"Screens.Scan.CameraPermissionDenied.allertMessage" = "Camera permissions have been denied for this app. You can change this by going to Settings";
+"Screens.Scan.presentVideoError.allertTitle" = "Configuration Failed";
+"Screens.Scan.presentVideoError.allertMessage" = "Configuration of camera has failed";
+"Screens.Scan.LocationPermissionDenied.allertTitle" = "Location Permissions Denied";
+"Screens.Scan.LocationPermissionDenied.allertMessage" = "Location permissions have been denied for this app. You can change this by going to Settings";
+
+"AlertAction.settings" = "Settings";
+"AlertAction.ok" = "OK";
+"AlertAction.cancel" = "Cancel";

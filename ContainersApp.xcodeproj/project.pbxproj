@@ -9,21 +9,61 @@
 /* Begin PBXBuildFile section */
 		FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B029D48E7700A2359D /* AppDelegate.swift */; };
 		FC60D1B329D48E7700A2359D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B229D48E7700A2359D /* SceneDelegate.swift */; };
-		FC60D1B529D48E7700A2359D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B429D48E7700A2359D /* ViewController.swift */; };
-		FC60D1B829D48E7700A2359D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1B629D48E7700A2359D /* Main.storyboard */; };
 		FC60D1BA29D48E7800A2359D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1B929D48E7800A2359D /* Assets.xcassets */; };
 		FC60D1BD29D48E7800A2359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1BB29D48E7800A2359D /* LaunchScreen.storyboard */; };
+		FC60D1CC29D4930C00A2359D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1CB29D4930C00A2359D /* Localizable.strings */; };
+		FC60D1D029D4939400A2359D /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1CE29D4939400A2359D /* Strings+Generated.swift */; };
+		FC60D1D129D4939400A2359D /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1CF29D4939400A2359D /* XCAssets+Generated.swift */; };
+		FC60D1D429D4944A00A2359D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC60D1D329D4944A00A2359D /* SnapKit */; };
+		FC60D1D729D494BC00A2359D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */; };
+		FC60D1DF29D49CA000A2359D /* WelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1DC29D49CA000A2359D /* WelcomePresenter.swift */; };
+		FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1DD29D49CA000A2359D /* WelcomeRouter.swift */; };
+		FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1DE29D49CA000A2359D /* WelcomeViewController.swift */; };
+		FC60D1E429D4DD5200A2359D /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1E329D4DD5200A2359D /* ScanViewController.swift */; };
+		FC60D1E729D4ED4F00A2359D /* ContainersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1E629D4ED4F00A2359D /* ContainersListViewController.swift */; };
+		FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1ED29D5870600A2359D /* UITableView+Extension.swift */; };
+		FC60D1F029D58A7600A2359D /* ScannedContainerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1EF29D58A7600A2359D /* ScannedContainerTableViewCell.swift */; };
+		FC60D1F229D58B1500A2359D /* ScannedContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */; };
+		FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1F329D5AFBA00A2359D /* Images.swift */; };
+		FC60D1F829D5B7BD00A2359D /* ContainersListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1F729D5B7BD00A2359D /* ContainersListPresenter.swift */; };
+		FC60D1FC29D5DA3D00A2359D /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1FB29D5DA3D00A2359D /* String+Extension.swift */; };
+		FC8091F129D6E6EB00D02816 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F029D6E6EB00D02816 /* PreviewView.swift */; };
+		FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F229D6E82300D02816 /* ContainersListRouter.swift */; };
+		FC8091F529D6EB6F00D02816 /* CameraFeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F429D6EB6F00D02816 /* CameraFeedManager.swift */; };
+		FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F629D7055200D02816 /* ScanPresenter.swift */; };
+		FC8091F929D706E500D02816 /* ScanRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F829D706E500D02816 /* ScanRouter.swift */; };
+		FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091FA29D7147000D02816 /* StartHelper.swift */; };
+		FC80920229D8883C00D02816 /* AlertActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC80920129D8883C00D02816 /* AlertActions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FC60D1AD29D48E7700A2359D /* ContainersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContainersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC60D1B029D48E7700A2359D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC60D1B229D48E7700A2359D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FC60D1B429D48E7700A2359D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		FC60D1B729D48E7700A2359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FC60D1B929D48E7800A2359D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC60D1BC29D48E7800A2359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FC60D1BE29D48E7800A2359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FC60D1CB29D4930C00A2359D /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FC60D1CE29D4939400A2359D /* Strings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
+		FC60D1CF29D4939400A2359D /* XCAssets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
+		FC60D1DC29D49CA000A2359D /* WelcomePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomePresenter.swift; sourceTree = "<group>"; };
+		FC60D1DD29D49CA000A2359D /* WelcomeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeRouter.swift; sourceTree = "<group>"; };
+		FC60D1DE29D49CA000A2359D /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		FC60D1E329D4DD5200A2359D /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
+		FC60D1E629D4ED4F00A2359D /* ContainersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersListViewController.swift; sourceTree = "<group>"; };
+		FC60D1ED29D5870600A2359D /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		FC60D1EF29D58A7600A2359D /* ScannedContainerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannedContainerTableViewCell.swift; sourceTree = "<group>"; };
+		FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannedContainerModel.swift; sourceTree = "<group>"; };
+		FC60D1F329D5AFBA00A2359D /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		FC60D1F729D5B7BD00A2359D /* ContainersListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersListPresenter.swift; sourceTree = "<group>"; };
+		FC60D1FB29D5DA3D00A2359D /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		FC8091F029D6E6EB00D02816 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		FC8091F229D6E82300D02816 /* ContainersListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersListRouter.swift; sourceTree = "<group>"; };
+		FC8091F429D6EB6F00D02816 /* CameraFeedManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFeedManager.swift; sourceTree = "<group>"; };
+		FC8091F629D7055200D02816 /* ScanPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanPresenter.swift; sourceTree = "<group>"; };
+		FC8091F829D706E500D02816 /* ScanRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRouter.swift; sourceTree = "<group>"; };
+		FC8091FA29D7147000D02816 /* StartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartHelper.swift; sourceTree = "<group>"; };
+		FC80920129D8883C00D02816 /* AlertActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertActions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +71,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC60D1D429D4944A00A2359D /* SnapKit in Frameworks */,
+				FC60D1D729D494BC00A2359D /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,15 +98,98 @@
 		FC60D1AF29D48E7700A2359D /* ContainersApp */ = {
 			isa = PBXGroup;
 			children = (
+				FC60D1EC29D586B400A2359D /* Extensions */,
+				FC60D1E829D4F5C500A2359D /* Models */,
+				FC60D1DA29D49C7D00A2359D /* Screens */,
+				FC60D1CD29D4932900A2359D /* Swiftgen */,
+				FC8091FA29D7147000D02816 /* StartHelper.swift */,
 				FC60D1B029D48E7700A2359D /* AppDelegate.swift */,
 				FC60D1B229D48E7700A2359D /* SceneDelegate.swift */,
-				FC60D1B429D48E7700A2359D /* ViewController.swift */,
-				FC60D1B629D48E7700A2359D /* Main.storyboard */,
 				FC60D1B929D48E7800A2359D /* Assets.xcassets */,
 				FC60D1BB29D48E7800A2359D /* LaunchScreen.storyboard */,
 				FC60D1BE29D48E7800A2359D /* Info.plist */,
+				FC60D1CB29D4930C00A2359D /* Localizable.strings */,
 			);
 			path = ContainersApp;
+			sourceTree = "<group>";
+		};
+		FC60D1CD29D4932900A2359D /* Swiftgen */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1CE29D4939400A2359D /* Strings+Generated.swift */,
+				FC60D1CF29D4939400A2359D /* XCAssets+Generated.swift */,
+			);
+			path = Swiftgen;
+			sourceTree = "<group>";
+		};
+		FC60D1DA29D49C7D00A2359D /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1DB29D49C8600A2359D /* Welcome */,
+				FC60D1E229D4DD3000A2359D /* Scan */,
+				FC60D1E529D4ED1F00A2359D /* ContainersList */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		FC60D1DB29D49C8600A2359D /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1DE29D49CA000A2359D /* WelcomeViewController.swift */,
+				FC60D1DC29D49CA000A2359D /* WelcomePresenter.swift */,
+				FC60D1DD29D49CA000A2359D /* WelcomeRouter.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		FC60D1E229D4DD3000A2359D /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1FE29D6E64100A2359D /* CameraFeed */,
+				FC60D1E329D4DD5200A2359D /* ScanViewController.swift */,
+				FC8091F629D7055200D02816 /* ScanPresenter.swift */,
+				FC8091F829D706E500D02816 /* ScanRouter.swift */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
+		FC60D1E529D4ED1F00A2359D /* ContainersList */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1EF29D58A7600A2359D /* ScannedContainerTableViewCell.swift */,
+				FC60D1E629D4ED4F00A2359D /* ContainersListViewController.swift */,
+				FC60D1F729D5B7BD00A2359D /* ContainersListPresenter.swift */,
+				FC8091F229D6E82300D02816 /* ContainersListRouter.swift */,
+			);
+			path = ContainersList;
+			sourceTree = "<group>";
+		};
+		FC60D1E829D4F5C500A2359D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FC60D1EC29D586B400A2359D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FC60D1ED29D5870600A2359D /* UITableView+Extension.swift */,
+				FC60D1F329D5AFBA00A2359D /* Images.swift */,
+				FC60D1FB29D5DA3D00A2359D /* String+Extension.swift */,
+				FC80920129D8883C00D02816 /* AlertActions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FC60D1FE29D6E64100A2359D /* CameraFeed */ = {
+			isa = PBXGroup;
+			children = (
+				FC8091F429D6EB6F00D02816 /* CameraFeedManager.swift */,
+				FC8091F029D6E6EB00D02816 /* PreviewView.swift */,
+			);
+			path = CameraFeed;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +208,10 @@
 			dependencies = (
 			);
 			name = ContainersApp;
+			packageProductDependencies = (
+				FC60D1D329D4944A00A2359D /* SnapKit */,
+				FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */,
+			);
 			productName = ContainersApp;
 			productReference = FC60D1AD29D48E7700A2359D /* ContainersApp.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +240,10 @@
 				Base,
 			);
 			mainGroup = FC60D1A429D48E7700A2359D;
+			packageReferences = (
+				FC60D1D229D4944A00A2359D /* XCRemoteSwiftPackageReference "SnapKit" */,
+				FC60D1D529D494BC00A2359D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			productRefGroup = FC60D1AE29D48E7700A2359D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -126,8 +259,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC60D1BD29D48E7800A2359D /* LaunchScreen.storyboard in Resources */,
+				FC60D1CC29D4930C00A2359D /* Localizable.strings in Resources */,
 				FC60D1BA29D48E7800A2359D /* Assets.xcassets in Resources */,
-				FC60D1B829D48E7700A2359D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +271,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC60D1B529D48E7700A2359D /* ViewController.swift in Sources */,
+				FC60D1FC29D5DA3D00A2359D /* String+Extension.swift in Sources */,
+				FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */,
+				FC8091F929D706E500D02816 /* ScanRouter.swift in Sources */,
+				FC60D1D129D4939400A2359D /* XCAssets+Generated.swift in Sources */,
+				FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */,
+				FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */,
+				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
+				FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */,
+				FC80920229D8883C00D02816 /* AlertActions.swift in Sources */,
+				FC60D1DF29D49CA000A2359D /* WelcomePresenter.swift in Sources */,
+				FC60D1F229D58B1500A2359D /* ScannedContainerModel.swift in Sources */,
+				FC8091F529D6EB6F00D02816 /* CameraFeedManager.swift in Sources */,
+				FC60D1F029D58A7600A2359D /* ScannedContainerTableViewCell.swift in Sources */,
+				FC60D1F829D5B7BD00A2359D /* ContainersListPresenter.swift in Sources */,
 				FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */,
+				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,
+				FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */,
+				FC60D1D029D4939400A2359D /* Strings+Generated.swift in Sources */,
+				FC8091F129D6E6EB00D02816 /* PreviewView.swift in Sources */,
 				FC60D1B329D48E7700A2359D /* SceneDelegate.swift in Sources */,
+				FC60D1E429D4DD5200A2359D /* ScanViewController.swift in Sources */,
+				FC60D1E729D4ED4F00A2359D /* ContainersListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		FC60D1B629D48E7700A2359D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FC60D1B729D48E7700A2359D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		FC60D1BB29D48E7800A2359D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -285,16 +429,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8322522RX9;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J8VM9NVFDC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ContainersApp/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your device's location. This will allow us to accurately record the location where each container ID was recognized";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -302,6 +449,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gleb.ContainersApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Valentin Velichko Wildcard";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -313,16 +462,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8322522RX9;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J8VM9NVFDC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ContainersApp/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your device's location. This will allow us to accurately record the location where each container ID was recognized";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -330,6 +482,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gleb.ContainersApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Valentin Velichko Wildcard";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -358,6 +512,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC60D1D229D4944A00A2359D /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		FC60D1D529D494BC00A2359D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC60D1D329D4944A00A2359D /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC60D1D229D4944A00A2359D /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC60D1D529D494BC00A2359D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FC60D1A529D48E7700A2359D /* Project object */;
 }
