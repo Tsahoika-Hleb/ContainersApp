@@ -1,0 +1,100 @@
+// swiftlint:disable all
+// Generated using SwiftGen — https://github.com/SwiftGen/SwiftGen
+
+import Foundation
+
+// swiftlint:disable superfluous_disable_command file_length implicit_return prefer_self_in_static_references
+
+// MARK: - Strings
+
+// swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
+// swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
+internal enum S {
+  internal enum AlertAction {
+    /// Cancel
+    internal static let cancel = S.tr("Localizable", "AlertAction.cancel", fallback: "Cancel")
+    /// OK
+    internal static let ok = S.tr("Localizable", "AlertAction.ok", fallback: "OK")
+    /// Settings
+    internal static let settings = S.tr("Localizable", "AlertAction.settings", fallback: "Settings")
+  }
+  internal enum Screens {
+    internal enum ContainerList {
+      /// All
+      internal static let allFilterButtonTitle = S.tr("Localizable", "Screens.ContainerList.allFilterButtonTitle", fallback: "All")
+      /// Scanned Containers
+      internal static let navigationTitle = S.tr("Localizable", "Screens.ContainerList.navigationTitle", fallback: "Scanned Containers")
+      /// Not Identified
+      internal static let notIdentifiedButtonTitle = S.tr("Localizable", "Screens.ContainerList.notIdentifiedButtonTitle", fallback: "Not Identified")
+      /// Not Send
+      internal static let notSendButtonTitle = S.tr("Localizable", "Screens.ContainerList.notSendButtonTitle", fallback: "Not Send")
+      /// Send to server
+      internal static let rightSwipeActionTitle = S.tr("Localizable", "Screens.ContainerList.rightSwipeActionTitle", fallback: "Send to server")
+      /// START SCANNING
+      internal static let scanButtonTitle = S.tr("Localizable", "Screens.ContainerList.scanButtonTitle", fallback: "START SCANNING")
+      /// Please enter a valid URL in the text field.
+      internal static let textFieldAlertPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldAlertPlaceholder", fallback: "Please enter a valid URL in the text field.")
+      /// VAV
+      internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldDefaultPlaceholder", fallback: "VAV")
+    }
+    internal enum Scan {
+      internal enum CameraPermissionDenied {
+        /// Camera permissions have been denied for this app. You can change this by going to Settings
+        internal static let allertMessage = S.tr("Localizable", "Screens.Scan.CameraPermissionDenied.allertMessage", fallback: "Camera permissions have been denied for this app. You can change this by going to Settings")
+        /// Camera Permissions Denied
+        internal static let allertTitle = S.tr("Localizable", "Screens.Scan.CameraPermissionDenied.allertTitle", fallback: "Camera Permissions Denied")
+      }
+      internal enum LocationPermissionDenied {
+        /// Location permissions have been denied for this app. You can change this by going to Settings
+        internal static let allertMessage = S.tr("Localizable", "Screens.Scan.LocationPermissionDenied.allertMessage", fallback: "Location permissions have been denied for this app. You can change this by going to Settings")
+        /// Location Permissions Denied
+        internal static let allertTitle = S.tr("Localizable", "Screens.Scan.LocationPermissionDenied.allertTitle", fallback: "Location Permissions Denied")
+      }
+      internal enum PresentVideoError {
+        /// Configuration of camera has failed
+        internal static let allertMessage = S.tr("Localizable", "Screens.Scan.presentVideoError.allertMessage", fallback: "Configuration of camera has failed")
+        /// Configuration Failed
+        internal static let allertTitle = S.tr("Localizable", "Screens.Scan.presentVideoError.allertTitle", fallback: "Configuration Failed")
+      }
+    }
+    internal enum Welcome {
+      /// SCAN
+      internal static let buttonTitle = S.tr("Localizable", "Screens.Welcome.buttonTitle", fallback: "SCAN")
+      /// Enter a URL endpoint where scans be sent
+      internal static let instructionsLabelText = S.tr("Localizable", "Screens.Welcome.instructionsLabelText", fallback: "Enter a URL endpoint where scans be sent")
+      /// This field must be filled with URL
+      internal static let textFieldAlertPlaceholder = S.tr("Localizable", "Screens.Welcome.textFieldAlertPlaceholder", fallback: "This field must be filled with URL")
+      /// VAV
+      internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.Welcome.textFieldDefaultPlaceholder", fallback: "VAV")
+      /// Welcome to Containers App
+      internal static let title = S.tr("Localizable", "Screens.Welcome.title", fallback: "Welcome to Containers App")
+    }
+  }
+  internal enum UserDefaults {
+    /// Urls
+    internal static let key = S.tr("Localizable", "userDefaults.key", fallback: "Urls")
+  }
+}
+// swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
+// swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
+
+// MARK: - Implementation Details
+
+extension S {
+  private static func tr(_ table: String, _ key: String, _ args: CVarArg..., fallback value: String) -> String {
+    let format = BundleToken.bundle.localizedString(forKey: key, value: value, table: table)
+    return String(format: format, locale: Locale.current, arguments: args)
+  }
+}
+
+// swiftlint:disable convenience_type
+private final class BundleToken {
+  static let bundle: Bundle = {
+    #if SWIFT_PACKAGE
+    return Bundle.module
+    #else
+    return Bundle(for: BundleToken.self)
+    #endif
+  }()
+}
+// swiftlint:enable convenience_type
