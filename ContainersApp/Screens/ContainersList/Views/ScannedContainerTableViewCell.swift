@@ -1,25 +1,23 @@
-//
-
 import UIKit
 
 class ScannedContainerTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    lazy var leftImageView: UIImageView = {
+    private lazy var leftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .lightGray
         return imageView
     }()
     
-    lazy var scanTimestampLabel: UILabel = {
+    private lazy var scanTimestampLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .darkGray
         return label
     }()
     
-    lazy var identifiedLabel: UILabel = {
+    private lazy var identifiedLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.text = "isIdentified:"
@@ -27,31 +25,34 @@ class ScannedContainerTableViewCell: UITableViewCell {
         return label
     }()
     
-    lazy var identifiedTickImageView: UIImageView = {
+    private lazy var identifiedTickImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    lazy var serialNumberLabel: UILabel = {
+    private lazy var serialNumberLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = .black
         return label
     }()
     
-    lazy var latitudeLabel: UILabel = {
+    private lazy var latitudeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textColor = .black
         return label
     }()
     
-    lazy var longitudeLabel: UILabel = {
+    private lazy var longitudeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textColor = .black
         return label
     }()
     
-    lazy var sentToServerLabel: UILabel = {
+    private lazy var sentToServerLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.text = "sent to server:"
@@ -59,7 +60,7 @@ class ScannedContainerTableViewCell: UITableViewCell {
         return label
     }()
     
-    lazy var sentToServerTickImageView: UIImageView = {
+    private lazy var sentToServerTickImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -106,6 +107,8 @@ class ScannedContainerTableViewCell: UITableViewCell {
     
     // MARK: - Private methods
     private func setupUI() {
+        backgroundColor = .white
+        
         contentView.addSubview(leftImageView)
         contentView.addSubview(scanTimestampLabel)
         contentView.addSubview(identifiedLabel)
@@ -116,51 +119,56 @@ class ScannedContainerTableViewCell: UITableViewCell {
         contentView.addSubview(sentToServerLabel)
         contentView.addSubview(sentToServerTickImageView)
         
+        let inset: CGFloat = 5
+        let labelOffset: CGFloat = 10
+        let imageViewSize: CGFloat = 20
+        let leftImageWidth: CGFloat = 120
+
         leftImageView.snp.makeConstraints { make in
-            make.top.leading.bottom.equalToSuperview().inset(5)
-            make.width.equalTo(120)
+            make.top.leading.bottom.equalToSuperview().inset(inset)
+            make.width.equalTo(leftImageWidth)
         }
-        
+
         scanTimestampLabel.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(10)
-            make.leading.equalTo(leftImageView.snp.trailing).offset(10)
+            make.top.trailing.equalToSuperview().inset(labelOffset)
+            make.leading.equalTo(leftImageView.snp.trailing).offset(labelOffset)
         }
-        
+
         identifiedLabel.snp.makeConstraints { make in
             make.leading.equalTo(scanTimestampLabel)
-            make.top.equalTo(scanTimestampLabel.snp.bottom).offset(10)
+            make.top.equalTo(scanTimestampLabel.snp.bottom).offset(labelOffset)
         }
-        
+
         identifiedTickImageView.snp.makeConstraints { make in
             make.centerY.equalTo(identifiedLabel)
-            make.leading.equalTo(identifiedLabel.snp.trailing).offset(5)
-            make.width.height.equalTo(20)
+            make.leading.equalTo(identifiedLabel.snp.trailing).offset(labelOffset / 2)
+            make.width.height.equalTo(imageViewSize)
         }
-        
+
         serialNumberLabel.snp.makeConstraints { make in
             make.leading.equalTo(scanTimestampLabel)
-            make.top.equalTo(identifiedLabel.snp.bottom).offset(10)
+            make.top.equalTo(identifiedLabel.snp.bottom).offset(labelOffset)
         }
-        
+
         latitudeLabel.snp.makeConstraints { make in
             make.leading.equalTo(scanTimestampLabel)
-            make.top.equalTo(serialNumberLabel.snp.bottom).offset(10)
+            make.top.equalTo(serialNumberLabel.snp.bottom).offset(labelOffset)
         }
-        
+
         longitudeLabel.snp.makeConstraints { make in
             make.top.equalTo(latitudeLabel)
-            make.leading.equalTo(latitudeLabel.snp.trailing).offset(15)
+            make.leading.equalTo(latitudeLabel.snp.trailing).offset(labelOffset * 1.5)
         }
-        
+
         sentToServerLabel.snp.makeConstraints { make in
             make.leading.equalTo(scanTimestampLabel)
-            make.top.equalTo(latitudeLabel.snp.bottom).offset(10)
+            make.top.equalTo(latitudeLabel.snp.bottom).offset(labelOffset)
         }
-        
+
         sentToServerTickImageView.snp.makeConstraints { make in
             make.centerY.equalTo(sentToServerLabel)
-            make.leading.equalTo(sentToServerLabel.snp.trailing).offset(5)
-            make.width.height.equalTo(20)
+            make.leading.equalTo(sentToServerLabel.snp.trailing).offset(labelOffset / 2)
+            make.width.height.equalTo(imageViewSize)
         }
     }
 }

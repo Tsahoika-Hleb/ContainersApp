@@ -1,5 +1,3 @@
-//
-
 import UIKit
 
 protocol ScanRouterSpec {
@@ -8,9 +6,8 @@ protocol ScanRouterSpec {
     func showContainersList()
 }
 
-
 class ScanRouter: ScanRouterSpec {
-    weak var viewController: UIViewController?
+    internal weak var viewController: UIViewController?
     
     init(viewController: UIViewController) {
         self.viewController = viewController
@@ -26,7 +23,6 @@ class ScanRouter: ScanRouterSpec {
         let presenter = ContainersListPresenter(delegate: containerListVC, router: router)
         containerListVC.presenter = presenter
         containerListVC.modalPresentationStyle = .fullScreen
-        
         vc.present(containerListVC, animated: true)
     }
 }

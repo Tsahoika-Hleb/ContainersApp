@@ -1,5 +1,3 @@
-//
-
 import Foundation
 
 enum ContainerListFilter {
@@ -10,11 +8,11 @@ enum ContainerListFilter {
 
 protocol ContainerListViewDelegateProtocol: AnyObject {
     func showContainersList()
-    func urlValidationError()
-    func urlValidationSucces()
+    func urlValidation(isSuccesful: Bool)
+    func showLastEndpoint(_ endpoint: String)
 }
 
-protocol ContainersListPresenterSpec {
+protocol ContainersListPresenterSpec: AnyObject {
     var delegate: ContainerListViewDelegateProtocol? { get set }
     var scunnedContainersCount: Int { get }
     var endpointsCount: Int { get }
@@ -22,9 +20,9 @@ protocol ContainersListPresenterSpec {
     func setUp()
     func changeFilter(to filter: ContainerListFilter)
     func addEndpoint(_ url: String)
-    func getContainerForRow(for row: Int) -> ScannedContainerModel
+    func container(for row: Int) -> ScannedContainerModel
     func deleteContainerForRow(for row: Int)
-    func getEndpointForRow(for row: Int) -> String
+    func endpoint(for row: Int) -> String
     func sendToServer()
     func returnToScanPage()
 }
@@ -33,64 +31,55 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Properties
     weak var delegate: ContainerListViewDelegateProtocol?
-    var router: ContainersListRouterProtocol?
     var scunnedContainersCount: Int { return filteredScannedContainers.count }
     var endpointsCount: Int { return endpoints.count }
     
     // MARK: - Private Properties
-    private let defaults = UserDefaults.standard
+    private var router: ContainersListRouterProtocol?
     
     private var allScunnedContainers: [ScannedContainerModel] = [
-            ScannedContainerModel(scanTimestamp: "30.3.2023 12:53",
-                                  latitude: 37.987,
-                                  longitude: -71.433,
-                                  serialNumber: "ABCU123567",
-                                  isIdentified: true,
-                                  isSentToServer: false),
-            ScannedContainerModel(scanTimestamp: "30.3.2023 12:54",
-                                  latitude: 37.987,
-                                  longitude: -71.433,
-                                  serialNumber: "Not Identified",
-                                  isIdentified: false,
-                                  isSentToServer: false),
-            ScannedContainerModel(scanTimestamp: "30.3.2023 12:55",
-                                  latitude: 37.987,
-                                  longitude: -71.433,
-                                  serialNumber: "ABCU123567",
-                                  isIdentified: true,
-                                  isSentToServer: true),
-            ScannedContainerModel(scanTimestamp: "30.3.2023 12:56",
-                                  latitude: 37.987,
-                                  longitude: -71.433,
-                                  serialNumber: "ABCU123567",
-                                  isIdentified: true,
-                                  isSentToServer: false),
-            ScannedContainerModel(scanTimestamp: "30.3.2023 12:57",
-                                  latitude: 37.987,
-                                  longitude: -71.433,
-                                  serialNumber: "Not Identified",
-                                  isIdentified: false,
-                                  isSentToServer: false),
-            ScannedContainerModel(scanTimestamp: "30.3.2023 12:58",
-                                  latitude: 37.987,
-                                  longitude: -71.433,
-                                  serialNumber: "ABCU123567984387",
-                                  isIdentified: true,
-                                  isSentToServer: true)
-        ]
+        ScannedContainerModel(scanTimestamp: "30.3.2023 12:53",
+                              latitude: 37.987,
+                              longitude: -71.433,
+                              serialNumber: "ABCU123567",
+                              isIdentified: true,
+                              isSentToServer: false),
+        ScannedContainerModel(scanTimestamp: "30.3.2023 12:54",
+                              latitude: 37.987,
+                              longitude: -71.433,
+                              serialNumber: "Not Identified",
+                              isIdentified: false,
+                              isSentToServer: false),
+        ScannedContainerModel(scanTimestamp: "30.3.2023 12:55",
+                              latitude: 37.987,
+                              longitude: -71.433,
+                              serialNumber: "ABCU123567",
+                              isIdentified: true,
+                              isSentToServer: true),
+        ScannedContainerModel(scanTimestamp: "30.3.2023 12:56",
+                              latitude: 37.987,
+                              longitude: -71.433,
+                              serialNumber: "ABCU123567",
+                              isIdentified: true,
+                              isSentToServer: false),
+        ScannedContainerModel(scanTimestamp: "30.3.2023 12:57",
+                              latitude: 37.987,
+                              longitude: -71.433,
+                              serialNumber: "Not Identified",
+                              isIdentified: false,
+                              isSentToServer: false),
+        ScannedContainerModel(scanTimestamp: "30.3.2023 12:58",
+                              latitude: 37.987,
+                              longitude: -71.433,
+                              serialNumber: "ABCU123567984387",
+                              isIdentified: true,
+                              isSentToServer: true)
+    ]
     private var filteredScannedContainers: [ScannedContainerModel] = []
     
     private var currentFilter: ContainerListFilter = .all {
         didSet {
-            switch currentFilter {
-            case .all:
-                filteredScannedContainers = allScunnedContainers
-            case .notSend:
-                filteredScannedContainers = allScunnedContainers.filter { !$0.isSentToServer }
-            case .notIdentified:
-                filteredScannedContainers = allScunnedContainers.filter { !$0.isIdentified }
-            }
-            delegate?.showContainersList()
+            setFilterFilter(currentFilter)
         }
     }
     
@@ -102,6 +91,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         self.router = router
     }
     
+    // MARK: - Methods
     func setUp() {
         currentFilter = .all
         
@@ -115,7 +105,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     func addEndpoint(_ url: String) {
         guard url.validate(idCase: .url) else {
-            delegate?.urlValidationError()
+            delegate?.urlValidation(isSuccesful: false)
             return
         }
         
@@ -124,12 +114,12 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         }
         
         endpoints.append(url)
-        defaults.set(endpoints, forKey: S.UserDefaults.key)
-        delegate?.urlValidationSucces()
+        UserDefaults.standard[.urls, default: []].append(contentsOf: endpoints)
+        delegate?.urlValidation(isSuccesful: true)
     }
     
-    func getContainerForRow(for row: Int) -> ScannedContainerModel {
-        filteredScannedContainers[row]
+    func container(for row: Int) -> ScannedContainerModel {
+        return filteredScannedContainers[row]
     }
     
     func deleteContainerForRow(for row: Int) {
@@ -138,7 +128,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         currentFilter = filter
     }
     
-    func getEndpointForRow(for row: Int) -> String {
+    func endpoint(for row: Int) -> String {
         endpoints[row]
     }
     
@@ -149,7 +139,6 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     func returnToScanPage() {
         //TODO: check established endpoint
-        
         router?.showScanScreen()
     }
     
@@ -159,10 +148,21 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     }
     
     private func fetchEndpoints() {
-        if let myArray = defaults.array(forKey: S.UserDefaults.key) as? [String] {
-            endpoints = myArray
-        } else {
-            print("Error: can't get endpoints")
+        endpoints = UserDefaults.standard[.urls, default: []]
+        if !endpoints.isEmpty {
+            delegate?.showLastEndpoint(endpoints.last!)
         }
+    }
+    
+    private func setFilterFilter(_ filter: ContainerListFilter) {
+        switch filter {
+        case .all:
+            filteredScannedContainers = allScunnedContainers
+        case .notSend:
+            filteredScannedContainers = allScunnedContainers.filter { !$0.isSentToServer }
+        case .notIdentified:
+            filteredScannedContainers = allScunnedContainers.filter { !$0.isIdentified }
+        }
+        delegate?.showContainersList()
     }
 }

@@ -1,5 +1,3 @@
-//
-
 import UIKit
 
 protocol ContainersListRouterProtocol {
@@ -9,13 +7,13 @@ protocol ContainersListRouterProtocol {
 }
 
 final class ContainersListRouter: ContainersListRouterProtocol {
-    weak var viewController: UIViewController?
+    internal weak var viewController: UIViewController?
     
     init(viewController: UIViewController) {
         self.viewController = viewController
     }
     
-    func showScanScreen() {
+    func showScanScreen() { // TODO: transfer endpoint
         guard let vc = viewController else {
             return
         }

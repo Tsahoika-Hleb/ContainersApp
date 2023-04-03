@@ -1,5 +1,3 @@
-//
-
 import UIKit
 import SnapKit
 
@@ -7,7 +5,6 @@ class ScanViewController: UIViewController {
     
     // MARK: - Properties
     var presenter: ScanPresenterProtocol?
-    private var alerts: [UIAlertController] = []
     
     private lazy var previewView: PreviewView = {
         let view = PreviewView()
@@ -64,27 +61,34 @@ class ScanViewController: UIViewController {
         view.addSubview(previewView)
         view.addSubview(containersListImageView)
         view.addSubview(serialNumberLabel)
-        
+    
+        let topBottomInset: CGFloat = 0
+        let leadingTrailingInset: CGFloat = 0
+        let containerImageViewSize: CGSize = CGSize(width: 50, height: 50)
+        let serialNumberLabelSize: CGSize = CGSize(width: 200, height: 60)
+        let containerImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+        let serialNumberLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 20)
+
         previewView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
+            make.top.bottom.leading.trailing.equalToSuperview().inset(UIEdgeInsets(top: topBottomInset, left: leadingTrailingInset, bottom: topBottomInset, right: leadingTrailingInset))
         }
-        
+
         containersListImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
-            make.trailing.equalToSuperview().inset(20)
-            make.width.height.equalTo(50)
+            make.trailing.equalToSuperview().inset(containerImageViewInsets.right)
+            make.width.height.equalTo(containerImageViewSize.width)
         }
-        
+
         serialNumberLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin)
-            make.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(60)
-            make.width.equalTo(200)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin).inset(serialNumberLabelInsets.bottom)
+            make.trailing.equalToSuperview().inset(serialNumberLabelInsets.right)
+            make.height.equalTo(serialNumberLabelSize.height)
+            make.width.equalTo(serialNumberLabelSize.width)
         }
     }
     
     // MARK: - Actions
-    @objc func imageTapped() {
+    @objc private func imageTapped() {
         presenter?.performContainersList()
     }
 }
@@ -103,18 +107,12 @@ extension ScanViewController: CameraFeedManagerDelegate {
             message: S.Screens.Scan.CameraPermissionDenied.allertMessage,
             preferredStyle: .alert)
 
-        let cancelAction = UIAlertAction(title: S.AlertAction.cancel, style: .cancel) { [self] (action) in
-            if alerts.count == 2 {
-                present(alerts[1], animated: true) //
-                alerts.remove(at: 1)
-            }
-        }
+        let cancelAction = UIAlertAction.cancelAction
         let settingsAction = UIAlertAction.settingAction
 
         alertController.addAction(cancelAction)
         alertController.addAction(settingsAction)
 
-        if alerts.isEmpty { alerts.append(alertController) }
         present(alertController, animated: true, completion: nil)
     }
     
@@ -144,24 +142,6 @@ extension ScanViewController: CameraFeedManagerDelegate {
 
 
 extension ScanViewController: ScanViewControllerDelegate {
-    
-    func locationPermissionDenied() {
-        
-        let alertController = UIAlertController(
-            title: S.Screens.Scan.LocationPermissionDenied.allertTitle,
-            message: S.Screens.Scan.LocationPermissionDenied.allertMessage,
-            preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction.cancelAction
-        let settingsAction = UIAlertAction.settingAction
-        
-        alertController.addAction(cancelAction)
-        alertController.addAction(settingsAction)
-        
-        alerts.append(alertController)
-        present(alertController, animated: true, completion: nil)
-        
-    }
 }
 
 

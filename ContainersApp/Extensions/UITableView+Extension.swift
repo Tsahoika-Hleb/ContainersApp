@@ -1,5 +1,3 @@
-//
-
 import UIKit
 
 extension UIView {
@@ -14,20 +12,10 @@ extension UITableView {
             assertionFailure("unable to dequeue cell with identifier \(T.identifier)")
             return nil
         }
-
         return cell
     }
 
-    func registerWithXib(cellClasses: UITableViewCell.Type...) {
-        cellClasses.forEach({
-            let nib = UINib(nibName: $0.identifier, bundle: nil)
-            register(nib, forCellReuseIdentifier: $0.identifier)
-        })
-    }
-
-    func register(cellClasses: UITableViewCell.Type...) {
-        cellClasses.forEach({
-            register($0.self, forCellReuseIdentifier: $0.identifier)
-        })
+    func register(cellClass: UITableViewCell.Type) {
+        register(cellClass.self, forCellReuseIdentifier: cellClass.identifier)
     }
 }

@@ -3,13 +3,15 @@
 
 "Screens.Welcome.title" = "Welcome to Containers App";
 "Screens.Welcome.instructionsLabelText" = "Enter a URL endpoint where scans be sent";
-"Screens.Welcome.textFieldDefaultPlaceholder" = "VAV";
+"Screens.Welcome.textFieldDefaultPlaceholder" = "Enter a valid URL";
 "Screens.Welcome.textFieldAlertPlaceholder" = "This field must be filled with URL";
 "Screens.Welcome.buttonTitle" = "SCAN";
+"Screens.Welcome.allertTitle" = "Permissions Required";
+"Screens.Welcome.allertMessage" = "Please enable camera and location permissions in the app settings.";
 
 "Screens.ContainerList.navigationTitle" = "Scanned Containers";
-"Screens.ContainerList.textFieldDefaultPlaceholder" = "VAV";
-"Screens.ContainerList.textFieldAlertPlaceholder" = "Please enter a valid URL in the text field.";
+"Screens.ContainerList.textFieldDefaultPlaceholder" = "Enter a valid URL";
+"Screens.ContainerList.textFieldAlertPlaceholder" = "Please enter a valid URL.";
 "Screens.ContainerList.scanButtonTitle" = "START SCANNING";
 "Screens.ContainerList.allFilterButtonTitle" = "All";
 "Screens.ContainerList.notSendButtonTitle" = "Not Send";

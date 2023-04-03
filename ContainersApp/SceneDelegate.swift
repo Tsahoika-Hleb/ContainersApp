@@ -1,5 +1,3 @@
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -11,7 +9,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: winScene)
         
         let vc = StartHelper().setRootVC()
-        self.window?.rootViewController = vc
+        window?.rootViewController = vc
         
         window?.makeKeyAndVisible()
     }

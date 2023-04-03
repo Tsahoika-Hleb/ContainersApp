@@ -1,49 +1,84 @@
-//
-
-import Foundation
-import CoreLocation
+import UIKit
 
 protocol WelcomeViewControllerDelegate: AnyObject {
-    func urlValidationError()
+    func urlValidation(isSuccesful: Bool)
+    func showLastEndpoint(_ endpoint: String)
 }
 
 protocol WelcomePresenterProtocol: AnyObject {
     var delegate: WelcomeViewControllerDelegate? { get set }
-    var router: WelcomeRouterSpec? { get set }
+    var endpointsCount: Int { get }
     
-    func urlReferenceValidate(_ url: String)
-    func locationRequest()
+    func setUpPresenter()
+    func addEndpoint(_ url: String)
+    func endpoint(for row: Int) -> String
+    func startScanning(_ urlString: String)
 }
 
 final class WelcomePresenter: WelcomePresenterProtocol {
     
     // MARK: - Properties
     weak var delegate: WelcomeViewControllerDelegate?
-    var router: WelcomeRouterSpec?
-    private let locationManager: CLLocationManager!
+    var endpointsCount: Int { return endpoints.count }
+    
+    // MARK: - Private Properties
+    private var router: WelcomeRouterSpec?
+    private var endpoints: [String] = []
     
     // MARK: - Initialization
-    init(delegate: WelcomeViewControllerDelegate, router: WelcomeRouterSpec, locationManager: CLLocationManager) {
+    init(delegate: WelcomeViewControllerDelegate, router: WelcomeRouterSpec) {
         self.delegate = delegate
         self.router = router
-        self.locationManager = locationManager
     }
     
     // MARK: - Methods
-    func urlReferenceValidate(_ urlString: String) {
+    func setUpPresenter() {
+        fetchEndpoints()
+        permissionRequest()
+    }
+    
+    func permissionRequest() {
+        PermissionManager.shared.requestAllPermissions()
+    }
+    
+    func addEndpoint(_ url: String) {
+        guard url.validate(idCase: .url) else {
+            delegate?.urlValidation(isSuccesful: false)
+            return
+        }
         
-        if urlString.validate(idCase: .url) {
-            
-            let defaults = UserDefaults.standard
-            defaults.set([urlString], forKey: S.UserDefaults.key)
-            defaults.synchronize()
-            router?.showScanScreen(locationManager: locationManager)
+        guard !endpoints.contains(url) else {
+            return
+        }
+        
+        endpoints.append(url)
+        UserDefaults.standard[.urls, default: []].append(contentsOf: endpoints)
+        delegate?.urlValidation(isSuccesful: true)
+    }
+    
+    func endpoint(for row: Int) -> String {
+        endpoints[row]
+    }
+    
+    func startScanning(_ urlString: String) {
+        if endpoints.contains(urlString) {
+            if let delegate, !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate as! UIViewController) {
+                router?.showScanScreen(endpoint: urlString)
+            }
+        } else if urlString.validate(idCase: .url), let delegate,
+           !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate as! UIViewController) {
+            UserDefaults.standard[.urls, default: []].append(urlString)
+            router?.showScanScreen(endpoint: urlString)
         } else {
-            delegate?.urlValidationError()
+            delegate?.urlValidation(isSuccesful: false)
         }
     }
     
-    func locationRequest() {
-        locationManager.requestWhenInUseAuthorization()
+    // MARK: - Private Methods
+    private func fetchEndpoints() {
+        endpoints = UserDefaults.standard[.urls, default: []]
+        if !endpoints.isEmpty {
+            delegate?.showLastEndpoint(endpoints.last!)
+        }
     }
 }

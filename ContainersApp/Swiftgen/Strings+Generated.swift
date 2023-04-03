@@ -32,10 +32,10 @@ internal enum S {
       internal static let rightSwipeActionTitle = S.tr("Localizable", "Screens.ContainerList.rightSwipeActionTitle", fallback: "Send to server")
       /// START SCANNING
       internal static let scanButtonTitle = S.tr("Localizable", "Screens.ContainerList.scanButtonTitle", fallback: "START SCANNING")
-      /// Please enter a valid URL in the text field.
-      internal static let textFieldAlertPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldAlertPlaceholder", fallback: "Please enter a valid URL in the text field.")
-      /// VAV
-      internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldDefaultPlaceholder", fallback: "VAV")
+      /// Please enter a valid URL.
+      internal static let textFieldAlertPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldAlertPlaceholder", fallback: "Please enter a valid URL.")
+      /// Enter a valid URL
+      internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldDefaultPlaceholder", fallback: "Enter a valid URL")
     }
     internal enum Scan {
       internal enum CameraPermissionDenied {
@@ -58,14 +58,18 @@ internal enum S {
       }
     }
     internal enum Welcome {
+      /// Please enable camera and location permissions in the app settings.
+      internal static let allertMessage = S.tr("Localizable", "Screens.Welcome.allertMessage", fallback: "Please enable camera and location permissions in the app settings.")
+      /// Permissions Required
+      internal static let allertTitle = S.tr("Localizable", "Screens.Welcome.allertTitle", fallback: "Permissions Required")
       /// SCAN
       internal static let buttonTitle = S.tr("Localizable", "Screens.Welcome.buttonTitle", fallback: "SCAN")
       /// Enter a URL endpoint where scans be sent
       internal static let instructionsLabelText = S.tr("Localizable", "Screens.Welcome.instructionsLabelText", fallback: "Enter a URL endpoint where scans be sent")
       /// This field must be filled with URL
       internal static let textFieldAlertPlaceholder = S.tr("Localizable", "Screens.Welcome.textFieldAlertPlaceholder", fallback: "This field must be filled with URL")
-      /// VAV
-      internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.Welcome.textFieldDefaultPlaceholder", fallback: "VAV")
+      /// Enter a valid URL
+      internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.Welcome.textFieldDefaultPlaceholder", fallback: "Enter a valid URL")
       /// Welcome to Containers App
       internal static let title = S.tr("Localizable", "Screens.Welcome.title", fallback: "Welcome to Containers App")
     }
