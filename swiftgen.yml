@@ -12,10 +12,10 @@
 ##   SwiftGen will parse all `.strings` files found in that folder.
  strings:
    inputs:
-     - ContainersApp/Localizable.strings
+     - QBoss/Localizable.strings
    outputs:
      - templateName: structured-swift5
-       output: ContainersApp/Swiftgen/Strings+Generated.swift
+       output: QBoss/Swiftgen/Strings+Generated.swift
        params:
          enumName: S
 
@@ -26,12 +26,12 @@
 ##   - To know which params are supported for a template, use `swiftgen template doc xcassets swift5` to open the template documentation on GitHub.
  xcassets:
    inputs:
-     - ContainersApp/Assets.xcassets
+     - QBoss/Assets.xcassets
    outputs:
      - templateName: swift5
        params:
          forceProvidesNamespaces: true
-       output: ContainersApp/Swiftgen/XCAssets+Generated.swift
+       output: QBoss/Swiftgen/XCAssets+Generated.swift
        params:
          enumName: I
 
