@@ -63,7 +63,9 @@ final class EndpointsTextField: UIView {
     }
     
     func setTextField(_ str: String) {
-        textField.text = str
+        if !str.isEmpty {
+            textField.text = str
+        }
         isEndpointsEmpty()
     }
     

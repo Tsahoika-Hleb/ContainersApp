@@ -77,8 +77,6 @@ final class WelcomePresenter: WelcomePresenterProtocol {
     // MARK: - Private Methods
     private func fetchEndpoints() {
         endpoints = UserDefaults.standard[.urls, default: []]
-        if !endpoints.isEmpty {
-            delegate?.showLastEndpoint(endpoints.last!)
-        }
+        delegate?.showLastEndpoint(endpoints.last ?? "")
     }
 }
