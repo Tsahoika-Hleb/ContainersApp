@@ -1,9 +1,4 @@
-import UIKit
-
-protocol WelcomeViewControllerDelegate: AnyObject {
-    func urlValidation(isSuccesful: Bool)
-    func showLastEndpoint(_ endpoint: String)
-}
+import Foundation
 
 protocol WelcomePresenterProtocol: AnyObject {
     var delegate: WelcomeViewControllerDelegate? { get set }
@@ -61,16 +56,26 @@ final class WelcomePresenter: WelcomePresenterProtocol {
     }
     
     func startScanning(_ urlString: String) {
-        if endpoints.contains(urlString) {
-            if let delegate, !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate as! UIViewController) {
-                router?.showScanScreen(endpoint: urlString)
-            }
-        } else if urlString.validate(idCase: .url), let delegate,
-           !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate as! UIViewController) {
-            UserDefaults.standard[.urls, default: []].append(urlString)
-            router?.showScanScreen(endpoint: urlString)
-        } else {
-            delegate?.urlValidation(isSuccesful: false)
+//        if endpoints.contains(urlString) {
+//            if let delegate, !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) {
+//                router?.showScanScreen(endpoint: urlString)
+//            }
+//        } else if urlString.validate(idCase: .url), let delegate,
+//           !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) {
+//            UserDefaults.standard[.urls, default: []].append(urlString)
+//            router?.showScanScreen(endpoint: urlString)
+//        } else {
+//            delegate?.urlValidation(isSuccesful: false)
+//        }
+        guard let delegate,
+                      !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
+                if endpoints.contains(urlString) {
+                    router?.showScanScreen(endpoint: urlString)
+                } else if urlString.validate(idCase: .url) {
+                    UserDefaults.standard[.urls, default: []].append(urlString)
+                    router?.showScanScreen(endpoint: urlString)
+                } else {
+                    delegate.urlValidation(isSuccesful: false)
         }
     }
     

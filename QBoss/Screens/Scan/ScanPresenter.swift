@@ -27,6 +27,7 @@ final class ScanPresenter: ScanPresenterProtocol {
         self.delegate = delegate
         self.router = router
         self.endpoint = endpoint
+        print(endpoint)
     }
     
     // MARK: - Methods

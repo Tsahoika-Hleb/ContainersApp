@@ -43,7 +43,7 @@
 /* Begin PBXFileReference section */
 		FC3B236729DAF25300297529 /* ContainersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersList.swift; sourceTree = "<group>"; };
 		FC3B236A29DB116C00297529 /* EndpointsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsTextField.swift; sourceTree = "<group>"; };
-		FC60D1AD29D48E7700A2359D /* ContainersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContainersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC60D1AD29D48E7700A2359D /* QBoss.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QBoss.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC60D1B029D48E7700A2359D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC60D1B229D48E7700A2359D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		FC60D1B929D48E7800A2359D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,7 +107,7 @@
 		FC60D1A429D48E7700A2359D = {
 			isa = PBXGroup;
 			children = (
-				FC60D1AF29D48E7700A2359D /* ContainersApp */,
+				FC60D1AF29D48E7700A2359D /* QBoss */,
 				FC60D1AE29D48E7700A2359D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -115,12 +115,12 @@
 		FC60D1AE29D48E7700A2359D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FC60D1AD29D48E7700A2359D /* ContainersApp.app */,
+				FC60D1AD29D48E7700A2359D /* QBoss.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FC60D1AF29D48E7700A2359D /* ContainersApp */ = {
+		FC60D1AF29D48E7700A2359D /* QBoss */ = {
 			isa = PBXGroup;
 			children = (
 				FC60D1EC29D586B400A2359D /* Extensions */,
@@ -135,7 +135,7 @@
 				FC60D1BE29D48E7800A2359D /* Info.plist */,
 				FC60D1CB29D4930C00A2359D /* Localizable.strings */,
 			);
-			path = ContainersApp;
+			path = QBoss;
 			sourceTree = "<group>";
 		};
 		FC60D1CD29D4932900A2359D /* Swiftgen */ = {
@@ -223,9 +223,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FC60D1AC29D48E7700A2359D /* ContainersApp */ = {
+		FC60D1AC29D48E7700A2359D /* QBoss */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FC60D1C129D48E7800A2359D /* Build configuration list for PBXNativeTarget "ContainersApp" */;
+			buildConfigurationList = FC60D1C129D48E7800A2359D /* Build configuration list for PBXNativeTarget "QBoss" */;
 			buildPhases = (
 				FC60D1A929D48E7700A2359D /* Sources */,
 				FC60D1AA29D48E7700A2359D /* Frameworks */,
@@ -235,13 +235,13 @@
 			);
 			dependencies = (
 			);
-			name = ContainersApp;
+			name = QBoss;
 			packageProductDependencies = (
 				FC60D1D329D4944A00A2359D /* SnapKit */,
 				FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */,
 			);
 			productName = ContainersApp;
-			productReference = FC60D1AD29D48E7700A2359D /* ContainersApp.app */;
+			productReference = FC60D1AD29D48E7700A2359D /* QBoss.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -259,7 +259,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FC60D1A829D48E7700A2359D /* Build configuration list for PBXProject "ContainersApp" */;
+			buildConfigurationList = FC60D1A829D48E7700A2359D /* Build configuration list for PBXProject "QBoss" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -276,7 +276,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FC60D1AC29D48E7700A2359D /* ContainersApp */,
+				FC60D1AC29D48E7700A2359D /* QBoss */,
 			);
 		};
 /* End PBXProject section */
@@ -467,7 +467,8 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J8VM9NVFDC;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ContainersApp/Info.plist;
+				INFOPLIST_FILE = QBoss/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "App needs access to your camera to scan serial numbers on containers";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your device's location. This will allow us to accurately record the location where each container ID was recognized";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -479,7 +480,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gleb.ContainersApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.8allocate.QBoss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Valentin Velichko Wildcard";
@@ -503,7 +504,8 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J8VM9NVFDC;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ContainersApp/Info.plist;
+				INFOPLIST_FILE = QBoss/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "App needs access to your camera to scan serial numbers on containers";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your device's location. This will allow us to accurately record the location where each container ID was recognized";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -515,7 +517,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gleb.ContainersApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.8allocate.QBoss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Valentin Velichko Wildcard";
@@ -531,7 +533,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FC60D1A829D48E7700A2359D /* Build configuration list for PBXProject "ContainersApp" */ = {
+		FC60D1A829D48E7700A2359D /* Build configuration list for PBXProject "QBoss" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FC60D1BF29D48E7800A2359D /* Debug */,
@@ -540,7 +542,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FC60D1C129D48E7800A2359D /* Build configuration list for PBXNativeTarget "ContainersApp" */ = {
+		FC60D1C129D48E7800A2359D /* Build configuration list for PBXNativeTarget "QBoss" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FC60D1C229D48E7800A2359D /* Debug */,

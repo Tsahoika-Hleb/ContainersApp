@@ -1,7 +1,15 @@
 import UIKit
-import SnapKit
 
-class ScanViewController: UIViewController {
+private enum LayoutConstants {
+    static let topBottomInset: CGFloat = 0
+    static let leadingTrailingInset: CGFloat = 0
+    static let containerImageViewSize: CGSize = CGSize(width: 50, height: 50)
+    static let serialNumberLabelSize: CGSize = CGSize(width: 200, height: 60)
+    static let containerImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+    static let serialNumberLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 20)
+}
+
+final class ScanViewController: UIViewController {
     
     // MARK: - Properties
     var presenter: ScanPresenterProtocol?
@@ -9,7 +17,7 @@ class ScanViewController: UIViewController {
     private lazy var previewView: PreviewView = {
         let view = PreviewView()
         view.contentMode = .scaleToFill
-        view.backgroundColor = .green
+        //view.backgroundColor = .green
         view.autoresizesSubviews = true
         return view
     }()
@@ -48,7 +56,8 @@ class ScanViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        configureSubviews()
+        setViews()
+        setConstraints()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -57,33 +66,32 @@ class ScanViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    private func configureSubviews() {
+    private func setViews() {
         view.addSubview(previewView)
         view.addSubview(containersListImageView)
         view.addSubview(serialNumberLabel)
+    }
     
-        let topBottomInset: CGFloat = 0
-        let leadingTrailingInset: CGFloat = 0
-        let containerImageViewSize: CGSize = CGSize(width: 50, height: 50)
-        let serialNumberLabelSize: CGSize = CGSize(width: 200, height: 60)
-        let containerImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-        let serialNumberLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 20)
-
+    private func setConstraints() {
         previewView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview().inset(UIEdgeInsets(top: topBottomInset, left: leadingTrailingInset, bottom: topBottomInset, right: leadingTrailingInset))
+            make.top.bottom.leading.trailing.equalToSuperview()
+                .inset(UIEdgeInsets(top: LayoutConstants.topBottomInset,
+                                    left: LayoutConstants.leadingTrailingInset,
+                                    bottom: LayoutConstants.topBottomInset,
+                                    right: LayoutConstants.leadingTrailingInset))
         }
-
+        
         containersListImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
-            make.trailing.equalToSuperview().inset(containerImageViewInsets.right)
-            make.width.height.equalTo(containerImageViewSize.width)
+            make.trailing.equalToSuperview().inset(LayoutConstants.containerImageViewInsets.right)
+            make.width.height.equalTo(LayoutConstants.containerImageViewSize.width)
         }
-
+        
         serialNumberLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin).inset(serialNumberLabelInsets.bottom)
-            make.trailing.equalToSuperview().inset(serialNumberLabelInsets.right)
-            make.height.equalTo(serialNumberLabelSize.height)
-            make.width.equalTo(serialNumberLabelSize.width)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin).inset(LayoutConstants.serialNumberLabelInsets.bottom)
+            make.trailing.equalToSuperview().inset(LayoutConstants.serialNumberLabelInsets.right)
+            make.height.equalTo(LayoutConstants.serialNumberLabelSize.height)
+            make.width.equalTo(LayoutConstants.serialNumberLabelSize.width)
         }
     }
     

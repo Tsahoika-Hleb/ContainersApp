@@ -2,6 +2,19 @@ import UIKit
 import SnapKit
 import IQKeyboardManagerSwift
 
+protocol WelcomeViewControllerDelegate: UIViewController {
+    func urlValidation(isSuccesful: Bool)
+    func showLastEndpoint(_ endpoint: String)
+}
+
+private enum LayoutConstants {
+    static let topInset: CGFloat = 16
+    static let sideInset: CGFloat = 16
+    static let textFieldHeight: CGFloat = 44
+    static let buttonHeight: CGFloat = 40
+    static let imageViewHeightMultiplier: CGFloat = 0.4
+}
+
 final class WelcomeViewController: UIViewController {
     
     // MARK: - Properties
@@ -9,23 +22,7 @@ final class WelcomeViewController: UIViewController {
     
     private lazy var endpointsTextField: EndpointsTextField = {
         let view = EndpointsTextField()
-        
-        view.endpointsCount = { [weak presenter] in
-            guard let presenter = presenter else {
-                fatalError("No presenter")
-            }
-            return presenter.endpointsCount
-        }
-        view.endpointForRow = { [weak presenter] row in
-            guard let presenter = presenter else {
-                fatalError("No presenter")
-            }
-            return presenter.endpoint(for: row)
-        }
-        view.addEndpoint = { [weak presenter] endpoint in
-            presenter?.addEndpoint(endpoint)
-        }
-        
+        view.delegate = self
         return view
     }()
     
@@ -76,29 +73,25 @@ final class WelcomeViewController: UIViewController {
         view.backgroundColor = .white
         IQKeyboardManager.shared.enableAutoToolbar = false
         presenter?.setUpPresenter()
-        //presenter?.locationRequest()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        setViews()
         configureSubviews()
     }
     
     // MARK: - Private Methods
-    private func configureSubviews() {
+    private func setViews() {
         view.addSubview(topSafeAreaView)
         view.addSubview(imageView)
         view.addSubview(titleLabel)
         view.addSubview(instructionsLabel)
         view.addSubview(scanButton)
         view.addSubview(endpointsTextField)
-        
-        let kTopInset: CGFloat = 16
-        let kSideInset: CGFloat = 16
-        let kTextFieldHeight: CGFloat = 44
-        let kButtonHeight: CGFloat = 40
-        let kImageViewHeightMultiplier: CGFloat = 0.4
-
+    }
+    
+    private func configureSubviews() {
         topSafeAreaView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -106,32 +99,31 @@ final class WelcomeViewController: UIViewController {
 
         imageView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(kImageViewHeightMultiplier)
+            make.height.equalToSuperview().multipliedBy(LayoutConstants.imageViewHeightMultiplier)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(kTopInset)
-            make.left.right.equalToSuperview().inset(kSideInset)
+            make.top.equalTo(imageView.snp.bottom).offset(LayoutConstants.topInset)
+            make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
         }
 
         instructionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(kTopInset)
-            make.left.right.equalToSuperview().inset(kSideInset)
+            make.top.equalTo(titleLabel.snp.bottom).offset(LayoutConstants.topInset)
+            make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
         }
 
         endpointsTextField.snp.makeConstraints { make in
-            make.top.equalTo(instructionsLabel.snp.bottom).offset(kTopInset / 2)
-            make.leading.trailing.equalToSuperview().inset(kSideInset)
-            make.height.equalTo(kTextFieldHeight)
+            make.top.equalTo(instructionsLabel.snp.bottom).offset(LayoutConstants.topInset / 2)
+            make.leading.trailing.equalToSuperview().inset(LayoutConstants.sideInset)
+            make.height.equalTo(LayoutConstants.textFieldHeight)
         }
         endpointsTextField.updateTableView()
 
         scanButton.snp.makeConstraints { make in
-            make.top.equalTo(endpointsTextField.snp.bottom).offset(kTopInset)
-            make.left.right.equalToSuperview().inset(kSideInset)
-            make.height.equalTo(kButtonHeight)
+            make.top.equalTo(endpointsTextField.snp.bottom).offset(LayoutConstants.topInset)
+            make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
+            make.height.equalTo(LayoutConstants.buttonHeight)
         }
-
     }
     
     // MARK: - Actions
@@ -171,3 +163,26 @@ extension WelcomeViewController: WelcomeViewControllerDelegate {
     }
 }
 
+
+// MARK: - EndpointsTextFieldDelegate
+extension WelcomeViewController: EndpointsTextFieldDelegate {
+    
+    func endpointsCount() -> Int {
+        guard let presenter = presenter else {
+            fatalError("No presenter")
+        }
+        return presenter.endpointsCount
+    }
+    
+    func endpointForRow(rowIndex: Int) -> String? {
+        guard let presenter = presenter else {
+            fatalError("No presenter")
+        }
+        return presenter.endpoint(for: rowIndex)
+        
+    }
+    
+    func addEndpoint(_ endpoint: String) {
+        presenter?.addEndpoint(endpoint)
+    }
+}

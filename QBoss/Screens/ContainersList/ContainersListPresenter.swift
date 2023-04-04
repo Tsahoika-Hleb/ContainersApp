@@ -6,12 +6,6 @@ enum ContainerListFilter {
     case notIdentified
 }
 
-protocol ContainerListViewDelegateProtocol: AnyObject {
-    func showContainersList()
-    func urlValidation(isSuccesful: Bool)
-    func showLastEndpoint(_ endpoint: String)
-}
-
 protocol ContainersListPresenterSpec: AnyObject {
     var delegate: ContainerListViewDelegateProtocol? { get set }
     var scunnedContainersCount: Int { get }
@@ -24,7 +18,7 @@ protocol ContainersListPresenterSpec: AnyObject {
     func deleteContainerForRow(for row: Int)
     func endpoint(for row: Int) -> String
     func sendToServer()
-    func returnToScanPage()
+    func returnToScanPage(urlString: String)
 }
 
 final class ContainersListPresenter: ContainersListPresenterSpec {
@@ -137,9 +131,18 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         print("Send")
     }
     
-    func returnToScanPage() {
+    func returnToScanPage(urlString: String) {
         //TODO: check established endpoint
-        router?.showScanScreen()
+        guard let delegate,
+                      !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
+                if endpoints.contains(urlString) {
+                    router?.showScanScreen(urlString)
+                } else if urlString.validate(idCase: .url) {
+                    UserDefaults.standard[.urls, default: []].append(urlString)
+                    router?.showScanScreen(urlString)
+                } else {
+                    delegate.urlValidation(isSuccesful: false)
+        }
     }
     
     // MARK: - Private Methods
@@ -149,9 +152,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     private func fetchEndpoints() {
         endpoints = UserDefaults.standard[.urls, default: []]
-        if !endpoints.isEmpty {
-            delegate?.showLastEndpoint(endpoints.last!)
-        }
+        delegate?.showLastEndpoint(endpoints.last ?? "")
     }
     
     private func setFilterFilter(_ filter: ContainerListFilter) {

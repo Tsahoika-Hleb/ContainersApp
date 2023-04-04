@@ -6,4 +6,3 @@ extension UIImage {
     static let chevronDown = UIImage(systemName: "chevron.down")
     static let listBullet = UIImage(systemName: "list.bullet")
 }
-

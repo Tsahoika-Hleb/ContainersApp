@@ -1,10 +1,20 @@
 import UIKit
 
+protocol EndpointsTextFieldDelegate: AnyObject {
+    func endpointsCount() -> Int
+    func endpointForRow(rowIndex: Int) -> String?
+    func addEndpoint(_ endpoint: String)
+}
+
+private enum LayoutConstants {
+    static let textFieldHeight: CGFloat = 44
+    static let endpointListTableViewHeight: CGFloat = 0
+    static let textFieldTrailingInset: CGFloat = 50
+}
+
 final class EndpointsTextField: UIView {
     
-    var endpointsCount: (() -> Int)?
-    var endpointForRow: ((Int) -> String)?
-    var addEndpoint: ((String) -> Void)?
+    weak var delegate: EndpointsTextFieldDelegate?
     
     // MARK: - Private Properties
     private var expandedTouchArea: CGFloat = 0.0
@@ -50,6 +60,7 @@ final class EndpointsTextField: UIView {
     // MARK: - Initialization
     init() {
         super.init(frame: .zero)
+        setViews()
         setConstraints()
     }
     
@@ -95,32 +106,16 @@ final class EndpointsTextField: UIView {
     }
     
     // MARK: - Private Methods
-    private func isEndpointsEmpty() {
-        if let endpointsCount = endpointsCount {
-            if endpointsCount() == 0 {
-                dropdownButton.isHidden = true
-                textField.snp.makeConstraints { make in
-                    make.trailing.equalToSuperview()
-                }
-            } else {
-                textField.snp.updateConstraints { make in
-                    make.trailing.equalToSuperview().inset(50)
-                }
-            }
-        }
-    }
-    
-    private func setConstraints() {
+    func setViews() {
         addSubview(textField)
         addSubview(dropdownButton)
         addSubview(endpointListTableView)
-
-        let textFieldHeight: CGFloat = 44
-        let endpointListTableViewHeight: CGFloat = 0
-
+    }
+    
+    private func setConstraints() {
         textField.snp.makeConstraints { make in
             make.top.leading.equalToSuperview()
-            make.height.equalTo(textFieldHeight)
+            make.height.equalTo(LayoutConstants.textFieldHeight)
             make.trailing.equalToSuperview()
         }
 
@@ -132,17 +127,31 @@ final class EndpointsTextField: UIView {
         endpointListTableView.snp.updateConstraints { make in
             make.top.equalTo(textField.snp.bottom)
             make.leading.trailing.equalTo(textField)
-            make.height.equalTo(endpointListTableViewHeight)
+            make.height.equalTo(LayoutConstants.endpointListTableViewHeight)
         }
-
+    }
+    
+    private func isEndpointsEmpty() {
+        if let endpointsCount = delegate?.endpointsCount() {
+            if endpointsCount == 0 {
+                dropdownButton.isHidden = true
+                textField.snp.makeConstraints { make in
+                    make.trailing.equalToSuperview()
+                }
+            } else {
+                textField.snp.updateConstraints { make in
+                    make.trailing.equalToSuperview().inset(LayoutConstants.textFieldTrailingInset)
+                }
+            }
+        }
     }
     
     private func getTableViewHeight() -> Int{
         let maxVisiableCells = 5
-        if let endpointsCount = endpointsCount {
-            let height = Int(endpointListTableView.rowHeight) * endpointsCount()
+        if let endpointsCount = delegate?.endpointsCount() {
+            let height = Int(endpointListTableView.rowHeight) * endpointsCount
             let maxHeight = Int(endpointListTableView.rowHeight) * maxVisiableCells
-            if endpointsCount() < maxVisiableCells {
+            if endpointsCount < maxVisiableCells {
                 return height
             } else {
                 return maxHeight
@@ -174,18 +183,18 @@ final class EndpointsTextField: UIView {
 extension EndpointsTextField: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        endpointsCount?() ?? 0
+        delegate?.endpointsCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell: UITableViewCell = endpointListTableView.dequeueReusableCell(for: indexPath),
-              let endpointForRow = endpointForRow
+              let endpointForRow = delegate?.endpointForRow(rowIndex: indexPath.row)
         else {
             return UITableViewCell()
         }
         
         cell.backgroundColor = .white
-        cell.textLabel?.text = endpointForRow(indexPath.row)
+        cell.textLabel?.text = endpointForRow
         cell.textLabel?.textColor = .black
         cell.layer.borderWidth = 0.2
         cell.layer.borderColor = UIColor.black.cgColor
@@ -193,10 +202,10 @@ extension EndpointsTextField: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let endpointForRow = endpointForRow else {
+        guard let endpointForRow = delegate?.endpointForRow(rowIndex: indexPath.row) else {
             return
         }
-        textField.text = endpointForRow(indexPath.row)
+        textField.text = endpointForRow
         textField.layer.borderColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 1.00).cgColor
         endpointListTableView.deselectRow(at: indexPath, animated: false)
         endpointListTableView.isHidden = true
@@ -227,7 +236,8 @@ extension EndpointsTextField: UITextFieldDelegate {
         if let text = textField.text {
             textField.resignFirstResponder()
             endpointListTableView.isHidden = true
-            addEndpoint?(text)
+            updateTouchArea()
+            delegate?.addEndpoint(text)
             return true
         } else {
             return false
