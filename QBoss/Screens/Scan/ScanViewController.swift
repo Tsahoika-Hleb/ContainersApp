@@ -1,4 +1,5 @@
 import UIKit
+import TensorFlowLiteTaskVision
 
 private enum LayoutConstants {
     static let topBottomInset: CGFloat = 0
@@ -11,8 +12,39 @@ private enum LayoutConstants {
 
 final class ScanViewController: UIViewController {
     
+    private lazy var lastFrameImage: UIImageView = {
+       var imageView = UIImageView()
+        imageView.backgroundColor = .clear
+        //imageView.image = I.welcomeScreenImage.image
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let colors = [
+      UIColor.red,
+      UIColor(displayP3Red: 90.0 / 255.0, green: 200.0 / 255.0, blue: 250.0 / 255.0, alpha: 1.0),
+      UIColor.green,
+      UIColor.orange,
+      UIColor.blue,
+      UIColor.purple,
+      UIColor.magenta,
+      UIColor.yellow,
+      UIColor.cyan,
+      UIColor.brown,
+    ]
+    
+    private lazy var overlayView: OverlayView = {
+        let view = OverlayView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let inferenceQueue = DispatchQueue(label: "inferencequeue")
+    private var isInferenceQueueBusy = false
+    
     // MARK: - Properties
     var presenter: ScanPresenterProtocol?
+    var tfManager: TFManager?
     
     private lazy var previewView: PreviewView = {
         let view = PreviewView()
@@ -46,6 +78,7 @@ final class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraFeedManager.delegate = self
+        tfManager?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,8 +101,10 @@ final class ScanViewController: UIViewController {
     // MARK: - Private Methods
     private func setViews() {
         view.addSubview(previewView)
-        view.addSubview(containersListImageView)
         view.addSubview(serialNumberLabel)
+        view.addSubview(overlayView)
+        view.addSubview(lastFrameImage)
+        view.addSubview(containersListImageView)
     }
     
     private func setConstraints() {
@@ -93,6 +128,15 @@ final class ScanViewController: UIViewController {
             make.height.equalTo(LayoutConstants.serialNumberLabelSize.height)
             make.width.equalTo(LayoutConstants.serialNumberLabelSize.width)
         }
+        
+        overlayView.snp.makeConstraints { make in
+            make.top.trailing.leading.bottom.equalToSuperview()
+        }
+        
+        lastFrameImage.snp.makeConstraints { make in
+            make.bottom.leading.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(200)
+        }
     }
     
     // MARK: - Actions
@@ -106,7 +150,13 @@ final class ScanViewController: UIViewController {
 extension ScanViewController: CameraFeedManagerDelegate {
     
     func didOutput(pixelBuffer: CVPixelBuffer) {
-        
+        guard !self.isInferenceQueueBusy else { return }
+    
+        inferenceQueue.async {
+            self.isInferenceQueueBusy = true
+            self.tfManager?.detect(pixelBuffer: pixelBuffer)
+            self.isInferenceQueueBusy = false
+        }
     }
     
     func presentCameraPermissionsDeniedAlert() {
@@ -153,3 +203,59 @@ extension ScanViewController: ScanViewControllerDelegate {
 }
 
 
+// MARK: - TFManagerDelegate
+extension ScanViewController: TFManagerDelegateProtocol {
+    
+    func drawAfterPerformingCalculations(onDetections detections: [Detection],
+                                         withImageSize imageSize: CGSize,
+                                         pixelBuffer: CVPixelBuffer) {
+        
+        overlayView.objectOverlays = []
+        overlayView.setNeedsDisplay()
+        
+        guard !detections.isEmpty else {
+            return
+        }
+        //print("Detections isn't empty")
+        
+        var objectOverlays: [ObjectOverlay] = []
+        
+        for detection in detections {
+            
+            guard let category = detection.categories.first else { continue }
+
+            let calculator = BoundingBoxCalculator()
+            let rect = calculator
+                .createBoundingBox(convertedRect: detection.boundingBox.applying(
+                    CGAffineTransform( scaleX: overlayView.bounds.size.width / imageSize.width,
+                                       y: overlayView.bounds.size.height / imageSize.height)),
+                                   viewBounds: overlayView.bounds)
+            
+            let objectDescription = String(
+                format: "\(category.label ?? "Unknown") (%.2f)",
+                category.score)
+            
+            let displayColor = colors[category.index % colors.count]
+            
+            let size = objectDescription.size(withAttributes: [.font: UIFont.displayFont])
+            
+            let objectOverlay = ObjectOverlay(
+                name: objectDescription, borderRect: rect, nameStringSize: size,
+                color: displayColor,
+                font: UIFont.displayFont)
+            
+            objectOverlays.append(objectOverlay)
+            if objectDescription.contains("vertical") || objectDescription.contains("horizontal") {
+                lastFrameImage.image = calculator.getBoundingBoxImage(cropRect: rect,
+                                                                      viewBoundsRect: previewView.bounds,
+                                                                      pixelBuffer: pixelBuffer)
+            }
+        }
+        
+        // Hands off drawing to the OverlayView
+        overlayView.objectOverlays = objectOverlays
+        overlayView.setNeedsDisplay()
+    }
+    
+    
+}

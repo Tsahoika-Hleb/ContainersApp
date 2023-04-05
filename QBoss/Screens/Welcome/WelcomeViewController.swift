@@ -15,6 +15,13 @@ private enum LayoutConstants {
     static let imageViewHeightMultiplier: CGFloat = 0.4
 }
 
+private enum AnimationConstants {
+    static let animationDuration: TimeInterval = 0.2
+    static let scaleFactor: CGFloat = 0.95
+    static let initialAlpha: CGFloat = 1.0
+    static let highlightedAlpha: CGFloat = 0.8
+}
+
 final class WelcomeViewController: UIViewController {
     
     // MARK: - Properties
@@ -126,22 +133,21 @@ final class WelcomeViewController: UIViewController {
         }
     }
     
-    // MARK: - Actions
-    @objc private func scanButtonTapped(sender: UIButton!) {
-        let animationDuration: TimeInterval = 0.2
-        let scaleFactor: CGFloat = 0.95
-        let initialAlpha: CGFloat = 1.0
-        let highlightedAlpha: CGFloat = 0.8
-
-        UIView.animate(withDuration: animationDuration, animations: {
-            sender.transform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
-            sender.alpha = highlightedAlpha
+    private func buttonAnimation(button: UIButton) {
+        UIView.animate(withDuration: AnimationConstants.animationDuration, animations: {
+            button.transform = CGAffineTransform(scaleX: AnimationConstants.scaleFactor, y: AnimationConstants.scaleFactor)
+            button.alpha = AnimationConstants.highlightedAlpha
         }, completion: { _ in
-            UIView.animate(withDuration: animationDuration, animations: {
-                sender.transform = CGAffineTransform.identity
-                sender.alpha = initialAlpha
+            UIView.animate(withDuration: AnimationConstants.animationDuration, animations: {
+                button.transform = CGAffineTransform.identity
+                button.alpha = AnimationConstants.initialAlpha
             })
         })
+    }
+    
+    // MARK: - Actions
+    @objc private func scanButtonTapped(sender: UIButton!) {
+        buttonAnimation(button: sender)
         
         if let url = endpointsTextField.getText() {
             presenter?.startScanning(url)

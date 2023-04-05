@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		276ACA188E692D620449012C /* Pods_QBoss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7EE39D45947F3AF1DB3837 /* Pods_QBoss.framework */; };
+		FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */; };
+		FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C229DD803D004D0B1A /* Fonts.swift */; };
+		FC0EABA629DC5D8B00FEE645 /* ObjectDetectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */; };
+		FC0EABA829DC5E4100FEE645 /* containerDetection.tflite in Resources */ = {isa = PBXBuildFile; fileRef = FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */; };
+		FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA929DC608F00FEE645 /* TFManger.swift */; };
+		FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABAC29DC651200FEE645 /* OverlayView.swift */; };
 		FC3B236829DAF25300297529 /* ContainersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236729DAF25300297529 /* ContainersList.swift */; };
 		FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236A29DB116C00297529 /* EndpointsTextField.swift */; };
 		FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B029D48E7700A2359D /* AppDelegate.swift */; };
@@ -41,6 +48,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D7EE39D45947F3AF1DB3837 /* Pods_QBoss.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QBoss.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		452300851C88202814E220B1 /* Pods-QBoss.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBoss.release.xcconfig"; path = "Target Support Files/Pods-QBoss/Pods-QBoss.release.xcconfig"; sourceTree = "<group>"; };
+		F987E87F423FFE560C796D4C /* Pods-QBoss.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBoss.debug.xcconfig"; path = "Target Support Files/Pods-QBoss/Pods-QBoss.debug.xcconfig"; sourceTree = "<group>"; };
+		FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBoxCalculator.swift; sourceTree = "<group>"; };
+		FC0121C229DD803D004D0B1A /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectDetectionHelper.swift; sourceTree = "<group>"; };
+		FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = containerDetection.tflite; sourceTree = "<group>"; };
+		FC0EABA929DC608F00FEE645 /* TFManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFManger.swift; sourceTree = "<group>"; };
+		FC0EABAC29DC651200FEE645 /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		FC3B236729DAF25300297529 /* ContainersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersList.swift; sourceTree = "<group>"; };
 		FC3B236A29DB116C00297529 /* EndpointsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsTextField.swift; sourceTree = "<group>"; };
 		FC60D1AD29D48E7700A2359D /* QBoss.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QBoss.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,12 +97,58 @@
 			files = (
 				FC60D1D429D4944A00A2359D /* SnapKit in Frameworks */,
 				FC60D1D729D494BC00A2359D /* IQKeyboardManagerSwift in Frameworks */,
+				276ACA188E692D620449012C /* Pods_QBoss.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31EF7BAB4515FF05FE756287 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F987E87F423FFE560C796D4C /* Pods-QBoss.debug.xcconfig */,
+				452300851C88202814E220B1 /* Pods-QBoss.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		8B1FEFE3C13F94CEE93AFB2D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3D7EE39D45947F3AF1DB3837 /* Pods_QBoss.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FC0121BF29DD7D95004D0B1A /* OverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				FC0EABAC29DC651200FEE645 /* OverlayView.swift */,
+				FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */,
+			);
+			path = OverlayView;
+			sourceTree = "<group>";
+		};
+		FC0EABA429DC5D6700FEE645 /* TFLite */ = {
+			isa = PBXGroup;
+			children = (
+				FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */,
+				FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */,
+				FC0EABA929DC608F00FEE645 /* TFManger.swift */,
+			);
+			path = TFLite;
+			sourceTree = "<group>";
+		};
+		FC0EABAB29DC64F600FEE645 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC0121BF29DD7D95004D0B1A /* OverlayView */,
+				FC60D1FE29D6E64100A2359D /* CameraFeed */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		FC3B236629DAF20400297529 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +171,8 @@
 			children = (
 				FC60D1AF29D48E7700A2359D /* QBoss */,
 				FC60D1AE29D48E7700A2359D /* Products */,
+				31EF7BAB4515FF05FE756287 /* Pods */,
+				8B1FEFE3C13F94CEE93AFB2D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +187,7 @@
 		FC60D1AF29D48E7700A2359D /* QBoss */ = {
 			isa = PBXGroup;
 			children = (
+				FC0EABA429DC5D6700FEE645 /* TFLite */,
 				FC60D1EC29D586B400A2359D /* Extensions */,
 				FC60D1E829D4F5C500A2359D /* Models */,
 				FC60D1DA29D49C7D00A2359D /* Screens */,
@@ -172,7 +237,7 @@
 		FC60D1E229D4DD3000A2359D /* Scan */ = {
 			isa = PBXGroup;
 			children = (
-				FC60D1FE29D6E64100A2359D /* CameraFeed */,
+				FC0EABAB29DC64F600FEE645 /* Views */,
 				FC60D1E329D4DD5200A2359D /* ScanViewController.swift */,
 				FC8091F629D7055200D02816 /* ScanPresenter.swift */,
 				FC8091F829D706E500D02816 /* ScanRouter.swift */,
@@ -207,6 +272,7 @@
 				FC60D1FB29D5DA3D00A2359D /* String+Extension.swift */,
 				FC80920129D8883C00D02816 /* AlertActions.swift */,
 				FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */,
+				FC0121C229DD803D004D0B1A /* Fonts.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -227,6 +293,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FC60D1C129D48E7800A2359D /* Build configuration list for PBXNativeTarget "QBoss" */;
 			buildPhases = (
+				272D8A48777BB94BC5DB760B /* [CP] Check Pods Manifest.lock */,
 				FC60D1A929D48E7700A2359D /* Sources */,
 				FC60D1AA29D48E7700A2359D /* Frameworks */,
 				FC60D1AB29D48E7700A2359D /* Resources */,
@@ -287,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC60D1BD29D48E7800A2359D /* LaunchScreen.storyboard in Resources */,
+				FC0EABA829DC5E4100FEE645 /* containerDetection.tflite in Resources */,
 				FC60D1CC29D4930C00A2359D /* Localizable.strings in Resources */,
 				FC60D1BA29D48E7800A2359D /* Assets.xcassets in Resources */,
 			);
@@ -294,15 +362,42 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		272D8A48777BB94BC5DB760B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-QBoss-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FC60D1A929D48E7700A2359D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FC60D1FC29D5DA3D00A2359D /* String+Extension.swift in Sources */,
+				FC0EABA629DC5D8B00FEE645 /* ObjectDetectionHelper.swift in Sources */,
 				FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */,
 				FC8091F929D706E500D02816 /* ScanRouter.swift in Sources */,
 				FC60D1D129D4939400A2359D /* XCAssets+Generated.swift in Sources */,
+				FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */,
 				FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */,
 				FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */,
 				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
@@ -318,7 +413,10 @@
 				FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */,
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,
 				FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */,
+				FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */,
 				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,
+				FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */,
+				FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */,
 				FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */,
 				FC60D1D029D4939400A2359D /* Strings+Generated.swift in Sources */,
 				FC8091F129D6E6EB00D02816 /* PreviewView.swift in Sources */,
@@ -458,6 +556,7 @@
 		};
 		FC60D1C229D48E7800A2359D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F987E87F423FFE560C796D4C /* Pods-QBoss.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -495,6 +594,7 @@
 		};
 		FC60D1C329D48E7800A2359D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 452300851C88202814E220B1 /* Pods-QBoss.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
