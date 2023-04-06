@@ -7,5 +7,8 @@ target 'QBoss' do
 
   # Pods for ObjectDetection
   pod 'TensorFlowLiteTaskVision'
+  pod 'SnapKit'
+  pod 'IQKeyboardManagerSwift'
+  # pod 'GoogleMLKit/TextRecognition','2.2.0'
 
 end

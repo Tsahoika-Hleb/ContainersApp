@@ -1,16 +1,24 @@
 PODS:
+  - IQKeyboardManagerSwift (6.5.11)
+  - SnapKit (5.6.0)
   - TensorFlowLiteTaskVision (0.4.3)
 
 DEPENDENCIES:
+  - IQKeyboardManagerSwift
+  - SnapKit
   - TensorFlowLiteTaskVision
 
 SPEC REPOS:
   trunk:
+    - IQKeyboardManagerSwift
+    - SnapKit
     - TensorFlowLiteTaskVision
 
 SPEC CHECKSUMS:
+  IQKeyboardManagerSwift: c7955c0bdbf7b2eb29bb7daaa44e3d90f55a9a85
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   TensorFlowLiteTaskVision: 125d5b49d325ba2cf3938454da5f74a1cbfe0552
 
-PODFILE CHECKSUM: 3b099ec99ca3bea2db554889f471e01e14563154
+PODFILE CHECKSUM: a38db6ed021d352936d3bab4b808159e5796e817
 
 COCOAPODS: 1.12.0

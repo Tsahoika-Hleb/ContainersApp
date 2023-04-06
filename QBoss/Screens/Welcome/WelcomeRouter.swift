@@ -21,9 +21,9 @@ final class WelcomeRouter: WelcomeRouterSpec {
         
         let scanVC = ScanViewController()
         let router = ScanRouter(viewController: scanVC)
-        let presenter = ScanPresenter(delegate: scanVC, router: router, endpoint: endpoint)
+        let presenter = ScanPresenter(delegate: scanVC, router: router, tfManager: TFManager(), endpoint: endpoint)
         scanVC.presenter = presenter
-        scanVC.tfManager = TFManager()
+        //scanVC.tfManager = TFManager()
         scanVC.modalPresentationStyle = .fullScreen
         
         vc.present(scanVC, animated: true)

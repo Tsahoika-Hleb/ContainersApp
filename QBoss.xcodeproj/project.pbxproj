@@ -10,6 +10,9 @@
 		276ACA188E692D620449012C /* Pods_QBoss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7EE39D45947F3AF1DB3837 /* Pods_QBoss.framework */; };
 		FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */; };
 		FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C229DD803D004D0B1A /* Fonts.swift */; };
+		FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */; };
+		FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */; };
+		FC0E1CA929DF5CFC002EA33D /* TextRecognitionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA829DF5CFC002EA33D /* TextRecognitionHelper.swift */; };
 		FC0EABA629DC5D8B00FEE645 /* ObjectDetectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */; };
 		FC0EABA829DC5E4100FEE645 /* containerDetection.tflite in Resources */ = {isa = PBXBuildFile; fileRef = FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */; };
 		FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA929DC608F00FEE645 /* TFManger.swift */; };
@@ -23,8 +26,6 @@
 		FC60D1CC29D4930C00A2359D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1CB29D4930C00A2359D /* Localizable.strings */; };
 		FC60D1D029D4939400A2359D /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1CE29D4939400A2359D /* Strings+Generated.swift */; };
 		FC60D1D129D4939400A2359D /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1CF29D4939400A2359D /* XCAssets+Generated.swift */; };
-		FC60D1D429D4944A00A2359D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC60D1D329D4944A00A2359D /* SnapKit */; };
-		FC60D1D729D494BC00A2359D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */; };
 		FC60D1DF29D49CA000A2359D /* WelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1DC29D49CA000A2359D /* WelcomePresenter.swift */; };
 		FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1DD29D49CA000A2359D /* WelcomeRouter.swift */; };
 		FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1DE29D49CA000A2359D /* WelcomeViewController.swift */; };
@@ -53,6 +54,9 @@
 		F987E87F423FFE560C796D4C /* Pods-QBoss.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBoss.debug.xcconfig"; path = "Target Support Files/Pods-QBoss/Pods-QBoss.debug.xcconfig"; sourceTree = "<group>"; };
 		FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBoxCalculator.swift; sourceTree = "<group>"; };
 		FC0121C229DD803D004D0B1A /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionProcessorHelper.swift; sourceTree = "<group>"; };
+		FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanScreenProtocols.swift; sourceTree = "<group>"; };
+		FC0E1CA829DF5CFC002EA33D /* TextRecognitionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognitionHelper.swift; sourceTree = "<group>"; };
 		FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectDetectionHelper.swift; sourceTree = "<group>"; };
 		FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = containerDetection.tflite; sourceTree = "<group>"; };
 		FC0EABA929DC608F00FEE645 /* TFManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFManger.swift; sourceTree = "<group>"; };
@@ -95,8 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC60D1D429D4944A00A2359D /* SnapKit in Frameworks */,
-				FC60D1D729D494BC00A2359D /* IQKeyboardManagerSwift in Frameworks */,
 				276ACA188E692D620449012C /* Pods_QBoss.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -125,9 +127,18 @@
 			isa = PBXGroup;
 			children = (
 				FC0EABAC29DC651200FEE645 /* OverlayView.swift */,
-				FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */,
 			);
 			path = OverlayView;
+			sourceTree = "<group>";
+		};
+		FC0E1CA529DEFB14002EA33D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */,
+				FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */,
+				FC0E1CA829DF5CFC002EA33D /* TextRecognitionHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		FC0EABA429DC5D6700FEE645 /* TFLite */ = {
@@ -237,10 +248,12 @@
 		FC60D1E229D4DD3000A2359D /* Scan */ = {
 			isa = PBXGroup;
 			children = (
+				FC0E1CA529DEFB14002EA33D /* Helpers */,
 				FC0EABAB29DC64F600FEE645 /* Views */,
 				FC60D1E329D4DD5200A2359D /* ScanViewController.swift */,
 				FC8091F629D7055200D02816 /* ScanPresenter.swift */,
 				FC8091F829D706E500D02816 /* ScanRouter.swift */,
+				FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */,
 			);
 			path = Scan;
 			sourceTree = "<group>";
@@ -297,16 +310,13 @@
 				FC60D1A929D48E7700A2359D /* Sources */,
 				FC60D1AA29D48E7700A2359D /* Frameworks */,
 				FC60D1AB29D48E7700A2359D /* Resources */,
+				3EB374D57F36F626586A6E19 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = QBoss;
-			packageProductDependencies = (
-				FC60D1D329D4944A00A2359D /* SnapKit */,
-				FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */,
-			);
 			productName = ContainersApp;
 			productReference = FC60D1AD29D48E7700A2359D /* QBoss.app */;
 			productType = "com.apple.product-type.application";
@@ -335,10 +345,6 @@
 				Base,
 			);
 			mainGroup = FC60D1A429D48E7700A2359D;
-			packageReferences = (
-				FC60D1D229D4944A00A2359D /* XCRemoteSwiftPackageReference "SnapKit" */,
-				FC60D1D529D494BC00A2359D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-			);
 			productRefGroup = FC60D1AE29D48E7700A2359D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -385,6 +391,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3EB374D57F36F626586A6E19 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QBoss/Pods-QBoss-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QBoss/Pods-QBoss-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QBoss/Pods-QBoss-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -400,6 +423,7 @@
 				FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */,
 				FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */,
 				FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */,
+				FC0E1CA929DF5CFC002EA33D /* TextRecognitionHelper.swift in Sources */,
 				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
 				FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */,
 				FC3B236829DAF25300297529 /* ContainersList.swift in Sources */,
@@ -410,6 +434,7 @@
 				FC8091F529D6EB6F00D02816 /* CameraFeedManager.swift in Sources */,
 				FC60D1F029D58A7600A2359D /* ScannedContainerTableViewCell.swift in Sources */,
 				FC60D1F829D5B7BD00A2359D /* ContainersListPresenter.swift in Sources */,
+				FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */,
 				FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */,
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,
 				FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */,
@@ -417,6 +442,7 @@
 				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,
 				FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */,
 				FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */,
+				FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */,
 				FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */,
 				FC60D1D029D4939400A2359D /* Strings+Generated.swift in Sources */,
 				FC8091F129D6E6EB00D02816 /* PreviewView.swift in Sources */,
@@ -652,38 +678,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		FC60D1D229D4944A00A2359D /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
-		FC60D1D529D494BC00A2359D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		FC60D1D329D4944A00A2359D /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FC60D1D229D4944A00A2359D /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		FC60D1D629D494BC00A2359D /* IQKeyboardManagerSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FC60D1D529D494BC00A2359D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FC60D1A529D48E7700A2359D /* Project object */;
 }
