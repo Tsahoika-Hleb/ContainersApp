@@ -1,5 +1,5 @@
 import UIKit
-//import TensorFlowLiteTaskVision
+//import Vision
 
 private enum LayoutConstants {
     static let topBottomInset: CGFloat = 0

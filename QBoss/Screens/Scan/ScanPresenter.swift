@@ -7,6 +7,7 @@ final class ScanPresenter: ScanPresenterProtocol {
     // MARK: - Properties
     weak var delegate: ScanViewControllerDelegate?
     var tfManager: TFManager?
+    let imageToTextProcessor: ImageToTextProcessor = .init()
     
     // MARK: - Private Properties
     internal var router: ScanRouterSpec?
@@ -37,6 +38,29 @@ final class ScanPresenter: ScanPresenterProtocol {
         tfManager?.detect(pixelBuffer: pixelBuffer)
         //self.viewBoundsRect = viewBoundsRect
     }
+    
+    // MARK: - Private Methods
+    private func recognizeText(image: UIImage) {
+        Task {
+            //var images: [UIImage] = []
+//            for result in results {
+//                guard let image = try? await getImageFromResult(result) else { continue }
+//                images.append(image)
+//            }
+
+            //guard let image = try? await getImageFromResult(image) else { continue }
+            do {
+                let result = try await imageToTextProcessor.process(image: image)
+                DispatchQueue.main.async { [weak self] in
+                    //self?.imageView.image = result.0
+                    //self?.numberLabel.text = result.1
+                    print(result.1)
+                }
+            } catch {
+                print("Error processing images or recognizing text: \(error)")
+            }
+        }
+    }
 }
 
 
@@ -61,10 +85,11 @@ extension ScanPresenter: TFManagerDelegateProtocol {
         let horizontalEl = objectOverlays.filter{ $0.name.contains("horizontal") }.first
         if let el = verticalEl ?? horizontalEl,
            let image = BoundingBoxCalculator()
-               .getBoundingBoxImage(cropRect: el.borderRect,
-                            viewBoundsRect: viewBoundsRect,
-                            pixelBuffer: pixelBuffer) {
-               delegate?.setImage(image: image)
+            .getBoundingBoxImage(cropRect: el.borderRect,
+                                 viewBoundsRect: viewBoundsRect,
+                                 pixelBuffer: pixelBuffer) {
+            delegate?.setImage(image: image)
+            recognizeText(image: image)
         }
     }
 }

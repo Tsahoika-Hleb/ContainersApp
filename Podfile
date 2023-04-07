@@ -9,6 +9,7 @@ target 'QBoss' do
   pod 'TensorFlowLiteTaskVision'
   pod 'SnapKit'
   pod 'IQKeyboardManagerSwift'
-pod 'GoogleMLKit/TextRecognition','3.2.0'
+  pod 'OpenCV'
+ #pod 'GoogleMLKit/TextRecognition','3.2.0'
 
 end
