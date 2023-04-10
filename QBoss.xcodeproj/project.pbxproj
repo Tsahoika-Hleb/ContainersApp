@@ -206,6 +206,7 @@
 		FC60D1AF29D48E7700A2359D /* QBoss */ = {
 			isa = PBXGroup;
 			children = (
+				FC72723D29E235B600957316 /* OpenCV */,
 				FC0EABA429DC5D6700FEE645 /* TFLite */,
 				FC60D1EC29D586B400A2359D /* Extensions */,
 				FC60D1E829D4F5C500A2359D /* Models */,
@@ -214,11 +215,6 @@
 				FC8091FA29D7147000D02816 /* StartHelper.swift */,
 				FC60D1B029D48E7700A2359D /* AppDelegate.swift */,
 				FC60D1B229D48E7700A2359D /* SceneDelegate.swift */,
-				FC29031829E064B5008FA328 /* BridgingHeader.h */,
-				FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */,
-				FC29031A29E064B5008FA328 /* ImageToTextProcessor.swift */,
-				FC29031B29E064B5008FA328 /* OpenCVWrapper.h */,
-				FC29031729E064B5008FA328 /* OpenCVWrapper.mm */,
 				FC60D1B929D48E7800A2359D /* Assets.xcassets */,
 				FC60D1BB29D48E7800A2359D /* LaunchScreen.storyboard */,
 				FC60D1BE29D48E7800A2359D /* Info.plist */,
@@ -310,6 +306,18 @@
 				FC8091F029D6E6EB00D02816 /* PreviewView.swift */,
 			);
 			path = CameraFeed;
+			sourceTree = "<group>";
+		};
+		FC72723D29E235B600957316 /* OpenCV */ = {
+			isa = PBXGroup;
+			children = (
+				FC29031829E064B5008FA328 /* BridgingHeader.h */,
+				FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */,
+				FC29031A29E064B5008FA328 /* ImageToTextProcessor.swift */,
+				FC29031B29E064B5008FA328 /* OpenCVWrapper.h */,
+				FC29031729E064B5008FA328 /* OpenCVWrapper.mm */,
+			);
+			path = OpenCV;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -633,7 +641,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = QBoss/BridgingHeader.h;
+				SWIFT_OBJC_BRIDGING_HEADER = QBoss/OpenCV/BridgingHeader.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -674,7 +682,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = QBoss/BridgingHeader.h;
+				SWIFT_OBJC_BRIDGING_HEADER = QBoss/OpenCV/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -8,10 +8,6 @@ protocol ScanPresenterProtocol: AnyObject {
     func setUp(viewBoundsRect: CGRect)
     func performContainersListScreen()
     func detect(pixelBuffer: CVPixelBuffer)
-//    func handleDetections(onDetections detections: [Detection],
-//                          withImageSize imageSize: CGSize,
-//                          viewBoundsRect: CGRect,
-//                          pixelBuffer: CVPixelBuffer)
 }
 
 // MARK: - ViewController

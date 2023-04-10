@@ -1,5 +1,4 @@
 import UIKit
-//import Vision
 
 private enum LayoutConstants {
     static let topBottomInset: CGFloat = 0
@@ -14,7 +13,6 @@ final class ScanViewController: UIViewController {
     
     // MARK: - Properties
     var presenter: ScanPresenterProtocol?
-//    var tfManager: TFManager?
     private lazy var cameraFeedManager = CameraFeedManager(previewView: previewView) // TODO: Как привильно перенесть в presenter?
     private let inferenceQueue = DispatchQueue(label: "inferencequeue")
     private var isInferenceQueueBusy = false
@@ -61,7 +59,6 @@ final class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraFeedManager.delegate = self
-        //tfManager?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -198,42 +195,5 @@ extension ScanViewController: ScanViewControllerDelegate {
     
     func setImage(image: UIImage) {
         lastFrameImageView.image = image
-        //await print(TextRecognitionHelper().recognizeText(in: image) ?? "NOTHING")
     }
-    
 }
-
-
-//// MARK: - TFManagerDelegate
-//extension ScanViewController: TFManagerDelegateProtocol {
-//    func drawAfterPerformingCalculations(onDetections detections: [Detection],
-//                                         withImageSize imageSize: CGSize,
-//                                         pixelBuffer: CVPixelBuffer) {
-//        guard let presenter = presenter else {
-//            fatalError("No presenter")
-//        }
-//
-//        overlayView.objectOverlays = []
-//        overlayView.setNeedsDisplay()
-//
-//        guard !detections.isEmpty else {
-//            return
-//        }
-//        var objectOverlays: [ObjectOverlay] = []
-//
-//        objectOverlays = DetectionProcessorHelper()
-//            .processDetections(detections, imageSize: imageSize, viewBoundsRect: overlayView.bounds)
-//
-//        let verticalEl = objectOverlays.filter{ $0.name.contains("vertical") }.first
-//        let horizontalEl = objectOverlays.filter{ $0.name.contains("horizontal") }.first
-//        if let el = verticalEl {
-//            lastFrameImageView.image = BoundingBoxCalculator()
-//                .getBoundingBoxImage(cropRect: el.borderRect,
-//                                     viewBoundsRect: overlayView.frame,
-//                                     pixelBuffer: pixelBuffer)
-//        }
-//
-//        overlayView.objectOverlays = //presenter?.handleDetections(onDetections: detections, withImageSize: imageSize, pixelBuffer: pixelBuffer)
-//        overlayView.setNeedsDisplay()
-//    }
-//}

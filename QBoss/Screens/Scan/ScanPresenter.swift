@@ -36,25 +36,21 @@ final class ScanPresenter: ScanPresenterProtocol {
 
     func detect(pixelBuffer: CVPixelBuffer) {
         tfManager?.detect(pixelBuffer: pixelBuffer)
-        //self.viewBoundsRect = viewBoundsRect
     }
     
     // MARK: - Private Methods
     private func recognizeText(image: UIImage) {
         Task {
-            //var images: [UIImage] = []
-//            for result in results {
-//                guard let image = try? await getImageFromResult(result) else { continue }
-//                images.append(image)
-//            }
-
-            //guard let image = try? await getImageFromResult(image) else { continue }
             do {
                 let result = try await imageToTextProcessor.process(image: image)
                 DispatchQueue.main.async { [weak self] in
-                    //self?.imageView.image = result.0
-                    //self?.numberLabel.text = result.1
-                    print(result.1)
+                    print("'\(result.1)'")
+                    if result.1.count == 10 ,let checksum = result.1.calculateCheckDigit() {
+                        print("\(checksum)")
+                    } else {
+                        print("incorrect check digit")
+                    }
+                    print("-----------------------")
                 }
             } catch {
                 print("Error processing images or recognizing text: \(error)")
