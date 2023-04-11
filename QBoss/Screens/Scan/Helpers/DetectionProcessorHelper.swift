@@ -1,14 +1,8 @@
 import UIKit
 import TensorFlowLiteTaskVision
 
-
-/**
- Helps to draw
- */
 final class DetectionProcessorHelper {
     
-//    private let overlayView: OverlayView
-//    private let lastFrameImageView: UIImageView
     private let colors = [
       UIColor.red,
       UIColor(displayP3Red: 90.0 / 255.0, green: 200.0 / 255.0, blue: 250.0 / 255.0, alpha: 1.0),
@@ -22,21 +16,8 @@ final class DetectionProcessorHelper {
       UIColor.brown,
     ]
 
-    
-//    init(overlayView: OverlayView, lastFrameImageView: UIImageView) {
-//        self.overlayView = overlayView
-//        self.lastFrameImageView = lastFrameImageView
-//    }
-    
     func processDetections(_ detections: [Detection], imageSize: CGSize, viewBoundsRect: CGRect) -> [ObjectOverlay] {
-        
-//        overlayView.objectOverlays = []
-//        overlayView.setNeedsDisplay()
-//        
-//        guard !detections.isEmpty else {
-//            return
-//        }
-        
+
         var objectOverlays: [ObjectOverlay] = []
         
         for detection in detections {
@@ -64,15 +45,8 @@ final class DetectionProcessorHelper {
                 font: UIFont.displayFont)
             
             objectOverlays.append(objectOverlay)
-//            if objectDescription.contains("vertical") || objectDescription.contains("horizontal") {
-//                lastFrameImageView.image = calculator.getBoundingBoxImage(cropRect: rect, viewBoundsRect: overlayView.frame, pixelBuffer: pixelBuffer)
-//            }
-            
         }
         
         return objectOverlays
-//        // Hands off drawing to the OverlayView
-//        overlayView.objectOverlays = objectOverlays
-//        overlayView.setNeedsDisplay()
     }
 }

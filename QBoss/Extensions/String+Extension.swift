@@ -3,6 +3,7 @@ import Foundation
 extension String {
     enum Identification: String {
         case url = #"^(?:https?://)?(?:www\.)?(?:[\w-]+\.)+[a-z]{2,}(?:/[\w-./?%&=]*)?$"#
+        case serialNumber = "^[A-Z]{3}[UJZ]\\d{7}$"
     }
     
     func validate(idCase: Identification) -> Bool {
@@ -12,7 +13,13 @@ extension String {
 }
 
 extension String {
-    func calculateCheckDigit() -> String? {
+    
+    func validateCheckDigit() -> Bool {
+        guard self.count > 10 else { return false }
+        
+        var containerNumberForValidation = self
+        let checkDigit = Int(String(containerNumberForValidation.removeLast()))
+        
         let weights = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
         let m: [String: Int] = [
             "A": 10,
@@ -44,22 +51,24 @@ extension String {
         ]
         var sum = 0
         for i in 0..<10 {
-//            let digit = i < 4 ? m[String(self[self.index(self.startIndex, offsetBy: i)])]! :
-//                                Int(String(self[self.index(self.startIndex, offsetBy: i)])) ?? 0
             var digit = 0
-            let index = self.index(self.startIndex, offsetBy: i)
-            let char = self[index]
+            let index = containerNumberForValidation.index(self.startIndex, offsetBy: i)
+            let char = containerNumberForValidation[index]
             if i < 4 {
-                guard let val = m[String(char)] else { return nil }
+                guard let val = m[String(char)] else { return false }
                 digit = val
             } else {
-                guard let val = Int(String(char)) else { return nil }
+                guard let val = Int(String(char)) else { return false }
                 digit = val
             }
             sum += digit * weights[i]
         }
-        let remainder = sum % 11
-        return remainder == 10 ? "0" : String(remainder)
+        
+        var remainder = sum % 11
+        remainder = remainder == 10 ? 0 : remainder
+        
+        return checkDigit == remainder
+        
     }
 }
 

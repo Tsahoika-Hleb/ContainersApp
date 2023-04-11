@@ -12,7 +12,6 @@
 		FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C229DD803D004D0B1A /* Fonts.swift */; };
 		FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */; };
 		FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */; };
-		FC0E1CA929DF5CFC002EA33D /* TextRecognitionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA829DF5CFC002EA33D /* TextRecognitionHelper.swift */; };
 		FC0EABA629DC5D8B00FEE645 /* ObjectDetectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */; };
 		FC0EABA829DC5E4100FEE645 /* containerDetection.tflite in Resources */ = {isa = PBXBuildFile; fileRef = FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */; };
 		FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA929DC608F00FEE645 /* TFManger.swift */; };
@@ -47,6 +46,7 @@
 		FC8091F929D706E500D02816 /* ScanRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F829D706E500D02816 /* ScanRouter.swift */; };
 		FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091FA29D7147000D02816 /* StartHelper.swift */; };
 		FC80920229D8883C00D02816 /* AlertActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC80920129D8883C00D02816 /* AlertActions.swift */; };
+		FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */; };
 		FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF74F1A29DB555F00A64908 /* PermissionManager.swift */; };
 		FCF74F1D29DB567E00A64908 /* UserDefault+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */; };
 /* End PBXBuildFile section */
@@ -59,7 +59,6 @@
 		FC0121C229DD803D004D0B1A /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionProcessorHelper.swift; sourceTree = "<group>"; };
 		FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanScreenProtocols.swift; sourceTree = "<group>"; };
-		FC0E1CA829DF5CFC002EA33D /* TextRecognitionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognitionHelper.swift; sourceTree = "<group>"; };
 		FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectDetectionHelper.swift; sourceTree = "<group>"; };
 		FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = containerDetection.tflite; sourceTree = "<group>"; };
 		FC0EABA929DC608F00FEE645 /* TFManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFManger.swift; sourceTree = "<group>"; };
@@ -98,6 +97,7 @@
 		FC8091F829D706E500D02816 /* ScanRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRouter.swift; sourceTree = "<group>"; };
 		FC8091FA29D7147000D02816 /* StartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartHelper.swift; sourceTree = "<group>"; };
 		FC80920129D8883C00D02816 /* AlertActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertActions.swift; sourceTree = "<group>"; };
+		FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBoundingBoxModel.swift; sourceTree = "<group>"; };
 		FCF74F1A29DB555F00A64908 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,7 +144,6 @@
 			children = (
 				FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */,
 				FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */,
-				FC0E1CA829DF5CFC002EA33D /* TextRecognitionHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -282,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */,
+				FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -447,7 +447,6 @@
 				FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */,
 				FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */,
 				FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */,
-				FC0E1CA929DF5CFC002EA33D /* TextRecognitionHelper.swift in Sources */,
 				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
 				FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */,
 				FC3B236829DAF25300297529 /* ContainersList.swift in Sources */,
@@ -461,6 +460,7 @@
 				FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */,
 				FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */,
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,
+				FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */,
 				FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */,
 				FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */,
 				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,

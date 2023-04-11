@@ -19,9 +19,8 @@ final class TFManager {
     
     private var objectDetectionHelper: ObjectDetectionHelper? = ObjectDetectionHelper(
         modelFileInfo: FileInfo("containerDetection", "tflite"),
-        threadCount: 1,
-        scoreThreshold: 0.5,
-        maxResults: 3
+        scoreThreshold: 0.4,
+        maxResults: 6
     )
     
     /** This method runs the live camera pixelBuffer through tensorFlow to get the result.

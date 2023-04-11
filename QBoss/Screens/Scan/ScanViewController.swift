@@ -51,7 +51,7 @@ final class ScanViewController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 24)
         label.textColor = .white
         label.textAlignment = .right
-        label.text = "ABCU 123567" // TODO: REMOVE IN THE FUTURE
+        label.text = "Check Digit: "
         return label
     }()
     
@@ -64,7 +64,7 @@ final class ScanViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         cameraFeedManager.checkCameraConfigurationAndStartSession()
-        presenter?.setUp(viewBoundsRect: view.bounds)
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -115,7 +115,8 @@ final class ScanViewController: UIViewController {
         
         lastFrameImageView.snp.makeConstraints { make in
             make.bottom.leading.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(200)
+            make.height.equalTo(150)
+            make.width.equalTo(300)
         }
     }
     
@@ -134,7 +135,6 @@ extension ScanViewController: CameraFeedManagerDelegate {
     
         inferenceQueue.async {
             self.isInferenceQueueBusy = true
-            //self.tfManager?.detect(pixelBuffer: pixelBuffer)
             self.presenter?.detect(pixelBuffer: pixelBuffer)
             self.isInferenceQueueBusy = false
         }
@@ -182,10 +182,21 @@ extension ScanViewController: CameraFeedManagerDelegate {
 
 // MARK: - ScanViewControllerDelegate
 extension ScanViewController: ScanViewControllerDelegate {
+    
+    func setLabel(text: String, rightCheckDigit: Bool?) {
+        serialNumberLabel.text = text
+        
+        if let rightCheckDigit = rightCheckDigit {
+            rightCheckDigit ? (serialNumberLabel.textColor = .green) : (serialNumberLabel.textColor = .red)
+        } else {
+            serialNumberLabel.textColor = .white
+        }
+    }
+    
     func cleanOverlays() {
         overlayView.objectOverlays = []
         overlayView.setNeedsDisplay()
-        lastFrameImageView.image = nil
+        //lastFrameImageView.image = nil
     }
     
     func drawOverlays(objectOverlays: [ObjectOverlay]) {

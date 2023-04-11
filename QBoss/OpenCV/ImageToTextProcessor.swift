@@ -1,16 +1,18 @@
 import UIKit
 import CoreImage
 
+typealias ProcessedImageResult = (UIImage?, String)
+
 final class ImageToTextProcessor {
     private let imageTextRecognizer: ImageTextRecognizer = .init()
 
-    func process(image: UIImage, isVertical: Bool = true) async throws -> (UIImage?, String) {
+    func process(image: UIImage, isVertical: Bool = true) async throws -> ProcessedImageResult {
         let outputImage = await processImageInBackground(image: image, isVertical: isVertical)
         let recognizedText = try await imageTextRecognizer.recognizeText(from: outputImage)
         return (outputImage, recognizedText)
     }
 
-    func process(images: [UIImage], isVertical: Bool = true) async throws -> (UIImage?, String) {
+    func process(images: [UIImage], isVertical: Bool = true) async throws -> ProcessedImageResult {
         let outputImage = await processImagesInBackground(images: images, isVertical: isVertical)
         let recognizedText = try await imageTextRecognizer.recognizeText(from: outputImage)
         return (outputImage, recognizedText)

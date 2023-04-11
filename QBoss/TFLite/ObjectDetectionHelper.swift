@@ -60,7 +60,7 @@ class ObjectDetectionHelper: NSObject {
   ///   - maxResults: Maximum number of objects to be include in the detection result.
   /// - Returns: A new instance is created if the model is successfully loaded from the app's main
   /// bundle.
-  init?(modelFileInfo: FileInfo, threadCount: Int, scoreThreshold: Float, maxResults: Int) {
+  init?(modelFileInfo: FileInfo, scoreThreshold: Float, maxResults: Int) {
     let modelFilename = modelFileInfo.name
 
     // Construct the path to the model file.
@@ -75,11 +75,9 @@ class ObjectDetectionHelper: NSObject {
     }
 
     // Specify the options for the `Detector`.
-
     let options = ObjectDetectorOptions(modelPath: modelPath)
     options.classificationOptions.scoreThreshold = scoreThreshold
     options.classificationOptions.maxResults = maxResults
-    options.baseOptions.computeSettings.cpuSettings.numThreads = Int(threadCount) // TODO: Int32
     do {
       // Create the `Detector`.
       detector = try ObjectDetector.detector(options: options)
