@@ -46,6 +46,7 @@
 		FC8091F929D706E500D02816 /* ScanRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091F829D706E500D02816 /* ScanRouter.swift */; };
 		FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091FA29D7147000D02816 /* StartHelper.swift */; };
 		FC80920229D8883C00D02816 /* AlertActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC80920129D8883C00D02816 /* AlertActions.swift */; };
+		FC87D36729E6B28400F63532 /* CISValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC87D36629E6B28400F63532 /* CISValidator.swift */; };
 		FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */; };
 		FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF74F1A29DB555F00A64908 /* PermissionManager.swift */; };
 		FCF74F1D29DB567E00A64908 /* UserDefault+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */; };
@@ -97,6 +98,7 @@
 		FC8091F829D706E500D02816 /* ScanRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRouter.swift; sourceTree = "<group>"; };
 		FC8091FA29D7147000D02816 /* StartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartHelper.swift; sourceTree = "<group>"; };
 		FC80920129D8883C00D02816 /* AlertActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertActions.swift; sourceTree = "<group>"; };
+		FC87D36629E6B28400F63532 /* CISValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CISValidator.swift; sourceTree = "<group>"; };
 		FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBoundingBoxModel.swift; sourceTree = "<group>"; };
 		FCF74F1A29DB555F00A64908 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Extension.swift"; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 			children = (
 				FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */,
 				FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */,
+				FC87D36629E6B28400F63532 /* CISValidator.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */,
 				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,
 				FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */,
+				FC87D36729E6B28400F63532 /* CISValidator.swift in Sources */,
 				FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */,
 				FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */,
 				FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */,

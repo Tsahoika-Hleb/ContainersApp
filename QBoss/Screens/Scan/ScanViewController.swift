@@ -48,10 +48,11 @@ final class ScanViewController: UIViewController {
     
     private lazy var serialNumberLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: 30)
         label.textColor = .white
-        label.textAlignment = .right
-        label.text = "Check Digit: "
+        label.textAlignment = .left
+        label.backgroundColor = .black
+        label.text = ""
         return label
     }()
     
@@ -102,21 +103,19 @@ final class ScanViewController: UIViewController {
             make.width.height.equalTo(LayoutConstants.containerImageViewSize.width)
         }
         
-        serialNumberLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin).inset(LayoutConstants.serialNumberLabelInsets.bottom)
-            make.trailing.equalToSuperview().inset(LayoutConstants.serialNumberLabelInsets.right)
-            make.height.equalTo(LayoutConstants.serialNumberLabelSize.height)
-            make.width.equalTo(LayoutConstants.serialNumberLabelSize.width)
-        }
-        
         overlayView.snp.makeConstraints { make in
             make.top.trailing.leading.bottom.equalToSuperview()
         }
         
         lastFrameImageView.snp.makeConstraints { make in
-            make.bottom.leading.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(150)
-            make.width.equalTo(300)
+            make.leading.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.bottom.equalTo(serialNumberLabel.snp.top)
+            make.width.lessThanOrEqualToSuperview().inset(10)
+        }
+        
+        serialNumberLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview().inset(10)
         }
     }
     

@@ -19,7 +19,7 @@ final class TFManager {
     
     private var objectDetectionHelper: ObjectDetectionHelper? = ObjectDetectionHelper(
         modelFileInfo: FileInfo("containerDetection", "tflite"),
-        scoreThreshold: 0.4,
+        scoreThreshold: 0.7,
         maxResults: 6
     )
     

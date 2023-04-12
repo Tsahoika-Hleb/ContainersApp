@@ -1,34 +1,39 @@
 import UIKit
 import CoreImage
 
-typealias ProcessedImageResult = (UIImage?, String)
+typealias ProcessedImageResult = (UIImage, String)
 
 final class ImageToTextProcessor {
+    
     private let imageTextRecognizer: ImageTextRecognizer = .init()
-
-    func process(image: UIImage, isVertical: Bool = true) async throws -> ProcessedImageResult {
-        let outputImage = await processImageInBackground(image: image, isVertical: isVertical)
-        let recognizedText = try await imageTextRecognizer.recognizeText(from: outputImage)
+    
+    func process(image: UIImage) async -> ProcessedImageResult? {
+        guard let outputImage = await processImageInBackground(image: image),
+              let recognizedText = await imageTextRecognizer.recognizeText(from: outputImage) else { return nil }
         return (outputImage, recognizedText)
     }
-
-    func process(images: [UIImage], isVertical: Bool = true) async throws -> ProcessedImageResult {
-        let outputImage = await processImagesInBackground(images: images, isVertical: isVertical)
-        let recognizedText = try await imageTextRecognizer.recognizeText(from: outputImage)
+    
+    func process(images: [UIImage]) async -> ProcessedImageResult? {
+        guard let outputImage = await processImagesInBackground(images: images),
+              let recognizedText = await imageTextRecognizer.recognizeText(from: outputImage) else { return nil }
         return (outputImage, recognizedText)
     }
-
-    private func processImageInBackground(image: UIImage, isVertical: Bool) async -> UIImage {
+    
+    private func processImageInBackground(image: UIImage) async -> UIImage? {
         return await withCheckedContinuation({ continuation in
-            let outputImage = OpenCVWrapper.processImage(image, isVertical: isVertical)
-            continuation.resume(returning: outputImage)
+            DispatchQueue.global(qos: .userInitiated).async {
+                let outputImage = OpenCVWrapper.processImage(image)
+                continuation.resume(returning: outputImage)
+            }
         })
     }
-
-    private func processImagesInBackground(images: [UIImage], isVertical: Bool) async -> UIImage {
+    
+    private func processImagesInBackground(images: [UIImage]) async -> UIImage? {
         return await withCheckedContinuation({ continuation in
-            let outputImage = OpenCVWrapper.processImages(images, isVertical: isVertical)
-            continuation.resume(returning: outputImage)
+            DispatchQueue.global(qos: .userInitiated).async {
+                let outputImage = OpenCVWrapper.processImages(images)
+                continuation.resume(returning: outputImage)
+            }
         })
     }
 }

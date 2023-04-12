@@ -32,7 +32,6 @@ Mat createDilatedMask(Mat dst, int thrash) {
     } else if (thrash % 2 == 0) {
         thrash++;
     }
-    
     Mat dilatedMask;
     adaptiveThreshold(dst, dilatedMask, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, thrash, i1 - 2);
     return dilatedMask;
@@ -55,8 +54,8 @@ Mat preprocessImage(Mat inputImage) {
     cvtColor(inputImage, grayMat, COLOR_BGR2GRAY);
     
     // Increase the brightness of the image
-    double alpha = 1.2; // Contrast control (1.0 - 3.0)
-    int beta = 40; // Brightness control (0 - 100)
+    double alpha = 1; // Contrast control (1.0 - 3.0)
+    int beta = 30; // Brightness control (0 - 100)
     Mat brightMat = increaseBrightness(grayMat, alpha, beta);
     
     // Binarize the image
@@ -65,6 +64,7 @@ Mat preprocessImage(Mat inputImage) {
     // Check if the text is black on white
     Scalar avgPixelIntensity = mean(binaryMat);
     if (avgPixelIntensity[0] > 128) {
+        
         // Invert the image
         Mat invertedMat; bitwise_not(binaryMat, invertedMat);
         return invertedMat;
@@ -88,14 +88,13 @@ vector<vector<cv::Point>> findContoursAndHull(Mat dilatedMask) {
                 convexHull(contours[i], tmp, true);
                 mContours.push_back(tmp);
             }
-            
         }
     }
     return mContours;
 }
 
-Mat combineSpacedBoxes(vector<Mat> spacedBoxes, bool isVertical) {
-    if (isVertical) { reverse(spacedBoxes.begin(), spacedBoxes.end()); }
+Mat combineSpacedBoxes(vector<Mat> spacedBoxes) {
+    reverse(spacedBoxes.begin(), spacedBoxes.end());
     Mat horizontalImage;
     hconcat(spacedBoxes, horizontalImage);
     return horizontalImage;
@@ -121,47 +120,58 @@ vector<Mat> extractSymbols(Mat grayMat, vector<vector<cv::Point>> mContours, cv:
 }
 
 // Function to extract symbols from an array of images and concatenate them horizontally or vertically
-Mat getCombinedImage(vector<Mat> inputImages, bool isVertical) {
+Mat getCombinedImage(vector<Mat> inputImages) {
     cv::Size standardSize(80, 100);
     vector<Mat> allSymbols;
     for (Mat inputImage : inputImages) {
         Mat dst = preprocessImage(inputImage);
         vector<vector<cv::Point>> mContours = findContoursAndHull(dst);
-        vector<Mat> symbols = extractSymbols(dst, mContours, standardSize, 3);
+        vector<Mat> symbols = extractSymbols(dst, mContours, standardSize, 2);
         allSymbols.insert(allSymbols.end(), symbols.begin(), symbols.end());
     }
-    Mat combinedImage = combineSpacedBoxes(allSymbols, isVertical); return combinedImage;
+    Mat combinedImage = combineSpacedBoxes(allSymbols);
+    return combinedImage;
 }
 
 // Process single image
-UIImage* processImage(UIImage* inputImage, bool isVertical) {
+std::optional<UIImage*> processImage(UIImage* inputImage) {
+    if (inputImage.size.width == 0 || inputImage.size.height == 0) {
+        return std::nullopt;
+    }
     cv::Mat mat;
     UIImageToMat(inputImage, mat);
-    Mat combinedImage = getCombinedImage(vector<Mat>{mat}, isVertical);
+    Mat combinedImage = getCombinedImage(vector<Mat>{mat});
     UIImage* outputImage = MatToUIImage(combinedImage);
     return outputImage;
 }
 
 // Process multiple images
-UIImage* processImages(NSArray<UIImage*>* inputImages, bool isVertical) {
+std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages) {
+    if (inputImages.count == 0) {
+        return std::nullopt;
+    }
     vector<Mat> mats;
     for (UIImage* inputImage: inputImages) {
+        if (inputImage.size.width == 0 || inputImage.size.height == 0) {
+            return std::nullopt;
+        }
         cv::Mat mat; UIImageToMat(inputImage, mat); mats.push_back(mat);
     }
-    Mat combinedImage = getCombinedImage(mats, isVertical); UIImage* outputImage = MatToUIImage(combinedImage);
+    Mat combinedImage = getCombinedImage(mats);
+    UIImage* outputImage = MatToUIImage(combinedImage);
     return outputImage;
 }
 
 @implementation OpenCVWrapper
 
-+(UIImage*)processImage:(UIImage*)inputImage isVertical:(BOOL)isVertical {
-    UIImage* outputImage = processImage(inputImage, isVertical);
-    return outputImage;
++(UIImage* _Nullable)processImage:(UIImage*)inputImage {
+    std::optional<UIImage*> outputImage = processImage(inputImage);
+    return outputImage ? *outputImage : nil;
 }
 
-+(UIImage*)processImages:(NSArray<UIImage*>*)inputImages isVertical:(BOOL)isVertical {
-    UIImage* outputImage = processImages(inputImages, isVertical);
-    return outputImage;
++(UIImage* _Nullable)processImages:(NSArray<UIImage*>*)inputImages {
+    std::optional<UIImage*> outputImage = processImages(inputImages);
+    return outputImage ? *outputImage : nil;
 }
 
 @end
