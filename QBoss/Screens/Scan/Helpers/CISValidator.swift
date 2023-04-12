@@ -16,10 +16,10 @@ final class CISValidator {
             print("Partial box, text is valid: \(partialResult)")
             return (partrialPair.0, partialResult.0, partialResult.1)
         } else if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1) {
-            print("Main box, text is unvalid: \(mainResult)")
+            print("Main box, text is invalid: \(mainResult)")
             return (mainPair.0, mainResult.0, mainResult.1)
         } else if let partrialPair = partialNumber, let partialResult = getValidatedNumber(serialNumber: partrialPair.1) {
-            print("Partial box, text is unvalid: \(partialResult)")
+            print("Partial box, text is invalid: \(partialResult)")
             return (partrialPair.0, partialResult.0, partialResult.1)
         } else {
             print("No result")
@@ -34,6 +34,7 @@ final class CISValidator {
         
         guard tempString.count >= 10 else { return nil }
         let hasCheckDigit = !(tempString.count == 10)
+        let hasTypeCode = (tempString.count >= 15)
         
         var codePart = String(tempString[tempString.startIndex...tempString.index(tempString.startIndex, offsetBy: 3)])
         codePart = charReplace(inputString: codePart, part: .code)
@@ -59,7 +60,15 @@ final class CISValidator {
                 return nil
             }
         }
-        tempString = codePart + digitsPart + checkDigitChar
+        
+        var typeCode = ""
+        if hasTypeCode {
+            let startIndex = tempString.index(tempString.startIndex, offsetBy: 11)
+            let endIndex = tempString.index(tempString.startIndex, offsetBy: 14)
+            typeCode = String(tempString[startIndex...endIndex])
+        } // TODO: add letters numbers check
+        
+        tempString = codePart + digitsPart + checkDigitChar + typeCode
 
         if tempString.count == 10, let checkDigit = countCheckDigit(serialNumber: tempString) {
             tempString += String(checkDigit)

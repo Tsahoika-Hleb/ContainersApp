@@ -14,12 +14,11 @@ final class TFManager {
     
     // Holds the results at any time
     private var result: Result?
-    //private let inferenceQueue = DispatchQueue(label: "inferencequeue")
     private var isInferenceQueueBusy = false
     
     private var objectDetectionHelper: ObjectDetectionHelper? = ObjectDetectionHelper(
         modelFileInfo: FileInfo("containerDetection", "tflite"),
-        scoreThreshold: 0.7,
+        scoreThreshold: 0.5,
         maxResults: 6
     )
     
