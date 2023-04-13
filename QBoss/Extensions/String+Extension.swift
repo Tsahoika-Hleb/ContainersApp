@@ -6,6 +6,7 @@ extension String {
         //case serialNumber = "^[A-Z]{3}[UJZ]\\d{7}$"
         case digits = #"^\d+$"#
         case letters = #"^[A-Z]+$"#
+        case groupCode = #"[UJZ]"#
     }
     
     func validate(idCase: Identification) -> Bool {

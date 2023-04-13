@@ -7,36 +7,6 @@
 using namespace cv;
 using namespace std;
 
-int calculateThrash(Mat dst) {
-    int total = dst.rows * dst.cols;
-    vector<int> mGrayMatList;
-    for (int col = 0; col < dst.cols; col++) {
-        for (int row = 0; row < dst.rows; row++) {
-            mGrayMatList.push_back(static_cast<int>(dst.at<uchar>(row, col)));
-        }
-    }
-    sort(mGrayMatList.begin(), mGrayMatList.end());
-    int thrash = mGrayMatList[static_cast<int>(0.035 * total)];
-    if (thrash % 2 == 0) {
-        thrash++;
-    }
-    return thrash;
-}
-
-Mat createDilatedMask(Mat dst, int thrash) {
-    int i1 = static_cast<int>(thrash / 1.2);
-    
-    // Ensure that thrash is an odd number greater than 1
-    if (thrash <= 1) {
-        thrash = 3;
-    } else if (thrash % 2 == 0) {
-        thrash++;
-    }
-    Mat dilatedMask;
-    adaptiveThreshold(dst, dilatedMask, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, thrash, i1 - 2);
-    return dilatedMask;
-}
-
 Mat increaseBrightness(Mat inputImage, double alpha, int beta) {
     Mat brightMat;
     convertScaleAbs(inputImage, brightMat, alpha, beta);
@@ -49,27 +19,53 @@ Mat binarizeImage(Mat inputImage) {
     return binaryMat;
 }
 
-Mat preprocessImage(Mat inputImage) {
-    Mat grayMat;
+Mat applyGaussianBlur(Mat inputImage, int kernelSize) {
+    Mat blurredMat;
+    GaussianBlur(inputImage, blurredMat, cv::Size(kernelSize, kernelSize), 0);
+    return blurredMat;
+}
+
+Mat applyErosionMultipleTimes(Mat inputImage, int kernelSize, int iterations) {
+    Mat erodedMat;
+    Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(kernelSize, kernelSize));
+    erode(inputImage, erodedMat, kernel, cv::Point(-1, -1), iterations);
+    return erodedMat;
+}
+
+Mat preprocessImage(Mat inputImage) { Mat grayMat;
     cvtColor(inputImage, grayMat, COLOR_BGR2GRAY);
     
     // Increase the brightness of the image
-    double alpha = 1; // Contrast control (1.0 - 3.0)
+    double alpha = 1.2; // Contrast control (1.0 - 3.0)
     int beta = 30; // Brightness control (0 - 100)
     Mat brightMat = increaseBrightness(grayMat, alpha, beta);
     
+    // Apply Gaussian blur
+    int blurKernelSize = 1;
+    Mat blurredMat = applyGaussianBlur(brightMat, blurKernelSize);
+    
     // Binarize the image
-    Mat binaryMat = binarizeImage(brightMat);
+    Mat binaryMat = binarizeImage(blurredMat);
+    
+    // Apply erosion to thin out the letters
+    int erosionKernelSize = 1;
+    int erosionIterations = 3;
+    Mat erodedMat = applyErosionMultipleTimes(binaryMat, erosionKernelSize, erosionIterations)
+    ;
+    // Apply morphological operations to remove small noise
+    // and connect broken characters
+    Mat morphedMat;
+    Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(3, 3));
+    morphologyEx(erodedMat, morphedMat, MORPH_CLOSE, kernel);
     
     // Check if the text is black on white
-    Scalar avgPixelIntensity = mean(binaryMat);
-    if (avgPixelIntensity[0] > 128) {
+    Scalar avgPixelIntensity = mean(morphedMat);
+    if (avgPixelIntensity[0] > 200) {
         
         // Invert the image
-        Mat invertedMat; bitwise_not(binaryMat, invertedMat);
-        return invertedMat;
+        Mat invertedMat; bitwise_not(morphedMat, invertedMat); return invertedMat;
     } else {
-        return binaryMat;
+        return morphedMat;
     }
 }
 
@@ -84,11 +80,8 @@ vector<vector<cv::Point>> findContoursAndHull(Mat dilatedMask) {
             
             // Filter out contours with aspect ratios that are too high or too low
             if (aspectRatio < 5.0 && aspectRatio > 0.2) {
-                vector<cv::Point> tmp;
-                convexHull(contours[i], tmp, true);
-                mContours.push_back(tmp);
-            }
-        }
+                vector<cv::Point> tmp; convexHull(contours[i], tmp, true); mContours.push_back(tmp);
+            } }
     }
     return mContours;
 }
@@ -109,12 +102,10 @@ vector<Mat> extractSymbols(Mat grayMat, vector<vector<cv::Point>> mContours, cv:
         rect.width = min(rect.width + padding * 2, grayMat.cols - rect.x);
         rect.height = min(rect.height + padding * 2, grayMat.rows - rect.y);
         Mat tmp = grayMat(rect).clone();
-        if (tmp.empty()) {
-            continue;
+        if (tmp.empty()) { continue;
         }
         Mat resizedSymbol;
-        resize(tmp, resizedSymbol, standardSize);
-        symbols.push_back(resizedSymbol);
+        resize(tmp, resizedSymbol, standardSize); symbols.push_back(resizedSymbol);
     }
     return symbols;
 }
@@ -147,9 +138,7 @@ std::optional<UIImage*> processImage(UIImage* inputImage) {
 
 // Process multiple images
 std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages) {
-    if (inputImages.count == 0) {
-        return std::nullopt;
-    }
+    if (inputImages.count == 0) { return std::nullopt; }
     vector<Mat> mats;
     for (UIImage* inputImage: inputImages) {
         if (inputImage.size.width == 0 || inputImage.size.height == 0) {
@@ -157,13 +146,11 @@ std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages) {
         }
         cv::Mat mat; UIImageToMat(inputImage, mat); mats.push_back(mat);
     }
-    Mat combinedImage = getCombinedImage(mats);
-    UIImage* outputImage = MatToUIImage(combinedImage);
+    Mat combinedImage = getCombinedImage(mats); UIImage* outputImage = MatToUIImage(combinedImage);
     return outputImage;
 }
 
 @implementation OpenCVWrapper
-
 +(UIImage* _Nullable)processImage:(UIImage*)inputImage {
     std::optional<UIImage*> outputImage = processImage(inputImage);
     return outputImage ? *outputImage : nil;

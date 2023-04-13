@@ -57,18 +57,17 @@ extension ScanPresenter: TFManagerDelegateProtocol {
             let recognisedTextPairs = await getRecognisedTexts(boundingBoxModel: boundingBoxModel,
                                                                pixelBuffer: pixelBuffer,
                                                                viewBoundsRect: viewBoundsRect)
-            
+        
             Task { @MainActor in
                 guard recognisedTextPairs.count > 0 else { return }
-                print("___________________________________________")
                 if let result = validator.handleResults(mainNumber: recognisedTextPairs.first, partialNumber: recognisedTextPairs.last) {
                     delegate?.setLabel(text: result.1, rightCheckDigit: result.2)
                     delegate?.setImage(image: result.0)
                 }
-                print("___________________________________________")
             }
         }
     }
+    
     private func getRecognisedTexts(boundingBoxModel: ContainerBoundingBoxModel,
                                     pixelBuffer: CVPixelBuffer,
                                     viewBoundsRect: CGRect) async -> [ProcessedImageResult] {

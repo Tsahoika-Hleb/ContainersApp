@@ -16,13 +16,10 @@ final class CISValidator {
             print("Partial box, text is valid: \(partialResult)")
             return (partrialPair.0, partialResult.0, partialResult.1)
         } else if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1) {
-            print("Main box, text is invalid: \(mainResult)")
             return (mainPair.0, mainResult.0, mainResult.1)
         } else if let partrialPair = partialNumber, let partialResult = getValidatedNumber(serialNumber: partrialPair.1) {
-            print("Partial box, text is invalid: \(partialResult)")
             return (partrialPair.0, partialResult.0, partialResult.1)
         } else {
-            print("No result")
             return nil
         }
     }
@@ -32,17 +29,26 @@ final class CISValidator {
         var tempString = serialNumber
         tempString = tempString.filter({ $0.isLetter || $0.isNumber && !$0.isWhitespace })
         
+//        print(serialNumber)
+        
         guard tempString.count >= 10 else { return nil }
         let hasCheckDigit = !(tempString.count == 10)
         let hasTypeCode = (tempString.count >= 15)
         
+        // Proccesing owner code and group code
         var codePart = String(tempString[tempString.startIndex...tempString.index(tempString.startIndex, offsetBy: 3)])
         codePart = charReplace(inputString: codePart, part: .code)
         guard codePart.validate(idCase: .letters) else {
             return nil
         }
         
+        // Group code one more time
+        if let last = codePart.last, !["U", "J", "Z"].contains(last) {
+            codePart.removeLast()
+            codePart += "U"
+        }
         
+        // Proccesing registration number
         let startIndex = tempString.index(tempString.startIndex, offsetBy: 4)
         let endIndex = tempString.index(tempString.startIndex, offsetBy: 9)
         var digitsPart = String(tempString[startIndex...endIndex])
@@ -51,6 +57,7 @@ final class CISValidator {
             return nil
         }
         
+        // Proccesing check digit
         var checkDigitChar = ""
         if hasCheckDigit {
             let checkDigitIndex = tempString.index(tempString.startIndex, offsetBy: 10)
@@ -61,20 +68,24 @@ final class CISValidator {
             }
         }
         
+        // Proccesing typeCode
         var typeCode = ""
         if hasTypeCode {
             let startIndex = tempString.index(tempString.startIndex, offsetBy: 11)
-            let endIndex = tempString.index(tempString.startIndex, offsetBy: 14)
+            let endIndex = tempString.index(tempString.startIndex, offsetBy: 12)
             typeCode = String(tempString[startIndex...endIndex])
-        } // TODO: add letters numbers check
+            typeCode.append("G1")
+        }
         
-        tempString = codePart + digitsPart + checkDigitChar + typeCode
+        tempString = codePart + digitsPart + checkDigitChar
 
+        // Calculate and add check if it is not recognized
         if tempString.count == 10, let checkDigit = countCheckDigit(serialNumber: tempString) {
             tempString += String(checkDigit)
         }
-        
         isValid = validateCheckDigit(serialNumber: tempString)
+        
+        tempString += (hasTypeCode ? typeCode : "")
         
         return (tempString, isValid)
     }
