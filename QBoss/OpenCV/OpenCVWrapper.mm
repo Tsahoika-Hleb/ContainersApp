@@ -25,6 +25,12 @@ Mat applyGaussianBlur(Mat inputImage, int kernelSize) {
     return blurredMat;
 }
 
+Mat applyMedianBlur(Mat inputImage, int kernelSize) {
+    Mat blurredMat;
+    medianBlur(inputImage, blurredMat, kernelSize);
+    return blurredMat;
+}
+
 Mat applyErosionMultipleTimes(Mat inputImage, int kernelSize, int iterations) {
     Mat erodedMat;
     Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(kernelSize, kernelSize));
@@ -32,7 +38,8 @@ Mat applyErosionMultipleTimes(Mat inputImage, int kernelSize, int iterations) {
     return erodedMat;
 }
 
-Mat preprocessImage(Mat inputImage) { Mat grayMat;
+Mat preprocessImage(Mat inputImage) {
+    Mat grayMat;
     cvtColor(inputImage, grayMat, COLOR_BGR2GRAY);
     
     // Increase the brightness of the image
@@ -44,24 +51,30 @@ Mat preprocessImage(Mat inputImage) { Mat grayMat;
     int blurKernelSize = 1;
     Mat blurredMat = applyGaussianBlur(brightMat, blurKernelSize);
     
+    // Add median blur to reduce salt-and-pepper noise
+    int medianBlurKernelSize = 3;
+    Mat medianBlurredMat = applyMedianBlur(blurredMat, medianBlurKernelSize);
+    
     // Binarize the image
-    Mat binaryMat = binarizeImage(blurredMat);
+    Mat binaryMat = binarizeImage(medianBlurredMat);
     
     // Apply erosion to thin out the letters
     int erosionKernelSize = 1;
     int erosionIterations = 3;
-    Mat erodedMat = applyErosionMultipleTimes(binaryMat, erosionKernelSize, erosionIterations)
-    ;
+    Mat erodedMat = applyErosionMultipleTimes(binaryMat, erosionKernelSize, erosionIterations);
+    
+    // Apply dilation to better preserve the structure of the characters
+    Mat dilatedMat;
+    Mat dilationKernel = getStructuringElement(MORPH_RECT, cv::Size(2, 2)); dilate(erodedMat, dilatedMat, dilationKernel);
+    
     // Apply morphological operations to remove small noise
     // and connect broken characters
     Mat morphedMat;
-    Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(3, 3));
-    morphologyEx(erodedMat, morphedMat, MORPH_CLOSE, kernel);
+    Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(3, 3)); morphologyEx(dilatedMat, morphedMat, MORPH_CLOSE, kernel);
     
     // Check if the text is black on white
     Scalar avgPixelIntensity = mean(morphedMat);
     if (avgPixelIntensity[0] > 200) {
-        
         // Invert the image
         Mat invertedMat; bitwise_not(morphedMat, invertedMat); return invertedMat;
     } else {
@@ -74,14 +87,13 @@ vector<vector<cv::Point>> findContoursAndHull(Mat dilatedMask) {
     findContours(dilatedMask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
     vector<vector<cv::Point>> mContours;
     for (size_t i = 0; i < contours.size(); i++) {
-        if (contourArea(contours[i]) > 50) {
-            cv::Rect rect = boundingRect(contours[i]);
-            float aspectRatio = static_cast<float>(rect.width) / rect.height;
-            
-            // Filter out contours with aspect ratios that are too high or too low
-            if (aspectRatio < 5.0 && aspectRatio > 0.2) {
-                vector<cv::Point> tmp; convexHull(contours[i], tmp, true); mContours.push_back(tmp);
-            } }
+        cv::Rect rect = boundingRect(contours[i]);
+        float aspectRatio = static_cast<float>(rect.width) / rect.height;
+        
+        // Filter out contours with small areas or extreme aspect ratios
+        if (contourArea(contours[i]) > 50 && aspectRatio < 5.0 && aspectRatio > 0.2) {
+            vector<cv::Point> tmp; convexHull(contours[i], tmp, true); mContours.push_back(tmp);
+        }
     }
     return mContours;
 }
@@ -102,22 +114,27 @@ vector<Mat> extractSymbols(Mat grayMat, vector<vector<cv::Point>> mContours, cv:
         rect.width = min(rect.width + padding * 2, grayMat.cols - rect.x);
         rect.height = min(rect.height + padding * 2, grayMat.rows - rect.y);
         Mat tmp = grayMat(rect).clone();
-        if (tmp.empty()) { continue;
-        }
+        if (tmp.empty()) { continue; }
+        
         Mat resizedSymbol;
-        resize(tmp, resizedSymbol, standardSize); symbols.push_back(resizedSymbol);
+        resize(tmp, resizedSymbol, standardSize);
+        
+        // Perform a final thresholding step to make the resized symbols binary
+        Mat binarySymbol;
+        threshold(resizedSymbol, binarySymbol, 0, 255, THRESH_BINARY_INV | THRESH_OTSU);
+        symbols.push_back(binarySymbol);
     }
     return symbols;
 }
 
 // Function to extract symbols from an array of images and concatenate them horizontally or vertically
 Mat getCombinedImage(vector<Mat> inputImages) {
-    cv::Size standardSize(80, 100);
+    cv::Size standardSize(64, 96);
     vector<Mat> allSymbols;
     for (Mat inputImage : inputImages) {
         Mat dst = preprocessImage(inputImage);
         vector<vector<cv::Point>> mContours = findContoursAndHull(dst);
-        vector<Mat> symbols = extractSymbols(dst, mContours, standardSize, 2);
+        vector<Mat> symbols = extractSymbols(dst, mContours, standardSize, 3);
         allSymbols.insert(allSymbols.end(), symbols.begin(), symbols.end());
     }
     Mat combinedImage = combineSpacedBoxes(allSymbols);
@@ -126,14 +143,11 @@ Mat getCombinedImage(vector<Mat> inputImages) {
 
 // Process single image
 std::optional<UIImage*> processImage(UIImage* inputImage) {
-    if (inputImage.size.width == 0 || inputImage.size.height == 0) {
-        return std::nullopt;
+    if (inputImage.size.width == 0 || inputImage.size.height == 0) { return std::nullopt;
     }
     cv::Mat mat;
     UIImageToMat(inputImage, mat);
-    Mat combinedImage = getCombinedImage(vector<Mat>{mat});
-    UIImage* outputImage = MatToUIImage(combinedImage);
-    return outputImage;
+    Mat combinedImage = getCombinedImage(vector<Mat>{mat}); UIImage* outputImage = MatToUIImage(combinedImage); return outputImage;
 }
 
 // Process multiple images
@@ -141,9 +155,7 @@ std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages) {
     if (inputImages.count == 0) { return std::nullopt; }
     vector<Mat> mats;
     for (UIImage* inputImage: inputImages) {
-        if (inputImage.size.width == 0 || inputImage.size.height == 0) {
-            return std::nullopt;
-        }
+        if (inputImage.size.width == 0 || inputImage.size.height == 0) { return std::nullopt; }
         cv::Mat mat; UIImageToMat(inputImage, mat); mats.push_back(mat);
     }
     Mat combinedImage = getCombinedImage(mats); UIImage* outputImage = MatToUIImage(combinedImage);
@@ -151,6 +163,7 @@ std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages) {
 }
 
 @implementation OpenCVWrapper
+
 +(UIImage* _Nullable)processImage:(UIImage*)inputImage {
     std::optional<UIImage*> outputImage = processImage(inputImage);
     return outputImage ? *outputImage : nil;
