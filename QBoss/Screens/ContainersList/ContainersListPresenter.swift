@@ -30,45 +30,18 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Private Properties
     private var router: ContainersListRouterProtocol?
+    private var localStorageManager: ContainerStoreProtocol?
     
     private var allScunnedContainers: [ScannedContainerModel] = [
-        ScannedContainerModel(scanTimestamp: "30.3.2023 12:53",
-                              latitude: 37.987,
-                              longitude: -71.433,
-                              serialNumber: "ABCU123567",
-                              isIdentified: true,
-                              isSentToServer: false),
-        ScannedContainerModel(scanTimestamp: "30.3.2023 12:54",
-                              latitude: 37.987,
-                              longitude: -71.433,
-                              serialNumber: "Not Identified",
-                              isIdentified: false,
-                              isSentToServer: false),
-        ScannedContainerModel(scanTimestamp: "30.3.2023 12:55",
-                              latitude: 37.987,
-                              longitude: -71.433,
-                              serialNumber: "ABCU123567",
-                              isIdentified: true,
-                              isSentToServer: true),
-        ScannedContainerModel(scanTimestamp: "30.3.2023 12:56",
-                              latitude: 37.987,
-                              longitude: -71.433,
-                              serialNumber: "ABCU123567",
-                              isIdentified: true,
-                              isSentToServer: false),
-        ScannedContainerModel(scanTimestamp: "30.3.2023 12:57",
-                              latitude: 37.987,
-                              longitude: -71.433,
-                              serialNumber: "Not Identified",
-                              isIdentified: false,
-                              isSentToServer: false),
-        ScannedContainerModel(scanTimestamp: "30.3.2023 12:58",
-                              latitude: 37.987,
-                              longitude: -71.433,
-                              serialNumber: "ABCU123567984387",
-                              isIdentified: true,
-                              isSentToServer: true)
-    ]
+//        ScannedContainerModel(title: "ABCU",
+//                              detectedTime: "14.02.2023",
+//                              isScannedSuccessfully: true,
+//                              latitude: 37.987,
+//                              longitude: -71.433,
+//                              isSentToServer: false,
+//                              image: UIImage(named: "mockImage")!.pngData()!)
+        ]
+    
     private var filteredScannedContainers: [ScannedContainerModel] = []
     
     private var currentFilter: ContainerListFilter = .all {
@@ -80,9 +53,10 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     private var endpoints: [String] = []
     
     // MARK: - Initialization
-    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol) {
+    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, localStorageManager: ContainerStoreProtocol) {
         self.delegate = delegate
         self.router = router
+        self.localStorageManager = localStorageManager
     }
     
     // MARK: - Methods
@@ -147,7 +121,14 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Private Methods
     private func fetchScunnedContainers() {
-        // TODO: fetch from core data
+        localStorageManager?.fetchContainers { result in
+            switch result {
+            case .success(let containers):
+                self.allScunnedContainers = containers
+            case .failure(let error):
+                print(error.localizedDescription) // TODO: change
+            }
+        }
     }
     
     private func fetchEndpoints() {
@@ -162,7 +143,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         case .notSend:
             filteredScannedContainers = allScunnedContainers.filter { !$0.isSentToServer }
         case .notIdentified:
-            filteredScannedContainers = allScunnedContainers.filter { !$0.isIdentified }
+            filteredScannedContainers = allScunnedContainers.filter { !$0.isScannedSuccessfully }
         }
         delegate?.showContainersList()
     }

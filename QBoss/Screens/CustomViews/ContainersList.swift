@@ -167,10 +167,11 @@ extension ContainersList: UITableViewDataSource, UITableViewDelegate {
         else {
             return UITableViewCell()
         }
-        cell.setup(leftImage: indexPath.row == 1 ? UIImage(named: "mockImage2") : UIImage(named: "mockImage"),
-                   scanTimestamp: container.scanTimestamp,
-                   isIdentified: container.isIdentified,
-                   serialNumber: container.serialNumber,
+        // indexPath.row == 1 ? UIImage(named: "mockImage2") : UIImage(named: "mockImage")
+        cell.setup(leftImage: UIImage(data: container.image),
+                   scanTimestamp: container.detectedTime,
+                   isIdentified: container.isScannedSuccessfully,
+                   serialNumber: container.title,
                    latitude: String(container.latitude),
                    longitude: String(container.longitude),
                    sentToServer: container.isSentToServer)

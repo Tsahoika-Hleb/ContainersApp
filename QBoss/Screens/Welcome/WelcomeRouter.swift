@@ -19,9 +19,14 @@ final class WelcomeRouter: WelcomeRouterSpec {
             return
         }
         
+        let localRepoManager = DataStoreManager()
         let scanVC = ScanViewController()
         let router = ScanRouter(viewController: scanVC)
-        let presenter = ScanPresenter(delegate: scanVC, router: router, tfManager: TFManager(), endpoint: endpoint)
+        let presenter = ScanPresenter(delegate: scanVC,
+                                      router: router,
+                                      tfManager: TFManager(),
+                                      endpoint: endpoint,
+                                      localStorageManager: localRepoManager)
         scanVC.presenter = presenter
         scanVC.modalPresentationStyle = .fullScreen
         

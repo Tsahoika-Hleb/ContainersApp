@@ -14,15 +14,18 @@ final class ScanPresenter: ScanPresenterProtocol {
     internal var router: ScanRouterSpec?
     private var endpoint: String
     private let defaults = UserDefaults.standard
+    private var localStorageManager: ContainerStoreProtocol?
     
     // MARK: - Initialization
-    init(delegate: ScanViewControllerDelegate, router: ScanRouterSpec, tfManager: TFManager, endpoint: String) {
+    init(delegate: ScanViewControllerDelegate, router: ScanRouterSpec,
+         tfManager: TFManager, endpoint: String,
+         localStorageManager: ContainerStoreProtocol) {
         self.delegate = delegate
         self.router = router
         self.tfManager = tfManager
         self.endpoint = endpoint
+        self.localStorageManager = localStorageManager
         tfManager.delegate = self
-        print(endpoint)
     }
     
     // MARK: - Methods
@@ -30,7 +33,9 @@ final class ScanPresenter: ScanPresenterProtocol {
     }
     
     func performContainersListScreen() {
-        router?.showContainersList()
+        if let localStorageManager {
+            router?.showContainersList(storageManager: localStorageManager)
+        }
     }
     
     func detect(pixelBuffer: CVPixelBuffer) {

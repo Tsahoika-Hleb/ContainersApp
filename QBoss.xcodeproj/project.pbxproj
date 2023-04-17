@@ -10,17 +10,22 @@
 		276ACA188E692D620449012C /* Pods_QBoss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7EE39D45947F3AF1DB3837 /* Pods_QBoss.framework */; };
 		FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */; };
 		FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0121C229DD803D004D0B1A /* Fonts.swift */; };
+		FC0B308329ECA6DC00CBEB6D /* DataStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B308229ECA6DC00CBEB6D /* DataStoreManager.swift */; };
+		FC0B308929ECA6FF00CBEB6D /* Container+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B308629ECA6FF00CBEB6D /* Container+CoreDataClass.swift */; };
+		FC0B308B29ECA6FF00CBEB6D /* Container+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B308829ECA6FF00CBEB6D /* Container+CoreDataProperties.swift */; };
 		FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */; };
 		FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */; };
 		FC0EABA629DC5D8B00FEE645 /* ObjectDetectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */; };
 		FC0EABA829DC5E4100FEE645 /* containerDetection.tflite in Resources */ = {isa = PBXBuildFile; fileRef = FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */; };
 		FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA929DC608F00FEE645 /* TFManger.swift */; };
 		FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABAC29DC651200FEE645 /* OverlayView.swift */; };
+		FC20157F29E9892900A75F71 /* QBoss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC20157D29E9892900A75F71 /* QBoss.xcdatamodeld */; };
 		FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC29031729E064B5008FA328 /* OpenCVWrapper.mm */; };
 		FC29031D29E064B5008FA328 /* ImageTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */; };
 		FC29031E29E064B5008FA328 /* ImageToTextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC29031A29E064B5008FA328 /* ImageToTextProcessor.swift */; };
 		FC3B236829DAF25300297529 /* ContainersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236729DAF25300297529 /* ContainersList.swift */; };
 		FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236A29DB116C00297529 /* EndpointsTextField.swift */; };
+		FC461E9829ECC01800B662DB /* RequestScannedObjectDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */; };
 		FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B029D48E7700A2359D /* AppDelegate.swift */; };
 		FC60D1B329D48E7700A2359D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B229D48E7700A2359D /* SceneDelegate.swift */; };
 		FC60D1BA29D48E7800A2359D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1B929D48E7800A2359D /* Assets.xcassets */; };
@@ -58,12 +63,16 @@
 		F987E87F423FFE560C796D4C /* Pods-QBoss.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBoss.debug.xcconfig"; path = "Target Support Files/Pods-QBoss/Pods-QBoss.debug.xcconfig"; sourceTree = "<group>"; };
 		FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBoxCalculator.swift; sourceTree = "<group>"; };
 		FC0121C229DD803D004D0B1A /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		FC0B308229ECA6DC00CBEB6D /* DataStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreManager.swift; sourceTree = "<group>"; };
+		FC0B308629ECA6FF00CBEB6D /* Container+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Container+CoreDataClass.swift"; sourceTree = "<group>"; };
+		FC0B308829ECA6FF00CBEB6D /* Container+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Container+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionProcessorHelper.swift; sourceTree = "<group>"; };
 		FC0E1CA629DF506A002EA33D /* ScanScreenProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanScreenProtocols.swift; sourceTree = "<group>"; };
 		FC0EABA529DC5D8B00FEE645 /* ObjectDetectionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectDetectionHelper.swift; sourceTree = "<group>"; };
 		FC0EABA729DC5E4100FEE645 /* containerDetection.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = containerDetection.tflite; sourceTree = "<group>"; };
 		FC0EABA929DC608F00FEE645 /* TFManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFManger.swift; sourceTree = "<group>"; };
 		FC0EABAC29DC651200FEE645 /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		FC20157E29E9892900A75F71 /* QBoss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QBoss.xcdatamodel; sourceTree = "<group>"; };
 		FC29031729E064B5008FA328 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		FC29031829E064B5008FA328 /* BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTextRecognizer.swift; sourceTree = "<group>"; };
@@ -71,6 +80,7 @@
 		FC29031B29E064B5008FA328 /* OpenCVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		FC3B236729DAF25300297529 /* ContainersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersList.swift; sourceTree = "<group>"; };
 		FC3B236A29DB116C00297529 /* EndpointsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsTextField.swift; sourceTree = "<group>"; };
+		FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestScannedObjectDto.swift; sourceTree = "<group>"; };
 		FC60D1AD29D48E7700A2359D /* QBoss.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QBoss.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC60D1B029D48E7700A2359D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC60D1B229D48E7700A2359D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,6 +151,25 @@
 			path = OverlayView;
 			sourceTree = "<group>";
 		};
+		FC0B308429ECA6E300CBEB6D /* LocalStorage */ = {
+			isa = PBXGroup;
+			children = (
+				FC0B308229ECA6DC00CBEB6D /* DataStoreManager.swift */,
+				FC0B308529ECA6F200CBEB6D /* Models */,
+			);
+			path = LocalStorage;
+			sourceTree = "<group>";
+		};
+		FC0B308529ECA6F200CBEB6D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FC20157D29E9892900A75F71 /* QBoss.xcdatamodeld */,
+				FC0B308629ECA6FF00CBEB6D /* Container+CoreDataClass.swift */,
+				FC0B308829ECA6FF00CBEB6D /* Container+CoreDataProperties.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		FC0E1CA529DEFB14002EA33D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +237,7 @@
 		FC60D1AF29D48E7700A2359D /* QBoss */ = {
 			isa = PBXGroup;
 			children = (
+				FCF2AA3329EC611800269A2A /* DataLayer */,
 				FC72723D29E235B600957316 /* OpenCV */,
 				FC0EABA429DC5D6700FEE645 /* TFLite */,
 				FC60D1EC29D586B400A2359D /* Extensions */,
@@ -284,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */,
+				FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */,
 				FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */,
 			);
 			path = Models;
@@ -321,6 +352,14 @@
 				FC29031729E064B5008FA328 /* OpenCVWrapper.mm */,
 			);
 			path = OpenCV;
+			sourceTree = "<group>";
+		};
+		FCF2AA3329EC611800269A2A /* DataLayer */ = {
+			isa = PBXGroup;
+			children = (
+				FC0B308429ECA6E300CBEB6D /* LocalStorage */,
+			);
+			path = DataLayer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -447,10 +486,12 @@
 				FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */,
 				FC8091F929D706E500D02816 /* ScanRouter.swift in Sources */,
 				FC60D1D129D4939400A2359D /* XCAssets+Generated.swift in Sources */,
+				FC0B308929ECA6FF00CBEB6D /* Container+CoreDataClass.swift in Sources */,
 				FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */,
 				FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */,
 				FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */,
 				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
+				FC20157F29E9892900A75F71 /* QBoss.xcdatamodeld in Sources */,
 				FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */,
 				FC3B236829DAF25300297529 /* ContainersList.swift in Sources */,
 				FC80920229D8883C00D02816 /* AlertActions.swift in Sources */,
@@ -462,6 +503,7 @@
 				FC60D1F829D5B7BD00A2359D /* ContainersListPresenter.swift in Sources */,
 				FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */,
 				FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */,
+				FC0B308B29ECA6FF00CBEB6D /* Container+CoreDataProperties.swift in Sources */,
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,
 				FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */,
 				FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */,
@@ -474,6 +516,8 @@
 				FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */,
 				FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */,
 				FC60D1D029D4939400A2359D /* Strings+Generated.swift in Sources */,
+				FC0B308329ECA6DC00CBEB6D /* DataStoreManager.swift in Sources */,
+				FC461E9829ECC01800B662DB /* RequestScannedObjectDto.swift in Sources */,
 				FC8091F129D6E6EB00D02816 /* PreviewView.swift in Sources */,
 				FC60D1B329D48E7700A2359D /* SceneDelegate.swift in Sources */,
 				FC60D1E429D4DD5200A2359D /* ScanViewController.swift in Sources */,
@@ -714,6 +758,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FC20157D29E9892900A75F71 /* QBoss.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FC20157E29E9892900A75F71 /* QBoss.xcdatamodel */,
+			);
+			currentVersion = FC20157E29E9892900A75F71 /* QBoss.xcdatamodel */;
+			path = QBoss.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FC60D1A529D48E7700A2359D /* Project object */;
 }

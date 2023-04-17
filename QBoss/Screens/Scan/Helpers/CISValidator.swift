@@ -22,6 +22,7 @@ final class CISValidator {
         } else {
             return nil
         }
+        
     }
     
     private func getValidatedNumber(serialNumber: String) -> (String, Bool)? {
