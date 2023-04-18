@@ -14,12 +14,12 @@ final class ScanPresenter: ScanPresenterProtocol {
     internal var router: ScanRouterSpec?
     private var endpoint: String
     private let defaults = UserDefaults.standard
-    private var localStorageManager: ContainerStoreProtocol?
+    private var localStorageManager: DataStoreManagerProtocol?
     
     // MARK: - Initialization
     init(delegate: ScanViewControllerDelegate, router: ScanRouterSpec,
          tfManager: TFManager, endpoint: String,
-         localStorageManager: ContainerStoreProtocol) {
+         localStorageManager: DataStoreManagerProtocol) {
         self.delegate = delegate
         self.router = router
         self.tfManager = tfManager
@@ -50,24 +50,55 @@ extension ScanPresenter: TFManagerDelegateProtocol {
                                          pixelBuffer: CVPixelBuffer) {
         
         delegate?.cleanOverlays()
-        guard !detections.isEmpty, let viewBoundsRect = delegate?.view.bounds else {
-            return
-        }
+        
+        guard !detections.isEmpty,
+              let viewBoundsRect = delegate?.view.bounds else { return }
         var objectOverlays: [ObjectOverlay] = []
         objectOverlays = DetectionProcessorHelper()
             .processDetections(detections, imageSize: imageSize, viewBoundsRect: viewBoundsRect)
         delegate?.drawOverlays(objectOverlays: objectOverlays)
+        
         let boundingBoxModel = ContainerBoundingBoxModel(models: objectOverlays)
+        
+
         Task {
             let recognisedTextPairs = await getRecognisedTexts(boundingBoxModel: boundingBoxModel,
                                                                pixelBuffer: pixelBuffer,
                                                                viewBoundsRect: viewBoundsRect)
-        
+            
             Task { @MainActor in
                 guard recognisedTextPairs.count > 0 else { return }
-                if let result = validator.handleResults(mainNumber: recognisedTextPairs.first, partialNumber: recognisedTextPairs.last) {
+                if let result = validator.handleResults(mainNumber: recognisedTextPairs.first,
+                                                        partialNumber: recognisedTextPairs.last) {
                     delegate?.setLabel(text: result.1, rightCheckDigit: result.2)
                     delegate?.setImage(image: result.0)
+                    
+                    var type: ScannedModelType = .NONE
+                    if let mainBox = boundingBoxModel.mainBox {
+                        if mainBox.name.contains("vertical") {
+                            type = .VERTICAL
+                        } else if mainBox.name.contains("horizontal") {
+                            type = .HORIZONTAL
+                        } else {
+                            type = .NONE
+                        }
+                    }
+                    
+                    var imageData: Data?
+                    switch type {
+                    case .NONE:
+                        imageData = result.0.pngData()
+                    case .HORIZONTAL, .VERTICAL:
+                        imageData = boundingBoxCalculator.getBoundingBoxImage(cropRect: boundingBoxModel.mainBox!.borderRect,
+                                                                              viewBoundsRect: viewBoundsRect,
+                                                                              pixelBuffer: pixelBuffer)?.pngData()
+                    }
+                    
+                    saveContainer(serialNumber: result.1,
+                                  isScannedSuccessfully: result.2,
+                                  image: imageData,
+                                  pixelBuffer: pixelBuffer,
+                                  scannedType: type)
                 }
             }
         }
@@ -89,7 +120,9 @@ extension ScanPresenter: TFManagerDelegateProtocol {
                                                              pixelBuffer: pixelBuffer,
                                                              viewBoundsRect: viewBoundsRect)
             }
-            return await group.compactMap { $0 }.reduce(into: [], { $0.append($1) })
+            return await group
+                .compactMap { $0 }
+                .reduce(into: [], { $0.append($1) })
         }
     }
     
@@ -111,11 +144,55 @@ extension ScanPresenter: TFManagerDelegateProtocol {
         
         var images: [UIImage] = []
         for box in boundingBoxModel.partialImageBoxes {
-            guard let image = boundingBoxCalculator.getBoundingBoxImage(cropRect: box.borderRect,
-                                                                        viewBoundsRect: viewBoundsRect,
-                                                                        pixelBuffer: pixelBuffer) else { continue }
+            guard let image = boundingBoxCalculator.getBoundingBoxImage(
+                cropRect: box.borderRect,
+                viewBoundsRect: viewBoundsRect,
+                pixelBuffer: pixelBuffer) else { continue }
             images.append(image)
         }
         return await imageToTextProcessor.process(images: images)
+    }
+    
+}
+
+
+// MARK: - Storage part
+extension ScanPresenter {
+    private func saveContainer(serialNumber: String,
+                               isScannedSuccessfully: Bool,
+                               image: Data?,
+                               pixelBuffer: CVPixelBuffer,
+                               scannedType: ScannedModelType) {
+        
+        let title = String(serialNumber.prefix(11))
+        var sizeCode: String?
+        serialNumber.count > 11 ? (sizeCode = String(serialNumber.suffix(4))) : (sizeCode = nil)
+    
+        // Convert pixelBuffer to CIImage
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let context = CIContext(options: nil)
+        if let cgImage = context.createCGImage(ciImage, from: CGRect(x: 0,
+                                                                     y: 0,
+                                                                     width: CVPixelBufferGetWidth(pixelBuffer),
+                                                                     height: CVPixelBufferGetHeight(pixelBuffer))),
+           let fullImage = UIImage(cgImage: cgImage).pngData(),
+           let image {
+            
+            localStorageManager?.saveContainer(model: ScannedContainerModel(
+                title: title,
+                detectedTime: Date(),
+                isScannedSuccessfully: isScannedSuccessfully,
+                latitude: 0.1,
+                longitude: 42.1,
+                isSentToServer: false,
+                image: image,
+                scannedType: scannedType,
+                fullImage: fullImage,
+                sizeCodeStr: sizeCode)) { result in
+                    result ? print("\(title) saved") : print("\(title) not saved")
+                }
+        } else {
+            print("error can't save")
+        }
     }
 }

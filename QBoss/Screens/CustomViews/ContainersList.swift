@@ -167,9 +167,12 @@ extension ContainersList: UITableViewDataSource, UITableViewDelegate {
         else {
             return UITableViewCell()
         }
+        
         // indexPath.row == 1 ? UIImage(named: "mockImage2") : UIImage(named: "mockImage")
+        let dateFormater = DateFormatter()
+        dateFormater.dateStyle = .full
         cell.setup(leftImage: UIImage(data: container.image),
-                   scanTimestamp: container.detectedTime,
+                   scanTimestamp: dateFormater.string(from: container.detectedTime),
                    isIdentified: container.isScannedSuccessfully,
                    serialNumber: container.title,
                    latitude: String(container.latitude),

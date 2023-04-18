@@ -1,93 +1,149 @@
-import Foundation
 import CoreData
+import UIKit
 
-protocol ContainerStoreProtocol {
-    func saveContainer(_ container: ScannedContainerModel,
-                       complitionHandler: @escaping (Swift.Result<Void, Error>) -> ())
-    func fetchContainers( _ complitionHndler:  @escaping (Swift.Result<[ScannedContainerModel], Error>) -> ())
-    func removeAll()
+protocol DataStoreManagerProtocol {
+    func fetchAllContainers(completion: @escaping ([ScannedContainerModel]) -> Void)
+    func saveContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void)
+    func deleteContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void)
+    func deleteAllContainers(completion: @escaping (Bool) -> Void)
 }
-
-class DataStoreManager: ContainerStoreProtocol {
+class DataStoreManager: DataStoreManagerProtocol {
     
-    lazy var persistentContainer: NSPersistentContainer = {
+    private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "QBoss")
-        container.loadPersistentStores { description, error in
-            if let error = error {
-                fatalError("Unable to load persistent stores: \(error)")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
-        }
+        })
         return container
     }()
     
-    lazy var viewContext = persistentContainer.viewContext
-    lazy var backgroundContext = persistentContainer.newBackgroundContext()
+    private func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        persistentContainer.performBackgroundTask(block)
+    }
     
-    func saveContainer(_ container: ScannedContainerModel, complitionHandler: @escaping (Swift.Result<Void, Error>) -> ()) {
-        backgroundContext.automaticallyMergesChangesFromParent = true
-        
-        let containerToSave = Container(context: backgroundContext)
-        
-        containerToSave.tiltle = container.title
-        
-        backgroundContext.perform {
+    func fetchAllContainers(completion: @escaping ([ScannedContainerModel]) -> Void) {
+        let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
+        performBackgroundTask { context in
             do {
-                
-                containerToSave.isSent = container.isSentToServer
-                
-                try self.backgroundContext.save()
-                complitionHandler(.success(()))
-            } catch let error {
-                complitionHandler(.failure(error))
+                let containers = try context.fetch(fetchRequest)
+                let models = containers.map { ScannedContainerModel(from: $0) }
+                DispatchQueue.main.async {
+                    completion(models)
+                }
+            } catch {
+                print("Error fetching containers: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion([])
+                }
             }
         }
     }
     
-    func fetchContainers( _ complitionHndler:
-                          @escaping (Swift.Result<[ScannedContainerModel], Error>) -> ()) {
-        let containerFetch: NSFetchRequest<Container> = Container.fetchRequest()
-        do {
-            let results = try viewContext.fetch(containerFetch)
+    func saveContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void) {
+        performBackgroundTask { context in
+            let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", model.title)
             
-            var scunnedContainers: [ScannedContainerModel] = []
-            for item in results {
-                scunnedContainers.append(ScannedContainerModel(
-                    title: item.tiltle,
-                    detectedTime: DateFormatter().string(from: item.detectedTime),
-                    isScannedSuccessfully: item.isScannedSuccessfully,
-                    latitude: item.latitude,
-                    longitude: item.longitude,
-                    isSentToServer: item.isSent,
-                    image: item.image,
-                    session: Int(item.session),
-                    scunnedType: item.type,
-                    fullImage: item.fullImage,
-                    ownerCodeStr: item.ownerCodeStr,
-                    groupCodeStr: item.groupCodeStr,
-                    rNumberCodeStr: item.rNumberCodeStr,
-                    checkCodeStr: item.checkCodeStr,
-                    sizeCodeStr: item.sizeCodeStr)
-                )
+            do {
+                let existingContainers = try context.fetch(fetchRequest)
+                if existingContainers.isEmpty {
+                    let newContainer = Container(model: model, context: context)
+                    try context.save()
+                    DispatchQueue.main.async {
+                        completion(true) }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
+                }
+            } catch {
+                print("Error saving container: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(false)
+                }
             }
-            
-            complitionHndler(.success(scunnedContainers))
-            
-        } catch let error as NSError {
-            complitionHndler(.failure(error))
         }
     }
     
-    func removeAll() {
-        let containerFetch: NSFetchRequest<Container> = Container.fetchRequest()
-        do {
-            let results = try viewContext.fetch(containerFetch)
-            for item in results {
-                viewContext.delete(item)
+    
+    func deleteContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void) {
+        performBackgroundTask { context in
+            let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", model.title)
+            
+            do {
+                let containers = try context.fetch(fetchRequest)
+                guard let container = containers.first else {
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
+                    return }
+                context.delete(container)
+                try context.save()
+                DispatchQueue.main.async {
+                    completion(true)
+                }
+            } catch {
+                print("Error deleting container: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(false)
+                }
             }
-            try viewContext.save()
-        } catch let error as NSError {
-            print("Fetch error: \(error) description: \(error.userInfo)")
+        }
+    }
+    
+    func deleteAllContainers(completion: @escaping (Bool) -> Void) {
+        performBackgroundTask { context in
+            let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
+            do {
+                let containers = try context.fetch(fetchRequest)
+                for container in containers {
+                    context.delete(container)
+                }
+                try context.save()
+                DispatchQueue.main.async {
+                    completion(true)
+                }
+            } catch {
+                print("Error deleting all containers: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
         }
     }
 }
 
+                                            
+extension ScannedContainerModel {
+    init(from container: Container) {
+        title = container.title
+        detectedTime = container.detectedTime
+        isScannedSuccessfully = container.isScannedSuccessfully
+        latitude = container.latitude
+        longitude = container.longitude
+        isSentToServer = container.isSent
+        image = container.image
+        scannedType = container.type
+        fullImage = container.fullImage
+        sizeCodeStr = container.sizeCodeStr
+    }
+}
+                                             
+extension Container {
+    convenience init(model: ScannedContainerModel, context: NSManagedObjectContext) {
+        self.init(context: context)
+        title = model.title
+        detectedTime = model.detectedTime
+        isScannedSuccessfully = model.isScannedSuccessfully
+        latitude = model.latitude
+        longitude = model.longitude
+        isSent = model.isSentToServer
+        image = model.image
+        type = model.scannedType
+        fullImage = model.fullImage
+        sizeCodeStr = model.sizeCodeStr
+    }
+}

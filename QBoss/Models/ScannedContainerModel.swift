@@ -2,20 +2,15 @@ import Foundation
 
 struct ScannedContainerModel: Codable {
     let title: String
-    let detectedTime: String
+    let detectedTime: Date
     var isScannedSuccessfully: Bool
     let latitude: Double
     let longitude: Double
     let isSentToServer: Bool
     let image: Data
     
-    let session: Int
-    let scunnedType: ScannedModelType
+    let scannedType: ScannedModelType
     let fullImage: Data
     
-    var ownerCodeStr: String
-    var groupCodeStr: String
-    var rNumberCodeStr: String
-    var checkCodeStr: String
-    var sizeCodeStr: String
+    var sizeCodeStr: String?
 }

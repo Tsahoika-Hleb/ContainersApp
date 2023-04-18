@@ -26,6 +26,7 @@
 		FC3B236829DAF25300297529 /* ContainersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236729DAF25300297529 /* ContainersList.swift */; };
 		FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236A29DB116C00297529 /* EndpointsTextField.swift */; };
 		FC461E9829ECC01800B662DB /* RequestScannedObjectDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */; };
+		FC461E9B29ED472400B662DB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC461E9A29ED472400B662DB /* Constants.swift */; };
 		FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B029D48E7700A2359D /* AppDelegate.swift */; };
 		FC60D1B329D48E7700A2359D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1B229D48E7700A2359D /* SceneDelegate.swift */; };
 		FC60D1BA29D48E7800A2359D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC60D1B929D48E7800A2359D /* Assets.xcassets */; };
@@ -81,6 +82,7 @@
 		FC3B236729DAF25300297529 /* ContainersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersList.swift; sourceTree = "<group>"; };
 		FC3B236A29DB116C00297529 /* EndpointsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsTextField.swift; sourceTree = "<group>"; };
 		FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestScannedObjectDto.swift; sourceTree = "<group>"; };
+		FC461E9A29ED472400B662DB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FC60D1AD29D48E7700A2359D /* QBoss.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QBoss.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC60D1B029D48E7700A2359D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC60D1B229D48E7700A2359D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -216,6 +218,14 @@
 			path = CustomViews;
 			sourceTree = "<group>";
 		};
+		FC461E9929ED470200B662DB /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				FC461E9A29ED472400B662DB /* Constants.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		FC60D1A429D48E7700A2359D = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +247,7 @@
 		FC60D1AF29D48E7700A2359D /* QBoss */ = {
 			isa = PBXGroup;
 			children = (
+				FC461E9929ED470200B662DB /* Other */,
 				FCF2AA3329EC611800269A2A /* DataLayer */,
 				FC72723D29E235B600957316 /* OpenCV */,
 				FC0EABA429DC5D6700FEE645 /* TFLite */,
@@ -502,6 +513,7 @@
 				FC60D1F029D58A7600A2359D /* ScannedContainerTableViewCell.swift in Sources */,
 				FC60D1F829D5B7BD00A2359D /* ContainersListPresenter.swift in Sources */,
 				FC0E1CA429DEF545002EA33D /* DetectionProcessorHelper.swift in Sources */,
+				FC461E9B29ED472400B662DB /* Constants.swift in Sources */,
 				FC60D1B129D48E7700A2359D /* AppDelegate.swift in Sources */,
 				FC0B308B29ECA6FF00CBEB6D /* Container+CoreDataProperties.swift in Sources */,
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,

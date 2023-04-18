@@ -3,7 +3,7 @@ import UIKit
 protocol ScanRouterSpec {
     var viewController: UIViewController? { get set }
     
-    func showContainersList(storageManager: ContainerStoreProtocol)
+    func showContainersList(storageManager: DataStoreManagerProtocol)
 }
 
 class ScanRouter: ScanRouterSpec {
@@ -13,7 +13,7 @@ class ScanRouter: ScanRouterSpec {
         self.viewController = viewController
     }
     
-    func showContainersList(storageManager: ContainerStoreProtocol) {
+    func showContainersList(storageManager: DataStoreManagerProtocol) {
         guard let vc = viewController else {
             return
         }

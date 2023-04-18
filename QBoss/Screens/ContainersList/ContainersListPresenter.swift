@@ -30,18 +30,9 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Private Properties
     private var router: ContainersListRouterProtocol?
-    private var localStorageManager: ContainerStoreProtocol?
+    private var localStorageManager: DataStoreManagerProtocol?
     
-    private var allScunnedContainers: [ScannedContainerModel] = [
-//        ScannedContainerModel(title: "ABCU",
-//                              detectedTime: "14.02.2023",
-//                              isScannedSuccessfully: true,
-//                              latitude: 37.987,
-//                              longitude: -71.433,
-//                              isSentToServer: false,
-//                              image: UIImage(named: "mockImage")!.pngData()!)
-        ]
-    
+    private var allScunnedContainers: [ScannedContainerModel] = []
     private var filteredScannedContainers: [ScannedContainerModel] = []
     
     private var currentFilter: ContainerListFilter = .all {
@@ -53,7 +44,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     private var endpoints: [String] = []
     
     // MARK: - Initialization
-    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, localStorageManager: ContainerStoreProtocol) {
+    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, localStorageManager: DataStoreManagerProtocol) {
         self.delegate = delegate
         self.router = router
         self.localStorageManager = localStorageManager
@@ -111,6 +102,9 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
                       !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
                 if endpoints.contains(urlString) {
                     router?.showScanScreen(urlString)
+                    localStorageManager?.deleteAllContainers { result in
+                        
+                    }
                 } else if urlString.validate(idCase: .url) {
                     UserDefaults.standard[.urls, default: []].append(urlString)
                     router?.showScanScreen(urlString)
@@ -121,13 +115,9 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Private Methods
     private func fetchScunnedContainers() {
-        localStorageManager?.fetchContainers { result in
-            switch result {
-            case .success(let containers):
-                self.allScunnedContainers = containers
-            case .failure(let error):
-                print(error.localizedDescription) // TODO: change
-            }
+        
+        localStorageManager?.fetchAllContainers { result in
+            self.allScunnedContainers = result
         }
     }
     
