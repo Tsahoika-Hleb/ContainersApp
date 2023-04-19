@@ -20,6 +20,8 @@
 		FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABA929DC608F00FEE645 /* TFManger.swift */; };
 		FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EABAC29DC651200FEE645 /* OverlayView.swift */; };
 		FC20157F29E9892900A75F71 /* QBoss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC20157D29E9892900A75F71 /* QBoss.xcdatamodeld */; };
+		FC286BD029EEC400001CCCF2 /* DataUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC286BCF29EEC400001CCCF2 /* DataUploadManager.swift */; };
+		FC286BD229EF6332001CCCF2 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC286BD129EF6332001CCCF2 /* NetworkMonitor.swift */; };
 		FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC29031729E064B5008FA328 /* OpenCVWrapper.mm */; };
 		FC29031D29E064B5008FA328 /* ImageTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */; };
 		FC29031E29E064B5008FA328 /* ImageToTextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC29031A29E064B5008FA328 /* ImageToTextProcessor.swift */; };
@@ -74,6 +76,8 @@
 		FC0EABA929DC608F00FEE645 /* TFManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFManger.swift; sourceTree = "<group>"; };
 		FC0EABAC29DC651200FEE645 /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		FC20157E29E9892900A75F71 /* QBoss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QBoss.xcdatamodel; sourceTree = "<group>"; };
+		FC286BCF29EEC400001CCCF2 /* DataUploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploadManager.swift; sourceTree = "<group>"; };
+		FC286BD129EF6332001CCCF2 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		FC29031729E064B5008FA328 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		FC29031829E064B5008FA328 /* BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTextRecognizer.swift; sourceTree = "<group>"; };
@@ -153,13 +157,13 @@
 			path = OverlayView;
 			sourceTree = "<group>";
 		};
-		FC0B308429ECA6E300CBEB6D /* LocalStorage */ = {
+		FC0B308429ECA6E300CBEB6D /* Local */ = {
 			isa = PBXGroup;
 			children = (
 				FC0B308229ECA6DC00CBEB6D /* DataStoreManager.swift */,
 				FC0B308529ECA6F200CBEB6D /* Models */,
 			);
-			path = LocalStorage;
+			path = Local;
 			sourceTree = "<group>";
 		};
 		FC0B308529ECA6F200CBEB6D /* Models */ = {
@@ -199,6 +203,24 @@
 				FC60D1FE29D6E64100A2359D /* CameraFeed */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		FC286BCD29EEC193001CCCF2 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				FC286BCE29EEC1BC001CCCF2 /* Model */,
+				FC286BCF29EEC400001CCCF2 /* DataUploadManager.swift */,
+				FC286BD129EF6332001CCCF2 /* NetworkMonitor.swift */,
+			);
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		FC286BCE29EEC1BC001CCCF2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FC3B236629DAF20400297529 /* Views */ = {
@@ -325,7 +347,6 @@
 			isa = PBXGroup;
 			children = (
 				FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */,
-				FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */,
 				FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */,
 			);
 			path = Models;
@@ -368,7 +389,8 @@
 		FCF2AA3329EC611800269A2A /* DataLayer */ = {
 			isa = PBXGroup;
 			children = (
-				FC0B308429ECA6E300CBEB6D /* LocalStorage */,
+				FC286BCD29EEC193001CCCF2 /* Remote */,
+				FC0B308429ECA6E300CBEB6D /* Local */,
 			);
 			path = DataLayer;
 			sourceTree = "<group>";
@@ -524,6 +546,7 @@
 				FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */,
 				FC87D36729E6B28400F63532 /* CISValidator.swift in Sources */,
 				FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */,
+				FC286BD029EEC400001CCCF2 /* DataUploadManager.swift in Sources */,
 				FC0121C329DD803D004D0B1A /* Fonts.swift in Sources */,
 				FC0E1CA729DF506A002EA33D /* ScanScreenProtocols.swift in Sources */,
 				FC60D1E029D49CA000A2359D /* WelcomeRouter.swift in Sources */,
@@ -534,6 +557,7 @@
 				FC60D1B329D48E7700A2359D /* SceneDelegate.swift in Sources */,
 				FC60D1E429D4DD5200A2359D /* ScanViewController.swift in Sources */,
 				FC60D1E729D4ED4F00A2359D /* ContainersListViewController.swift in Sources */,
+				FC286BD229EF6332001CCCF2 /* NetworkMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

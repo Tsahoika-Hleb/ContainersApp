@@ -6,9 +6,10 @@ protocol DataStoreManagerProtocol {
     func saveContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void)
     func deleteContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void)
     func deleteAllContainers(completion: @escaping (Bool) -> Void)
+    func updateContainerSendFlag(model: ScannedContainerModel, completion: @escaping (Bool) -> Void)
 }
 class DataStoreManager: DataStoreManagerProtocol {
-    
+        
     private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "QBoss")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -67,7 +68,6 @@ class DataStoreManager: DataStoreManagerProtocol {
         }
     }
     
-    
     func deleteContainer(model: ScannedContainerModel, completion: @escaping (Bool) -> Void) {
         performBackgroundTask { context in
             let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
@@ -111,6 +111,26 @@ class DataStoreManager: DataStoreManagerProtocol {
                 DispatchQueue.main.async {
                     completion(false)
                 }
+            }
+        }
+    }
+    
+    func updateContainerSendFlag(model: ScannedContainerModel, completion: @escaping (Bool) -> Void) {
+        performBackgroundTask{ context in
+            let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", model.title)
+            
+            do {
+                let results = try? context.fetch(fetchRequest)
+                guard let container = results?.first else {
+                    completion(false)
+                    return
+                }
+                container.isSent = true
+                try context.save()
+                completion(true)
+            } catch {
+                completion(false)
             }
         }
     }

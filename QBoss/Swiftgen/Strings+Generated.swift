@@ -52,9 +52,9 @@ internal enum S {
       }
       internal enum PresentVideoError {
         /// Configuration of camera has failed
-        internal static let allertMessage = S.tr("Localizable", "Screens.Scan.presentVideoError.allertMessage", fallback: "Configuration of camera has failed")
+        internal static let allertMessage = S.tr("Localizable", "Screens.Scan.PresentVideoError.allertMessage", fallback: "Configuration of camera has failed")
         /// Configuration Failed
-        internal static let allertTitle = S.tr("Localizable", "Screens.Scan.presentVideoError.allertTitle", fallback: "Configuration Failed")
+        internal static let allertTitle = S.tr("Localizable", "Screens.Scan.PresentVideoError.allertTitle", fallback: "Configuration Failed")
       }
     }
     internal enum Welcome {
@@ -73,10 +73,6 @@ internal enum S {
       /// Welcome to Containers App
       internal static let title = S.tr("Localizable", "Screens.Welcome.title", fallback: "Welcome to Containers App")
     }
-  }
-  internal enum UserDefaults {
-    /// Urls
-    internal static let key = S.tr("Localizable", "userDefaults.key", fallback: "Urls")
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

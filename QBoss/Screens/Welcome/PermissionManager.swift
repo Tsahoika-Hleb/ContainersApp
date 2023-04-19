@@ -18,6 +18,7 @@ final class PermissionManager: NSObject, CLLocationManagerDelegate {
             self?.requestLocationPermission()
         }
     }
+    
     private func requestCameraPermission(completion: @escaping (Bool) -> Void) {
         AVCaptureDevice.requestAccess(for: .video) { granted in
             DispatchQueue.main.async { completion(granted) }

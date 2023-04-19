@@ -17,7 +17,8 @@ protocol ContainersListPresenterSpec: AnyObject {
     func container(for row: Int) -> ScannedContainerModel
     func deleteContainerForRow(for row: Int)
     func endpoint(for row: Int) -> String
-    func sendToServer()
+    func sendToServer(for row: Int)
+    func sendAllUnsent()
     func returnToScanPage(urlString: String)
 }
 
@@ -31,6 +32,7 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     // MARK: - Private Properties
     private var router: ContainersListRouterProtocol?
     private var localStorageManager: DataStoreManagerProtocol?
+    private var networkManager: DataUploadManagerProtocol?
     
     private var allScunnedContainers: [ScannedContainerModel] = []
     private var filteredScannedContainers: [ScannedContainerModel] = []
@@ -44,16 +46,15 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     private var endpoints: [String] = []
     
     // MARK: - Initialization
-    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, localStorageManager: DataStoreManagerProtocol) {
+    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, localStorageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol) {
         self.delegate = delegate
         self.router = router
         self.localStorageManager = localStorageManager
+        self.networkManager = networkManager
     }
     
     // MARK: - Methods
     func setUp() {
-        currentFilter = .all
-        
         fetchScunnedContainers()
         fetchEndpoints()
     }
@@ -91,9 +92,45 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         endpoints[row]
     }
     
-    func sendToServer() {
-        // TODO: send to server
-        print("Send")
+    func sendToServer(for row: Int) {
+        networkManager?.upload(RequestScannedObjectDto(from: filteredScannedContainers[row])) { result in
+            if result {
+                self.localStorageManager?.updateContainerSendFlag(model: self.filteredScannedContainers[row]) { result in
+                    if result {
+                        self.filteredScannedContainers[row].isSentToServer = true
+                        DispatchQueue.main.async {
+                            self.delegate?.showContainersList()
+                        }
+                    }
+                }
+            } else {
+                print("Don't upload(((9")
+            }
+        }
+    }
+    
+    func sendAllUnsent() {
+        let unsentContaners = allScunnedContainers.filter { !$0.isSentToServer }
+        for container in unsentContaners {
+            networkManager?.upload(RequestScannedObjectDto(from: container)) { result in
+                if result {
+                    self.localStorageManager?.updateContainerSendFlag(model: container) { result in
+                        if result {
+                            for (index, model) in self.filteredScannedContainers.enumerated() {
+                                if model.title == container.title {
+                                    self.filteredScannedContainers[index].isSentToServer = true
+                                    }
+                                }
+                            DispatchQueue.main.async {
+                                self.delegate?.showContainersList()
+                            }
+                        }
+                    }
+                } else {
+                    print("Don't upload(((9")
+                }
+            }
+        }
     }
     
     func returnToScanPage(urlString: String) {
@@ -115,9 +152,9 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Private Methods
     private func fetchScunnedContainers() {
-        
         localStorageManager?.fetchAllContainers { result in
             self.allScunnedContainers = result
+            self.setFilterFilter(.all)
         }
     }
     

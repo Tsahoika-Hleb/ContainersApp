@@ -7,7 +7,7 @@ protocol ContainersListDelegate: AnyObject {
     func containersCount() -> Int
     func containerForRow(_ rowIndex: Int) -> ScannedContainerModel?
     func deleteContainerForRow(_ rowIndex: Int)
-    func sendToServer()
+    func sendToServer(for row: Int)
 }
 
 private enum ButtonSizes {
@@ -168,7 +168,6 @@ extension ContainersList: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         
-        // indexPath.row == 1 ? UIImage(named: "mockImage2") : UIImage(named: "mockImage")
         let dateFormater = DateFormatter()
         dateFormater.dateStyle = .full
         cell.setup(leftImage: UIImage(data: container.image),
@@ -189,7 +188,7 @@ extension ContainersList: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let customAction = UIContextualAction(style: .normal, title: S.Screens.ContainerList.rightSwipeActionTitle) { (action, view, completionHandler) in
-            self.delegate?.sendToServer()
+            self.delegate?.sendToServer(for: indexPath.row)
             completionHandler(true)
         }
         customAction.backgroundColor = UIColor.blue

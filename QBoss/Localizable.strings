@@ -1,6 +1,3 @@
-
-"userDefaults.key" = "Urls";
-
 "Screens.Welcome.title" = "Welcome to Containers App";
 "Screens.Welcome.instructionsLabelText" = "Enter a URL endpoint where scans be sent";
 "Screens.Welcome.textFieldDefaultPlaceholder" = "Enter a valid URL";
@@ -20,8 +17,8 @@
 
 "Screens.Scan.CameraPermissionDenied.allertTitle" = "Camera Permissions Denied";
 "Screens.Scan.CameraPermissionDenied.allertMessage" = "Camera permissions have been denied for this app. You can change this by going to Settings";
-"Screens.Scan.presentVideoError.allertTitle" = "Configuration Failed";
-"Screens.Scan.presentVideoError.allertMessage" = "Configuration of camera has failed";
+"Screens.Scan.PresentVideoError.allertTitle" = "Configuration Failed";
+"Screens.Scan.PresentVideoError.allertMessage" = "Configuration of camera has failed";
 "Screens.Scan.LocationPermissionDenied.allertTitle" = "Location Permissions Denied";
 "Screens.Scan.LocationPermissionDenied.allertMessage" = "Location permissions have been denied for this app. You can change this by going to Settings";
 

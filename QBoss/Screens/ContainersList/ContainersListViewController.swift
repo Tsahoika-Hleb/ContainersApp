@@ -20,6 +20,8 @@ final class ContainersListViewController: UIViewController {
     // MARK: - Properties
     var presenter: ContainersListPresenterSpec?
     
+    private var isConnected = false
+    
     private lazy var containersList: ContainersList = {
         let view = ContainersList()
         view.delegate = self
@@ -69,6 +71,9 @@ final class ContainersListViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         presenter?.setUp()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(connectoinObserver(notification:)),
+                                               name: NSNotification.Name.connectivityStatus, object: nil)
     }
     
     override func viewWillLayoutSubviews() {
@@ -131,6 +136,19 @@ final class ContainersListViewController: UIViewController {
             presenter?.returnToScanPage(urlString: text)
         }
     }
+    
+    // MARK: - Observers
+    @objc func connectoinObserver(notification: Notification) {
+        if NetworkMonitor.shared.isConnected {
+            print("Connected")
+            if !isConnected {
+                presenter?.sendAllUnsent()
+            }
+        } else {
+            print("Not connected")
+            isConnected = false
+        }
+    }
 }
 
 
@@ -186,11 +204,11 @@ extension ContainersListViewController: ContainersListDelegate {
         presenter.deleteContainerForRow(for: rowIndex)
     }
     
-    func sendToServer() {
+    func sendToServer(for row: Int) {
         guard let presenter = presenter else {
             fatalError("No presenter")
         }
-        presenter.sendToServer()
+        presenter.sendToServer(for: row)
     }
 }
 

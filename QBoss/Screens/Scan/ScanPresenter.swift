@@ -15,16 +15,18 @@ final class ScanPresenter: ScanPresenterProtocol {
     private var endpoint: String
     private let defaults = UserDefaults.standard
     private var localStorageManager: DataStoreManagerProtocol?
+    private var networkManager: DataUploadManagerProtocol?
     
     // MARK: - Initialization
     init(delegate: ScanViewControllerDelegate, router: ScanRouterSpec,
          tfManager: TFManager, endpoint: String,
-         localStorageManager: DataStoreManagerProtocol) {
+         localStorageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol) {
         self.delegate = delegate
         self.router = router
         self.tfManager = tfManager
         self.endpoint = endpoint
         self.localStorageManager = localStorageManager
+        self.networkManager = networkManager
         tfManager.delegate = self
     }
     
@@ -33,8 +35,8 @@ final class ScanPresenter: ScanPresenterProtocol {
     }
     
     func performContainersListScreen() {
-        if let localStorageManager {
-            router?.showContainersList(storageManager: localStorageManager)
+        if let localStorageManager, let networkManager {
+            router?.showContainersList(storageManager: localStorageManager, networkManager: networkManager)
         }
     }
     
@@ -156,7 +158,7 @@ extension ScanPresenter: TFManagerDelegateProtocol {
 }
 
 
-// MARK: - Storage part
+// MARK: - Send&Save containers
 extension ScanPresenter {
     private func saveContainer(serialNumber: String,
                                isScannedSuccessfully: Bool,
@@ -167,7 +169,7 @@ extension ScanPresenter {
         let title = String(serialNumber.prefix(11))
         var sizeCode: String?
         serialNumber.count > 11 ? (sizeCode = String(serialNumber.suffix(4))) : (sizeCode = nil)
-    
+        
         // Convert pixelBuffer to CIImage
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         let context = CIContext(options: nil)
@@ -178,7 +180,7 @@ extension ScanPresenter {
            let fullImage = UIImage(cgImage: cgImage).pngData(),
            let image {
             
-            localStorageManager?.saveContainer(model: ScannedContainerModel(
+            var container = ScannedContainerModel(
                 title: title,
                 detectedTime: Date(),
                 isScannedSuccessfully: isScannedSuccessfully,
@@ -188,9 +190,14 @@ extension ScanPresenter {
                 image: image,
                 scannedType: scannedType,
                 fullImage: fullImage,
-                sizeCodeStr: sizeCode)) { result in
-                    result ? print("\(title) saved") : print("\(title) not saved")
+                sizeCodeStr: sizeCode)
+            
+            networkManager?.upload(RequestScannedObjectDto(from: container)) { result in
+                container.isSentToServer = result
+                self.localStorageManager?.saveContainer(model: container) { result in
+                    print("save: \(result)")
                 }
+            }
         } else {
             print("error can't save")
         }

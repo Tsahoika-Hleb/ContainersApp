@@ -3,7 +3,7 @@ import UIKit
 protocol ScanRouterSpec {
     var viewController: UIViewController? { get set }
     
-    func showContainersList(storageManager: DataStoreManagerProtocol)
+    func showContainersList(storageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol)
 }
 
 class ScanRouter: ScanRouterSpec {
@@ -13,7 +13,7 @@ class ScanRouter: ScanRouterSpec {
         self.viewController = viewController
     }
     
-    func showContainersList(storageManager: DataStoreManagerProtocol) {
+    func showContainersList(storageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol) {
         guard let vc = viewController else {
             return
         }
@@ -22,7 +22,8 @@ class ScanRouter: ScanRouterSpec {
         let router = ContainersListRouter(viewController: vc)
         let presenter = ContainersListPresenter(delegate: containerListVC,
                                                 router: router,
-                                                localStorageManager: storageManager)
+                                                localStorageManager: storageManager,
+                                                networkManager: networkManager)
         containerListVC.presenter = presenter
         containerListVC.modalPresentationStyle = .fullScreen
         vc.present(containerListVC, animated: true)
