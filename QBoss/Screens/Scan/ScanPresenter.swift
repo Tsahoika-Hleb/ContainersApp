@@ -2,42 +2,34 @@ import Foundation
 import TensorFlowLiteTaskVision
 
 final class ScanPresenter: ScanPresenterProtocol {
-    
     // MARK: - Properties
+
+    var router: ScanRouterSpec?
     weak var delegate: ScanViewControllerDelegate?
-    var tfManager: TFManager?
-    let imageToTextProcessor: ImageToTextProcessor = .init()
-    let boundingBoxCalculator = BoundingBoxCalculator()
-    let validator = CISValidator()
     
     // MARK: - Private Properties
-    internal var router: ScanRouterSpec?
-    private var endpoint: String
-    private let defaults = UserDefaults.standard
-    private var localStorageManager: DataStoreManagerProtocol?
-    private var networkManager: DataUploadManagerProtocol?
+
+    private var tfManager: TFManager?
+    private let imageToTextProcessor: ImageToTextProcessor = .init()
+    private let boundingBoxCalculator = BoundingBoxCalculator()
+    private let validator = CISValidator()
+    private var dataUpdateHelper: DataUpdateHelper
+    private lazy var detectionProcessorHelper: DetectionProcessorHelper = .init()
+    private let locationManager = LocationManager()
     
     // MARK: - Initialization
     init(delegate: ScanViewControllerDelegate, router: ScanRouterSpec,
-         tfManager: TFManager, endpoint: String,
-         localStorageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol) {
+         tfManager: TFManager, dataUpdateHelper: DataUpdateHelper) {
         self.delegate = delegate
         self.router = router
         self.tfManager = tfManager
-        self.endpoint = endpoint
-        self.localStorageManager = localStorageManager
-        self.networkManager = networkManager
+        self.dataUpdateHelper = dataUpdateHelper
         tfManager.delegate = self
     }
     
     // MARK: - Methods
-    func setUp() {
-    }
-    
     func performContainersListScreen() {
-        if let localStorageManager, let networkManager {
-            router?.showContainersList(storageManager: localStorageManager, networkManager: networkManager)
-        }
+        router?.showContainersList(dataUpdateHelper: dataUpdateHelper)
     }
     
     func detect(pixelBuffer: CVPixelBuffer) {
@@ -45,105 +37,84 @@ final class ScanPresenter: ScanPresenterProtocol {
     }
 }
 
-    // MARK: - TFManagerDelegateProtocol
+// MARK: - TFManagerDelegateProtocol
 extension ScanPresenter: TFManagerDelegateProtocol {
     func drawAfterPerformingCalculations(onDetections detections: [Detection],
                                          withImageSize imageSize: CGSize,
                                          pixelBuffer: CVPixelBuffer) {
-        
         delegate?.cleanOverlays()
-        
-        guard !detections.isEmpty,
-              let viewBoundsRect = delegate?.view.bounds else { return }
-        var objectOverlays: [ObjectOverlay] = []
-        objectOverlays = DetectionProcessorHelper()
-            .processDetections(detections, imageSize: imageSize, viewBoundsRect: viewBoundsRect)
-        delegate?.drawOverlays(objectOverlays: objectOverlays)
-        
-        let boundingBoxModel = ContainerBoundingBoxModel(models: objectOverlays)
-        
+        guard !detections.isEmpty, let viewBoundsRect = delegate?.view.bounds else { return }
 
+        let objectOverlays = detectionProcessorHelper.processDetections(detections,
+                                                                        imageSize: imageSize,
+                                                                        viewBoundsRect: viewBoundsRect)
+        delegate?.drawOverlays(objectOverlays: objectOverlays)
+
+        let boundingBoxModel = ContainerBoundingBoxModel(models: objectOverlays)
         Task {
             let recognisedTextPairs = await getRecognisedTexts(boundingBoxModel: boundingBoxModel,
                                                                pixelBuffer: pixelBuffer,
-                                                               viewBoundsRect: viewBoundsRect)
+                                                               viewBoundsRect: viewBoundsRect,
+                                                               isVertical: boundingBoxModel.getContainerOrientation() == .vertical)
+
+            guard !recognisedTextPairs.isEmpty,
+                    let result = validator.handleResults(mainNumber: recognisedTextPairs.first,
+                                                       partialNumber: recognisedTextPairs.last) else { return }
             
+            saveContainer(containerText: result.1,
+                          isScannedSuccessfully: result.2,
+                          image: result.0.jpegData(compressionQuality: 0.5),
+                          pixelBuffer: pixelBuffer,
+                          scannedType: boundingBoxModel.getContainerOrientation())
+
             Task { @MainActor in
-                guard recognisedTextPairs.count > 0 else { return }
-                if let result = validator.handleResults(mainNumber: recognisedTextPairs.first,
-                                                        partialNumber: recognisedTextPairs.last) {
-                    delegate?.setLabel(text: result.1, rightCheckDigit: result.2)
-                    delegate?.setImage(image: result.0)
-                    
-                    var type: ScannedModelType = .NONE
-                    if let mainBox = boundingBoxModel.mainBox {
-                        if mainBox.name.contains("vertical") {
-                            type = .VERTICAL
-                        } else if mainBox.name.contains("horizontal") {
-                            type = .HORIZONTAL
-                        } else {
-                            type = .NONE
-                        }
-                    }
-                    
-                    var imageData: Data?
-                    switch type {
-                    case .NONE:
-                        imageData = result.0.pngData()
-                    case .HORIZONTAL, .VERTICAL:
-                        imageData = boundingBoxCalculator.getBoundingBoxImage(cropRect: boundingBoxModel.mainBox!.borderRect,
-                                                                              viewBoundsRect: viewBoundsRect,
-                                                                              pixelBuffer: pixelBuffer)?.pngData()
-                    }
-                    
-                    saveContainer(serialNumber: result.1,
-                                  isScannedSuccessfully: result.2,
-                                  image: imageData,
-                                  pixelBuffer: pixelBuffer,
-                                  scannedType: type)
-                }
+                delegate?.setLabel(text: result.1, rightCheckDigit: result.2)
+                delegate?.setImage(image: result.0)
             }
         }
     }
-    
+
     private func getRecognisedTexts(boundingBoxModel: ContainerBoundingBoxModel,
                                     pixelBuffer: CVPixelBuffer,
-                                    viewBoundsRect: CGRect) async -> [ProcessedImageResult] {
+                                    viewBoundsRect: CGRect,
+                                    isVertical: Bool) async -> [ProcessedImageResult] {
         return await withTaskGroup(of: Optional<ProcessedImageResult>.self,
                                    returning: [ProcessedImageResult].self) { [weak self] group in
             guard let self else { return [] }
             group.addTask {
                 return await self.getRecognisedTextForImage(boundingBoxModel: boundingBoxModel,
                                                             pixelBuffer: pixelBuffer,
-                                                            viewBoundsRect: viewBoundsRect)
+                                                            viewBoundsRect: viewBoundsRect,
+                                                            isVertical: isVertical)
             }
             group.addTask {
                 return await self.getRecognisedTextForImages(boundingBoxModel: boundingBoxModel,
                                                              pixelBuffer: pixelBuffer,
-                                                             viewBoundsRect: viewBoundsRect)
+                                                             viewBoundsRect: viewBoundsRect,
+                                                             isVertical: isVertical)
             }
-            return await group
-                .compactMap { $0 }
-                .reduce(into: [], { $0.append($1) })
+            return await group.compactMap { $0 }.reduce(into: [], { $0.append($1) })
         }
     }
-    
+
     private func getRecognisedTextForImage(boundingBoxModel: ContainerBoundingBoxModel,
                                            pixelBuffer: CVPixelBuffer,
-                                           viewBoundsRect: CGRect) async -> ProcessedImageResult? {
-        
+                                           viewBoundsRect: CGRect,
+                                           isVertical: Bool) async -> ProcessedImageResult? {
+
         guard let mainBox = boundingBoxModel.mainBox,
               let image = boundingBoxCalculator.getBoundingBoxImage(cropRect: mainBox.borderRect,
                                                                     viewBoundsRect: viewBoundsRect,
                                                                     pixelBuffer: pixelBuffer) else { return nil }
-        
+
         return await imageToTextProcessor.process(image: image)
     }
-    
+
     private func getRecognisedTextForImages(boundingBoxModel: ContainerBoundingBoxModel,
                                             pixelBuffer: CVPixelBuffer,
-                                            viewBoundsRect: CGRect) async -> ProcessedImageResult? {
-        
+                                            viewBoundsRect: CGRect,
+                                            isVertical: Bool) async -> ProcessedImageResult? {
+
         var images: [UIImage] = []
         for box in boundingBoxModel.partialImageBoxes {
             guard let image = boundingBoxCalculator.getBoundingBoxImage(
@@ -152,54 +123,34 @@ extension ScanPresenter: TFManagerDelegateProtocol {
                 pixelBuffer: pixelBuffer) else { continue }
             images.append(image)
         }
-        return await imageToTextProcessor.process(images: images)
+        return await imageToTextProcessor.process(images: images, isVertical: isVertical)
     }
-    
 }
-
 
 // MARK: - Send&Save containers
 extension ScanPresenter {
-    private func saveContainer(serialNumber: String,
+    private func saveContainer(containerText: String,
                                isScannedSuccessfully: Bool,
                                image: Data?,
                                pixelBuffer: CVPixelBuffer,
-                               scannedType: ScannedModelType) {
+                               scannedType: ContainerOrientationType) {
+        let title = String(containerText.prefix(11))
+        let sizeCode: String? = containerText.count > 11 ? String(containerText.suffix(4)) : nil
         
-        let title = String(serialNumber.prefix(11))
-        var sizeCode: String?
-        serialNumber.count > 11 ? (sizeCode = String(serialNumber.suffix(4))) : (sizeCode = nil)
+        guard let imageData = pixelBuffer.getImage()?.jpegData(compressionQuality: 0.5), let image else { return }
         
-        // Convert pixelBuffer to CIImage
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        let context = CIContext(options: nil)
-        if let cgImage = context.createCGImage(ciImage, from: CGRect(x: 0,
-                                                                     y: 0,
-                                                                     width: CVPixelBufferGetWidth(pixelBuffer),
-                                                                     height: CVPixelBufferGetHeight(pixelBuffer))),
-           let fullImage = UIImage(cgImage: cgImage).pngData(),
-           let image {
-            
-            var container = ScannedContainerModel(
-                title: title,
-                detectedTime: Date(),
-                isScannedSuccessfully: isScannedSuccessfully,
-                latitude: 0.1,
-                longitude: 42.1,
-                isSentToServer: false,
-                image: image,
-                scannedType: scannedType,
-                fullImage: fullImage,
-                sizeCodeStr: sizeCode)
-            
-            networkManager?.upload(RequestScannedObjectDto(from: container)) { result in
-                container.isSentToServer = result
-                self.localStorageManager?.saveContainer(model: container) { result in
-                    print("save: \(result)")
-                }
-            }
-        } else {
-            print("error can't save")
-        }
+        let container = ScannedContainerModel(
+            title: title,
+            detectedTime: Date(),
+            isScannedSuccessfully: isScannedSuccessfully,
+            latitude: locationManager.currentLocation?.coordinate.latitude ?? 0,
+            longitude: locationManager.currentLocation?.coordinate.longitude ?? 0,
+            isSentToServer: false,
+            image: image,
+            scannedType: scannedType,
+            fullImage: imageData,
+            sizeCodeStr: sizeCode)
+        
+        self.dataUpdateHelper.saveContainer(container)
     }
 }

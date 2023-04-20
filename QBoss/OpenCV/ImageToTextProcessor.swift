@@ -13,8 +13,8 @@ final class ImageToTextProcessor {
         return (outputImage, recognizedText)
     }
     
-    func process(images: [UIImage]) async -> ProcessedImageResult? {
-        guard let outputImage = await processImagesInBackground(images: images),
+    func process(images: [UIImage], isVertical: Bool) async -> ProcessedImageResult? {
+        guard let outputImage = await processImagesInBackground(images: images, isVertical: isVertical),
               let recognizedText = await imageTextRecognizer.recognizeText(from: outputImage) else { return nil }
         return (outputImage, recognizedText)
     }
@@ -28,10 +28,10 @@ final class ImageToTextProcessor {
         })
     }
     
-    private func processImagesInBackground(images: [UIImage]) async -> UIImage? {
+    private func processImagesInBackground(images: [UIImage], isVertical: Bool) async -> UIImage? {
         return await withCheckedContinuation({ continuation in
             DispatchQueue.global(qos: .userInitiated).async {
-                let outputImage = OpenCVWrapper.processImages(images)
+                let outputImage = OpenCVWrapper.processImages(images, isVerticalText: isVertical)
                 continuation.resume(returning: outputImage)
             }
         })

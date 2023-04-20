@@ -62,10 +62,12 @@ internal enum S {
       internal static let allertMessage = S.tr("Localizable", "Screens.Welcome.allertMessage", fallback: "Please enable camera and location permissions in the app settings.")
       /// Permissions Required
       internal static let allertTitle = S.tr("Localizable", "Screens.Welcome.allertTitle", fallback: "Permissions Required")
-      /// SCAN
-      internal static let buttonTitle = S.tr("Localizable", "Screens.Welcome.buttonTitle", fallback: "SCAN")
+      /// CONTAINERS
+      internal static let containersButtonTitle = S.tr("Localizable", "Screens.Welcome.containersButtonTitle", fallback: "CONTAINERS")
       /// Enter a URL endpoint where scans be sent
       internal static let instructionsLabelText = S.tr("Localizable", "Screens.Welcome.instructionsLabelText", fallback: "Enter a URL endpoint where scans be sent")
+      /// SCAN
+      internal static let scanButtonTitle = S.tr("Localizable", "Screens.Welcome.scanButtonTitle", fallback: "SCAN")
       /// This field must be filled with URL
       internal static let textFieldAlertPlaceholder = S.tr("Localizable", "Screens.Welcome.textFieldAlertPlaceholder", fallback: "This field must be filled with URL")
       /// Enter a valid URL

@@ -7,7 +7,9 @@ protocol DataUploadManagerProtocol {
 class DataUploadManager: DataUploadManagerProtocol {
     
     func upload(_ model: RequestScannedObjectDto, completionHandler: @escaping (Bool) -> ()) {
-        let url = URL(string: "https://webhook.site/13172e89-9c7f-4f9b-ae8b-3d365b9701f5")!
+        guard let url = URL(string: "https://webhook.site/13172e89-9c7f-4f9b-ae8b-3d365b9701f5") else {
+            return
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -24,6 +26,10 @@ class DataUploadManager: DataUploadManagerProtocol {
 
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
+            if let error {
+                print("ERRROORR: \(error.localizedDescription)")
+                completionHandler(false)
+            }
             
             if let httpResponse = response as? HTTPURLResponse {
                 print("Код ответа: \(httpResponse.statusCode)")
@@ -32,18 +38,14 @@ class DataUploadManager: DataUploadManagerProtocol {
                 }
             }
             
-            if let error = error {
-                print("Ошибка: \(error.localizedDescription)")
-                completionHandler(false)
-            }
-            
             if let data = data {
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("Ответ сервера: \(responseString)")
                 }
             }
+
+            completionHandler(false)
         }
         task.resume()
     }
-    
 }

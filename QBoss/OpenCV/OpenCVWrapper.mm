@@ -7,6 +7,15 @@
 using namespace cv;
 using namespace std;
 
+Mat resizeImageToFixedHeight(Mat inputImage, int fixedHeight) {
+    float aspectRatio = static_cast<float>(inputImage.cols) / static_cast<float>(inputImage.rows);
+    int resizedWidth = static_cast<int>(aspectRatio * fixedHeight);
+    cv::Size newSize(resizedWidth, fixedHeight);
+    Mat resizedImage;
+    cv::resize(inputImage, resizedImage, newSize);
+    return resizedImage;
+}
+
 Mat increaseBrightness(Mat inputImage, double alpha, int beta) {
     Mat brightMat;
     convertScaleAbs(inputImage, brightMat, alpha, beta);
@@ -25,58 +34,54 @@ Mat applyGaussianBlur(Mat inputImage, int kernelSize) {
     return blurredMat;
 }
 
-Mat applyMedianBlur(Mat inputImage, int kernelSize) {
-    Mat blurredMat;
-    medianBlur(inputImage, blurredMat, kernelSize);
-    return blurredMat;
-}
-
-Mat applyErosionMultipleTimes(Mat inputImage, int kernelSize, int iterations) {
+Mat applyErosion(Mat inputImage, int kernelSize) {
     Mat erodedMat;
     Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(kernelSize, kernelSize));
-    erode(inputImage, erodedMat, kernel, cv::Point(-1, -1), iterations);
+    erode(inputImage, erodedMat, kernel, cv::Point(-1, -1), 1);
     return erodedMat;
 }
 
 Mat preprocessImage(Mat inputImage) {
     Mat grayMat;
     cvtColor(inputImage, grayMat, COLOR_BGR2GRAY);
-    
+
+    // Resize the image to a fixed height while maintaining the aspect ratio
+    int fixedHeight = 600;
+    Mat resizedGrayMat = resizeImageToFixedHeight(grayMat, fixedHeight);
+
     // Increase the brightness of the image
     double alpha = 1.2; // Contrast control (1.0 - 3.0)
     int beta = 30; // Brightness control (0 - 100)
-    Mat brightMat = increaseBrightness(grayMat, alpha, beta);
-    
+    Mat brightMat = increaseBrightness(resizedGrayMat, alpha, beta);
+
     // Apply Gaussian blur
-    int blurKernelSize = 1;
+    int blurKernelSize = 5;
     Mat blurredMat = applyGaussianBlur(brightMat, blurKernelSize);
-    
-    // Add median blur to reduce salt-and-pepper noise
-    int medianBlurKernelSize = 3;
-    Mat medianBlurredMat = applyMedianBlur(blurredMat, medianBlurKernelSize);
-    
+
     // Binarize the image
-    Mat binaryMat = binarizeImage(medianBlurredMat);
-    
+    Mat binaryMat = binarizeImage(blurredMat);
+
     // Apply erosion to thin out the letters
     int erosionKernelSize = 1;
-    int erosionIterations = 3;
-    Mat erodedMat = applyErosionMultipleTimes(binaryMat, erosionKernelSize, erosionIterations);
-    
+    Mat erodedMat = applyErosion(binaryMat, erosionKernelSize);
+
     // Apply dilation to better preserve the structure of the characters
     Mat dilatedMat;
-    Mat dilationKernel = getStructuringElement(MORPH_RECT, cv::Size(2, 2)); dilate(erodedMat, dilatedMat, dilationKernel);
-    
+    Mat dilationKernel = getStructuringElement(MORPH_RECT, cv::Size(2, 2));
+    dilate(erodedMat, dilatedMat, dilationKernel);
+
     // Apply morphological operations to remove small noise
     // and connect broken characters
     Mat morphedMat;
     Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(3, 3)); morphologyEx(dilatedMat, morphedMat, MORPH_CLOSE, kernel);
-    
+
     // Check if the text is black on white
     Scalar avgPixelIntensity = mean(morphedMat);
     if (avgPixelIntensity[0] > 200) {
         // Invert the image
-        Mat invertedMat; bitwise_not(morphedMat, invertedMat); return invertedMat;
+        Mat invertedMat;
+        bitwise_not(morphedMat, invertedMat);
+        return invertedMat;
     } else {
         return morphedMat;
     }
@@ -89,10 +94,12 @@ vector<vector<cv::Point>> findContoursAndHull(Mat dilatedMask) {
     for (size_t i = 0; i < contours.size(); i++) {
         cv::Rect rect = boundingRect(contours[i]);
         float aspectRatio = static_cast<float>(rect.width) / rect.height;
-        
+
         // Filter out contours with small areas or extreme aspect ratios
         if (contourArea(contours[i]) > 50 && aspectRatio < 5.0 && aspectRatio > 0.2) {
-            vector<cv::Point> tmp; convexHull(contours[i], tmp, true); mContours.push_back(tmp);
+            vector<cv::Point> tmp;
+            convexHull(contours[i], tmp, true);
+            mContours.push_back(tmp);
         }
     }
     return mContours;
@@ -105,20 +112,37 @@ Mat combineSpacedBoxes(vector<Mat> spacedBoxes) {
     return horizontalImage;
 }
 
+bool compareContourRects(const cv::Rect &a, const cv::Rect &b) {
+    cv::Point a_center = a.tl() + cv::Point(a.width / 2, a.height / 2);
+    cv::Point b_center = b.tl() + cv::Point(b.width / 2, b.height / 2);
+
+    if (abs(a_center.y - b_center.y) <= 20) {
+        return a_center.x > b_center.x;
+    }
+    return a_center.y > b_center.y;
+}
+
 vector<Mat> extractSymbols(Mat grayMat, vector<vector<cv::Point>> mContours, cv::Size standardSize, int padding) {
-    vector<Mat> symbols;
+    vector<cv::Rect> sortedRects;
     for (size_t i = 0; i < mContours.size(); i++) {
-        cv::Rect rect = boundingRect(mContours[i]);
-        rect.x = max(rect.x - padding, 0);
-        rect.y = max(rect.y - padding, 0);
-        rect.width = min(rect.width + padding * 2, grayMat.cols - rect.x);
-        rect.height = min(rect.height + padding * 2, grayMat.rows - rect.y);
-        Mat tmp = grayMat(rect).clone();
+        sortedRects.push_back(boundingRect(mContours[i]));
+    }
+
+    sort(sortedRects.begin(), sortedRects.end(), compareContourRects);
+
+    vector<Mat> symbols;
+    for (const auto &rect : sortedRects) {
+        cv::Rect adjustedRect;
+        adjustedRect.x = max(rect.x - padding, 0);
+        adjustedRect.y = max(rect.y - padding, 0);
+        adjustedRect.width = min(rect.width + padding * 2, grayMat.cols - rect.x);
+        adjustedRect.height = min(rect.height + padding * 2, grayMat.rows - rect.y);
+        Mat tmp = grayMat(adjustedRect).clone();
         if (tmp.empty()) { continue; }
-        
+
         Mat resizedSymbol;
         resize(tmp, resizedSymbol, standardSize);
-        
+
         // Perform a final thresholding step to make the resized symbols binary
         Mat binarySymbol;
         threshold(resizedSymbol, binarySymbol, 0, 255, THRESH_BINARY_INV | THRESH_OTSU);
@@ -142,36 +166,72 @@ Mat getCombinedImage(vector<Mat> inputImages) {
 }
 
 // Process single image
-std::optional<UIImage*> processImage(UIImage* inputImage) {
+std::optional<UIImage *> processImage(UIImage *inputImage) {
     if (inputImage.size.width == 0 || inputImage.size.height == 0) { return std::nullopt;
     }
     cv::Mat mat;
     UIImageToMat(inputImage, mat);
-    Mat combinedImage = getCombinedImage(vector<Mat>{mat}); UIImage* outputImage = MatToUIImage(combinedImage); return outputImage;
+    Mat combinedImage = getCombinedImage(vector<Mat>{mat});
+    UIImage* outputImage = MatToUIImage(combinedImage);
+    return outputImage;
 }
 
-// Process multiple images
-std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages) {
-    if (inputImages.count == 0) { return std::nullopt; }
-    vector<Mat> mats;
+void resizeImages(std::vector<cv::Mat>& allMats, NSArray<UIImage*>* inputImages, bool isVertical) {
+    int maxDimension = 0;
+
+    // Find the max dimension (width for vertical or height for horizontal)
     for (UIImage* inputImage: inputImages) {
-        if (inputImage.size.width == 0 || inputImage.size.height == 0) { return std::nullopt; }
-        cv::Mat mat; UIImageToMat(inputImage, mat); mats.push_back(mat);
+        cv::Mat matImage;
+        UIImageToMat(inputImage, matImage);
+        maxDimension = std::max(maxDimension, isVertical ? matImage.cols : matImage.rows);
     }
-    Mat combinedImage = getCombinedImage(mats); UIImage* outputImage = MatToUIImage(combinedImage);
+
+    // Resize the images while maintaining the aspect ratio
+    for (UIImage* inputImage: inputImages) {
+        cv::Mat matImage, resizedMatImage;
+        UIImageToMat(inputImage, matImage);
+
+        float aspectRatio = isVertical
+            ? static_cast<float>(matImage.rows) / static_cast<float>(matImage.cols)
+            : static_cast<float>(matImage.cols) / static_cast<float>(matImage.rows);
+
+        int newDimension = static_cast<int>(aspectRatio * maxDimension);
+        cv::Size newSize = isVertical ? cv::Size(maxDimension, newDimension) : cv::Size(newDimension, maxDimension);
+
+        cv::resize(matImage, resizedMatImage, newSize);
+        allMats.push_back(resizedMatImage);
+    }
+}
+
+std::optional<UIImage*> processImages(NSArray<UIImage*>* inputImages, bool isVertical) {
+    if (inputImages.count == 0) { return std::nullopt; }
+
+    // create a vector to store Mat images for all input images
+    std::vector<cv::Mat> allMats;
+
+    resizeImages(allMats, inputImages, isVertical);
+
+    // concatenate all images into a single image
+    cv::Mat combinedImage;
+    if (isVertical) {
+        cv::vconcat(allMats, combinedImage);
+    } else {
+        cv::hconcat(allMats, combinedImage);
+    }
+    UIImage *concatenatedImage = MatToUIImage(combinedImage);
+    // process the concatenated image
+    std::optional<UIImage*> outputImage = processImage(concatenatedImage);
     return outputImage;
 }
 
 @implementation OpenCVWrapper
-
-+(UIImage* _Nullable)processImage:(UIImage*)inputImage {
-    std::optional<UIImage*> outputImage = processImage(inputImage);
++ (UIImage *_Nullable)processImage:(UIImage *)inputImage {
+    std::optional<UIImage *> outputImage = processImage(inputImage);
     return outputImage ? *outputImage : nil;
 }
 
-+(UIImage* _Nullable)processImages:(NSArray<UIImage*>*)inputImages {
-    std::optional<UIImage*> outputImage = processImages(inputImages);
++ (UIImage* _Nullable)processImages:(NSArray<UIImage*>*)inputImages isVerticalText:(BOOL)isVertical {
+    std::optional<UIImage*> outputImage = processImages(inputImages, isVertical);
     return outputImage ? *outputImage : nil;
 }
-
 @end

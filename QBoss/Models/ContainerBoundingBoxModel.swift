@@ -1,6 +1,13 @@
 import Foundation
 
+enum ContainerOrientationType: String, Codable {
+    case none = "NONE"
+    case horizontal = "HORIZONTAL"
+    case vertical = "VERTICAL"
+}
+
 struct ContainerBoundingBoxModel {
+
     enum CodingKeys: String, CaseIterable {
         case vertical
         case horizontal
@@ -18,7 +25,7 @@ struct ContainerBoundingBoxModel {
     }
     
     var partialImageBoxes: [ObjectOverlay] {
-        let keysToInclude: [CodingKeys] = [.ownerCode, .groupCode, .registrationNumber, .checkDigit, .sizeTypeCode]
+        let keysToInclude: [CodingKeys] = [.ownerCode, .groupCode, .registrationNumber, .checkDigit]
         return keysToInclude.compactMap { overlays[$0] }
     }
     
@@ -27,6 +34,19 @@ struct ContainerBoundingBoxModel {
             if let key = CodingKeys.allCases.first(where: { model.name.contains($0.rawValue) }) {
                 result[key] = model
             }
+        }
+    }
+
+    func getContainerOrientation() -> ContainerOrientationType {
+        let isContainsVertical: Bool = overlays.contains(where: { $0.key == .vertical })
+        let isContainsHorizontal: Bool = overlays.contains(where: { $0.key == .horizontal })
+        switch (isContainsVertical, isContainsHorizontal) {
+        case (true, false):
+            return .vertical
+        case (false, true):
+            return .horizontal
+        default:
+            return .none
         }
     }
     

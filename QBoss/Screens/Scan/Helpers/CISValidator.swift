@@ -10,10 +10,10 @@ final class CISValidator {
     func handleResults(mainNumber: ProcessedImageResult?, partialNumber: ProcessedImageResult?) -> (UIImage, String, Bool)? {
         
         if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1), mainResult.1 {
-            print("Main box, text is valid: \(mainResult)")
+            //print("Main box, text is valid: \(mainResult)")
             return (mainPair.0, mainResult.0, mainResult.1)
         } else if let partrialPair = partialNumber, let partialResult = getValidatedNumber(serialNumber: partrialPair.1), partialResult.1 {
-            print("Partial box, text is valid: \(partialResult)")
+            //print("Partial box, text is valid: \(partialResult)")
             return (partrialPair.0, partialResult.0, partialResult.1)
         } else if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1) {
             return (mainPair.0, mainResult.0, mainResult.1)

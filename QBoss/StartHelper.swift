@@ -3,11 +3,13 @@ import CoreLocation
 
 final class StartHelper {
     
-    func setRootVC () -> UIViewController {
+    func setRootVC(routeHelper: RouteHelper) {
         let vc = WelcomeViewController()
-        let router = WelcomeRouter(viewController: vc)
+        let dataUpdateHelper = DataUpdateHelper(localStorageManager: DataStoreManager(),
+                                                    networkManager: DataUploadManager())
+        let router = WelcomeRouter(routeHelper: routeHelper, dataUpdateHelper: dataUpdateHelper)
         let presenter = WelcomePresenter(delegate: vc, router: router)
         vc.presenter = presenter
-        return vc
+        routeHelper.navController?.viewControllers = [vc]
     }
 }

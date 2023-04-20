@@ -9,7 +9,7 @@ struct ScannedContainerModel: Codable {
     var isSentToServer: Bool
     let image: Data
     
-    let scannedType: ScannedModelType
+    let scannedType: ContainerOrientationType
     let fullImage: Data
     
     var sizeCodeStr: String?

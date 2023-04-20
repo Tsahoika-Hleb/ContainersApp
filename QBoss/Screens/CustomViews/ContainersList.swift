@@ -169,13 +169,14 @@ extension ContainersList: UITableViewDataSource, UITableViewDelegate {
         }
         
         let dateFormater = DateFormatter()
+        dateFormater.timeStyle = .long
         dateFormater.dateStyle = .full
         cell.setup(leftImage: UIImage(data: container.image),
                    scanTimestamp: dateFormater.string(from: container.detectedTime),
                    isIdentified: container.isScannedSuccessfully,
                    serialNumber: container.title,
-                   latitude: String(container.latitude),
-                   longitude: String(container.longitude),
+                   latitude: String(format: "%.5f", container.latitude),
+                   longitude: String(format: "%.5f",container.longitude),
                    sentToServer: container.isSentToServer)
         return cell
     }

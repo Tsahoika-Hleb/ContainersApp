@@ -8,7 +8,7 @@ enum ContainerListFilter {
 
 protocol ContainersListPresenterSpec: AnyObject {
     var delegate: ContainerListViewDelegateProtocol? { get set }
-    var scunnedContainersCount: Int { get }
+    var scannedContainersCount: Int { get }
     var endpointsCount: Int { get }
     
     func setUp()
@@ -16,9 +16,9 @@ protocol ContainersListPresenterSpec: AnyObject {
     func addEndpoint(_ url: String)
     func container(for row: Int) -> ScannedContainerModel
     func deleteContainerForRow(for row: Int)
+    func removeAllContainers()
     func endpoint(for row: Int) -> String
     func sendToServer(for row: Int)
-    func sendAllUnsent()
     func returnToScanPage(urlString: String)
 }
 
@@ -26,36 +26,35 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     
     // MARK: - Properties
     weak var delegate: ContainerListViewDelegateProtocol?
-    var scunnedContainersCount: Int { return filteredScannedContainers.count }
+    var scannedContainersCount: Int { return filteredScannedContainers.count }
     var endpointsCount: Int { return endpoints.count }
     
     // MARK: - Private Properties
     private var router: ContainersListRouterProtocol?
-    private var localStorageManager: DataStoreManagerProtocol?
-    private var networkManager: DataUploadManagerProtocol?
+    private var dataUpdateHelper: DataUpdateHelper
     
-    private var allScunnedContainers: [ScannedContainerModel] = []
+    private var allScannedContainers: [ScannedContainerModel] = []
     private var filteredScannedContainers: [ScannedContainerModel] = []
     
     private var currentFilter: ContainerListFilter = .all {
         didSet {
-            setFilterFilter(currentFilter)
+            setDataByCurrentFilter()
         }
     }
     
     private var endpoints: [String] = []
     
     // MARK: - Initialization
-    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, localStorageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol) {
+    init(delegate: ContainerListViewDelegateProtocol, router: ContainersListRouterProtocol, dataUpdateHelper: DataUpdateHelper) {
         self.delegate = delegate
         self.router = router
-        self.localStorageManager = localStorageManager
-        self.networkManager = networkManager
+        self.dataUpdateHelper = dataUpdateHelper
+        dataUpdateHelper.delegate = self
     }
     
     // MARK: - Methods
     func setUp() {
-        fetchScunnedContainers()
+        fetchScannedContainers()
         fetchEndpoints()
     }
     
@@ -83,9 +82,21 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     }
     
     func deleteContainerForRow(for row: Int) {
-        let filter = currentFilter
-        allScunnedContainers.remove(at: row)
-        currentFilter = filter
+        let itemToDelete = filteredScannedContainers[row]
+        dataUpdateHelper.deleteContainer(itemToDelete) { [weak self] result in
+            self?.allScannedContainers.removeAll(where: { $0.title == itemToDelete.title })
+            self?.setDataByCurrentFilter()
+        }
+    }
+    
+    func removeAllContainers() {
+        dataUpdateHelper.deleteAllContainers { [weak self] result in
+            if result {
+                self?.allScannedContainers = []
+                self?.filteredScannedContainers = []
+                self?.setDataByCurrentFilter()
+            }
+        }
     }
     
     func endpoint(for row: Int) -> String {
@@ -93,68 +104,31 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
     }
     
     func sendToServer(for row: Int) {
-        networkManager?.upload(RequestScannedObjectDto(from: filteredScannedContainers[row])) { result in
-            if result {
-                self.localStorageManager?.updateContainerSendFlag(model: self.filteredScannedContainers[row]) { result in
-                    if result {
-                        self.filteredScannedContainers[row].isSentToServer = true
-                        DispatchQueue.main.async {
-                            self.delegate?.showContainersList()
-                        }
-                    }
-                }
-            } else {
-                print("Don't upload(((9")
-            }
-        }
-    }
-    
-    func sendAllUnsent() {
-        let unsentContaners = allScunnedContainers.filter { !$0.isSentToServer }
-        for container in unsentContaners {
-            networkManager?.upload(RequestScannedObjectDto(from: container)) { result in
-                if result {
-                    self.localStorageManager?.updateContainerSendFlag(model: container) { result in
-                        if result {
-                            for (index, model) in self.filteredScannedContainers.enumerated() {
-                                if model.title == container.title {
-                                    self.filteredScannedContainers[index].isSentToServer = true
-                                    }
-                                }
-                            DispatchQueue.main.async {
-                                self.delegate?.showContainersList()
-                            }
-                        }
-                    }
-                } else {
-                    print("Don't upload(((9")
-                }
-            }
+        dataUpdateHelper.sendToServer(containerModel: filteredScannedContainers[row]) { [weak self] result in
+            self?.filteredScannedContainers[row].isSentToServer = result
+            self?.delegate?.showContainersList()
         }
     }
     
     func returnToScanPage(urlString: String) {
         //TODO: check established endpoint
         guard let delegate,
-                      !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
-                if endpoints.contains(urlString) {
-                    router?.showScanScreen(urlString)
-                    localStorageManager?.deleteAllContainers { result in
-                        
-                    }
-                } else if urlString.validate(idCase: .url) {
-                    UserDefaults.standard[.urls, default: []].append(urlString)
-                    router?.showScanScreen(urlString)
-                } else {
-                    delegate.urlValidation(isSuccesful: false)
+              !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
+        if endpoints.contains(urlString) {
+            router?.showScanScreen()
+        } else if urlString.validate(idCase: .url) {
+            UserDefaults.standard[.urls, default: []].append(urlString)
+            router?.showScanScreen()
+        } else {
+            delegate.urlValidation(isSuccesful: false)
         }
     }
     
     // MARK: - Private Methods
-    private func fetchScunnedContainers() {
-        localStorageManager?.fetchAllContainers { result in
-            self.allScunnedContainers = result
-            self.setFilterFilter(.all)
+    private func fetchScannedContainers() {
+        dataUpdateHelper.fetchScannedContainers(onlyUnsent: false) { [weak self] result in
+            self?.allScannedContainers = result
+            self?.setDataByCurrentFilter()
         }
     }
     
@@ -163,15 +137,20 @@ final class ContainersListPresenter: ContainersListPresenterSpec {
         delegate?.showLastEndpoint(endpoints.last ?? "")
     }
     
-    private func setFilterFilter(_ filter: ContainerListFilter) {
-        switch filter {
+    private func setDataByCurrentFilter() {
+        switch currentFilter {
         case .all:
-            filteredScannedContainers = allScunnedContainers
+            filteredScannedContainers = allScannedContainers
         case .notSend:
-            filteredScannedContainers = allScunnedContainers.filter { !$0.isSentToServer }
+            filteredScannedContainers = allScannedContainers.filter { !$0.isSentToServer }
         case .notIdentified:
-            filteredScannedContainers = allScunnedContainers.filter { !$0.isScannedSuccessfully }
+            filteredScannedContainers = allScannedContainers.filter { !$0.isScannedSuccessfully }
         }
+        filteredScannedContainers = filteredScannedContainers.sorted { $0.detectedTime > $1.detectedTime }
         delegate?.showContainersList()
     }
+}
+
+extension ContainersListPresenter: DataUpdateHelperSendable {
+    func setActualData() { fetchScannedContainers() }
 }

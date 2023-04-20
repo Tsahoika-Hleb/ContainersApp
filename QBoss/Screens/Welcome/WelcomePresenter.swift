@@ -8,6 +8,7 @@ protocol WelcomePresenterProtocol: AnyObject {
     func addEndpoint(_ url: String)
     func endpoint(for row: Int) -> String
     func startScanning(_ urlString: String)
+    func showContainers()
 }
 
 final class WelcomePresenter: WelcomePresenterProtocol {
@@ -59,13 +60,17 @@ final class WelcomePresenter: WelcomePresenterProtocol {
         guard let delegate,
                       !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
                 if endpoints.contains(urlString) {
-                    router?.showScanScreen(endpoint: urlString)
+                    router?.showScanScreen()
                 } else if urlString.validate(idCase: .url) {
                     UserDefaults.standard[.urls, default: []].append(urlString)
-                    router?.showScanScreen(endpoint: urlString)
+                    router?.showScanScreen()
                 } else {
                     delegate.urlValidation(isSuccesful: false)
         }
+    }
+    
+    func showContainers() {
+        router?.showContainersList()
     }
     
     // MARK: - Private Methods

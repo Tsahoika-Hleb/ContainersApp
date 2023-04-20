@@ -46,6 +46,8 @@ final class ContainersListViewController: UIViewController {
         UINavigationBar.appearance().titleTextAttributes = textAttributes
         UINavigationBar.appearance().barTintColor = .white
         let navItem = UINavigationItem(title: S.Screens.ContainerList.navigationTitle)
+        let busketButton = UIBarButtonItem(image: UIImage.trashFill, style: .plain, target: self, action: #selector(deleteAllContainersButton))
+        navItem.rightBarButtonItem = busketButton
         bar.setItems([navItem], animated: false)
         return bar
     }()
@@ -70,12 +72,12 @@ final class ContainersListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        presenter?.setUp()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(connectoinObserver(notification:)),
-                                               name: NSNotification.Name.connectivityStatus, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.setUp()
+    }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         setViews()
@@ -137,17 +139,9 @@ final class ContainersListViewController: UIViewController {
         }
     }
     
-    // MARK: - Observers
-    @objc func connectoinObserver(notification: Notification) {
-        if NetworkMonitor.shared.isConnected {
-            print("Connected")
-            if !isConnected {
-                presenter?.sendAllUnsent()
-            }
-        } else {
-            print("Not connected")
-            isConnected = false
-        }
+    @objc private func deleteAllContainersButton() {
+        presenter?.removeAllContainers()
+        
     }
 }
 
@@ -187,7 +181,7 @@ extension ContainersListViewController: ContainersListDelegate {
         guard let presenter = presenter else {
             fatalError("No presenter")
         }
-        return presenter.scunnedContainersCount
+        return presenter.scannedContainersCount
     }
     
     func containerForRow(_ rowIndex: Int) -> ScannedContainerModel? {

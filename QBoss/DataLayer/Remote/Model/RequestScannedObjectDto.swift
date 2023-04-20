@@ -7,7 +7,7 @@ struct RequestScannedObjectDto: Codable {
     let detectedTime: String
     var isScannedSuccessfully: Bool
     let location: String
-    let scannedType: ScannedModelType
+    let scannedType: ContainerOrientationType
     
     let image: String
     let fullImage: String
@@ -19,17 +19,14 @@ struct RequestScannedObjectDto: Codable {
     var sizeCodeStr: String
 }
 
-enum ScannedModelType: String, Codable {
-    case NONE, HORIZONTAL, VERTICAL
-}
-
 extension RequestScannedObjectDto {
     init(from container: ScannedContainerModel) {
-        deviceID = nil
+        deviceID = Constansts.deviceID
         title = container.title
         
         let dateFormater = DateFormatter()
-        dateFormater.timeStyle = .full
+        dateFormater.timeStyle = .long
+        dateFormater.dateStyle = .full
         detectedTime = dateFormater.string(from: container.detectedTime)
         
         isScannedSuccessfully = container.isScannedSuccessfully

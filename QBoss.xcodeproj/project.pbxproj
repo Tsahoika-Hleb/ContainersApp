@@ -55,6 +55,10 @@
 		FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091FA29D7147000D02816 /* StartHelper.swift */; };
 		FC80920229D8883C00D02816 /* AlertActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC80920129D8883C00D02816 /* AlertActions.swift */; };
 		FC87D36729E6B28400F63532 /* CISValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC87D36629E6B28400F63532 /* CISValidator.swift */; };
+		FCB114D129F1296700E18FD4 /* CVPixelBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D029F1296700E18FD4 /* CVPixelBuffer+Extension.swift */; };
+		FCB114D329F12C9300E18FD4 /* DataUpdateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D229F12C9300E18FD4 /* DataUpdateHelper.swift */; };
+		FCB114D529F1529800E18FD4 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D429F1529800E18FD4 /* LocationManager.swift */; };
+		FCB114D729F1783C00E18FD4 /* RouteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D629F1783C00E18FD4 /* RouteHelper.swift */; };
 		FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */; };
 		FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF74F1A29DB555F00A64908 /* PermissionManager.swift */; };
 		FCF74F1D29DB567E00A64908 /* UserDefault+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */; };
@@ -115,6 +119,10 @@
 		FC8091FA29D7147000D02816 /* StartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartHelper.swift; sourceTree = "<group>"; };
 		FC80920129D8883C00D02816 /* AlertActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertActions.swift; sourceTree = "<group>"; };
 		FC87D36629E6B28400F63532 /* CISValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CISValidator.swift; sourceTree = "<group>"; };
+		FCB114D029F1296700E18FD4 /* CVPixelBuffer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Extension.swift"; sourceTree = "<group>"; };
+		FCB114D229F12C9300E18FD4 /* DataUpdateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUpdateHelper.swift; sourceTree = "<group>"; };
+		FCB114D429F1529800E18FD4 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		FCB114D629F1783C00E18FD4 /* RouteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteHelper.swift; sourceTree = "<group>"; };
 		FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBoundingBoxModel.swift; sourceTree = "<group>"; };
 		FCF74F1A29DB555F00A64908 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Extension.swift"; sourceTree = "<group>"; };
@@ -182,6 +190,7 @@
 				FC0121C029DD7DC2004D0B1A /* BoundingBoxCalculator.swift */,
 				FC0E1CA329DEF545002EA33D /* DetectionProcessorHelper.swift */,
 				FC87D36629E6B28400F63532 /* CISValidator.swift */,
+				FCB114D429F1529800E18FD4 /* LocationManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -244,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				FC461E9A29ED472400B662DB /* Constants.swift */,
+				FCB114D629F1783C00E18FD4 /* RouteHelper.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -361,6 +371,7 @@
 				FC80920129D8883C00D02816 /* AlertActions.swift */,
 				FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */,
 				FC0121C229DD803D004D0B1A /* Fonts.swift */,
+				FCB114D029F1296700E18FD4 /* CVPixelBuffer+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -389,6 +400,7 @@
 		FCF2AA3329EC611800269A2A /* DataLayer */ = {
 			isa = PBXGroup;
 			children = (
+				FCB114D229F12C9300E18FD4 /* DataUpdateHelper.swift */,
 				FC286BCD29EEC193001CCCF2 /* Remote */,
 				FC0B308429ECA6E300CBEB6D /* Local */,
 			);
@@ -523,11 +535,14 @@
 				FC0EABAD29DC651200FEE645 /* OverlayView.swift in Sources */,
 				FC60D1EE29D5870600A2359D /* UITableView+Extension.swift in Sources */,
 				FC8091F729D7055200D02816 /* ScanPresenter.swift in Sources */,
+				FCB114D729F1783C00E18FD4 /* RouteHelper.swift in Sources */,
 				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
 				FC20157F29E9892900A75F71 /* QBoss.xcdatamodeld in Sources */,
 				FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */,
+				FCB114D329F12C9300E18FD4 /* DataUpdateHelper.swift in Sources */,
 				FC3B236829DAF25300297529 /* ContainersList.swift in Sources */,
 				FC80920229D8883C00D02816 /* AlertActions.swift in Sources */,
+				FCB114D129F1296700E18FD4 /* CVPixelBuffer+Extension.swift in Sources */,
 				FC60D1DF29D49CA000A2359D /* WelcomePresenter.swift in Sources */,
 				FC60D1F229D58B1500A2359D /* ScannedContainerModel.swift in Sources */,
 				FCF74F1D29DB567E00A64908 /* UserDefault+Extension.swift in Sources */,
@@ -541,6 +556,7 @@
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,
 				FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */,
 				FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */,
+				FCB114D529F1529800E18FD4 /* LocationManager.swift in Sources */,
 				FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */,
 				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,
 				FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */,

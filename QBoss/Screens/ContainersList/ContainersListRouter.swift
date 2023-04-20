@@ -1,30 +1,27 @@
 import UIKit
 
 protocol ContainersListRouterProtocol {
-    var viewController: UIViewController? { get set }
-    
-    func showScanScreen(_ endpoint: String)
+    func showScanScreen()
 }
 
 final class ContainersListRouter: ContainersListRouterProtocol {
-    internal weak var viewController: UIViewController?
+    private let routeHelper: RouteHelper
+    private let dataUpdateHelper: DataUpdateHelper
     
-    init(viewController: UIViewController) {
-        self.viewController = viewController
+    init(routeHelper: RouteHelper, dataUpdateHelper: DataUpdateHelper) {
+        self.routeHelper = routeHelper
+        self.dataUpdateHelper = dataUpdateHelper
     }
     
-    func showScanScreen(_ endpoint: String) { // TODO: transfer endpoint
-        guard let vc = viewController else {
-            return
-        }
-        vc.dismiss(animated: true)
-        
-//        let scanVC = ScanViewController()
-//        let router = ScanRouter(viewController: scanVC)
-//        let presenter = ScanPresenter(delegate: scanVC, router: router, endpoint: endpoint)
-//        scanVC.presenter = presenter
-//        scanVC.modalPresentationStyle = .fullScreen
-//
-//        vc.present(scanVC, animated: true)
+    func showScanScreen() {
+        guard !routeHelper.popTo(controllerType: ScanViewController.self, animated: true) else { return }
+        let scanVC = ScanViewController()
+        let router = ScanRouter(routeHelper: routeHelper, dataUpdateHelper: dataUpdateHelper)
+        let presenter = ScanPresenter(delegate: scanVC,
+                                      router: router,
+                                      tfManager: TFManager(),
+                                      dataUpdateHelper: dataUpdateHelper)
+        scanVC.presenter = presenter
+        routeHelper.pushVC(scanVC)
     }
 }

@@ -2,34 +2,37 @@ import UIKit
 import CoreLocation
 
 protocol WelcomeRouterSpec {
-    var viewController: UIViewController? { get set }
-    
-    func showScanScreen(endpoint: String)
+    func showScanScreen()
+    func showContainersList()
 }
 
 final class WelcomeRouter: WelcomeRouterSpec {
-    internal weak var viewController: UIViewController?
+    private let routeHelper: RouteHelper
+    private let dataUpdateHelper: DataUpdateHelper
     
-    init(viewController: UIViewController) {
-        self.viewController = viewController
+    init(routeHelper: RouteHelper, dataUpdateHelper: DataUpdateHelper) {
+        self.routeHelper = routeHelper
+        self.dataUpdateHelper = dataUpdateHelper
     }
     
-    func showScanScreen(endpoint: String) {
-        guard let vc = viewController else {
-            return
-        }
-        
+    func showScanScreen() {
         let scanVC = ScanViewController()
-        let router = ScanRouter(viewController: scanVC)
+        let router = ScanRouter(routeHelper: routeHelper, dataUpdateHelper: dataUpdateHelper)
         let presenter = ScanPresenter(delegate: scanVC,
                                       router: router,
                                       tfManager: TFManager(),
-                                      endpoint: endpoint,
-                                      localStorageManager: DataStoreManager(),
-                                      networkManager: DataUploadManager())
+                                      dataUpdateHelper: dataUpdateHelper)
         scanVC.presenter = presenter
-        scanVC.modalPresentationStyle = .fullScreen
         
-        vc.present(scanVC, animated: true)
+        routeHelper.pushVC(scanVC)
+    }
+    
+    func showContainersList() {
+        let containersVC = ContainersListViewController()
+        let router = ContainersListRouter(routeHelper: routeHelper, dataUpdateHelper: dataUpdateHelper)
+        let presenter = ContainersListPresenter(delegate: containersVC, router: router, dataUpdateHelper: dataUpdateHelper)
+        containersVC.presenter = presenter
+        routeHelper.pushVC(containersVC)
+    
     }
 }

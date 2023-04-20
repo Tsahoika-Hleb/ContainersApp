@@ -2,7 +2,8 @@
 "Screens.Welcome.instructionsLabelText" = "Enter a URL endpoint where scans be sent";
 "Screens.Welcome.textFieldDefaultPlaceholder" = "Enter a valid URL";
 "Screens.Welcome.textFieldAlertPlaceholder" = "This field must be filled with URL";
-"Screens.Welcome.buttonTitle" = "SCAN";
+"Screens.Welcome.scanButtonTitle" = "SCAN";
+"Screens.Welcome.containersButtonTitle" = "CONTAINERS";
 "Screens.Welcome.allertTitle" = "Permissions Required";
 "Screens.Welcome.allertMessage" = "Please enable camera and location permissions in the app settings.";
 

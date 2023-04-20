@@ -7,9 +7,9 @@ public class Container: NSManagedObject {
 }
 
 extension Container {
-    var type: ScannedModelType {
+    var type: ContainerOrientationType {
         get {
-            return ScannedModelType(rawValue: self.scannedType) ?? .NONE
+            return ContainerOrientationType(rawValue: self.scannedType) ?? .none
         }
         set {
             self.scannedType = newValue.rawValue

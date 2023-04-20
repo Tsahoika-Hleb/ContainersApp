@@ -2,7 +2,7 @@ import Foundation
 
 struct Constansts {
     
-    static let session = UUID()
+    static let deviceID = UIDevice.current.identifierForVendor?.uuidString
     
     static let userDefaultsKey = "Urls"
 }

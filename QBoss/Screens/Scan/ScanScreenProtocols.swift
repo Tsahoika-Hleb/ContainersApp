@@ -5,7 +5,6 @@ protocol ScanPresenterProtocol: AnyObject {
     var delegate: ScanViewControllerDelegate? { get set }
     var router: ScanRouterSpec? { get set }
     
-    func setUp()
     func performContainersListScreen()
     func detect(pixelBuffer: CVPixelBuffer)
 }

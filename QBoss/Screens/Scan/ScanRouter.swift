@@ -1,31 +1,27 @@
 import UIKit
 
 protocol ScanRouterSpec {
-    var viewController: UIViewController? { get set }
-    
-    func showContainersList(storageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol)
+    func showContainersList(dataUpdateHelper: DataUpdateHelper)
 }
 
 class ScanRouter: ScanRouterSpec {
-    internal weak var viewController: UIViewController?
     
-    init(viewController: UIViewController) {
-        self.viewController = viewController
+    private let routeHelper: RouteHelper
+    private let dataUpdateHelper: DataUpdateHelper
+    
+    init(routeHelper: RouteHelper, dataUpdateHelper: DataUpdateHelper) {
+        self.routeHelper = routeHelper
+        self.dataUpdateHelper = dataUpdateHelper
     }
     
-    func showContainersList(storageManager: DataStoreManagerProtocol, networkManager: DataUploadManagerProtocol) {
-        guard let vc = viewController else {
-            return
-        }
-        
+    func showContainersList(dataUpdateHelper: DataUpdateHelper) {
+        guard !routeHelper.popTo(controllerType: ContainersListViewController.self, animated: true) else { return }
         let containerListVC = ContainersListViewController()
-        let router = ContainersListRouter(viewController: vc)
+        let router = ContainersListRouter(routeHelper: routeHelper, dataUpdateHelper: dataUpdateHelper)
         let presenter = ContainersListPresenter(delegate: containerListVC,
                                                 router: router,
-                                                localStorageManager: storageManager,
-                                                networkManager: networkManager)
+                                                dataUpdateHelper: dataUpdateHelper)
         containerListVC.presenter = presenter
-        containerListVC.modalPresentationStyle = .fullScreen
-        vc.present(containerListVC, animated: true)
+        routeHelper.pushVC(containerListVC)
     }
 }

@@ -65,12 +65,22 @@ final class WelcomeViewController: UIViewController {
     }()
     
     private lazy var scanButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(S.Screens.Welcome.buttonTitle, for: .normal)
+        let button = UIButton(type: .system)
+        button.setTitle(S.Screens.Welcome.scanButtonTitle, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .blue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(scanButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var containersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(S.Screens.Welcome.containersButtonTitle, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(containersButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -90,6 +100,7 @@ final class WelcomeViewController: UIViewController {
     
     // MARK: - Private Methods
     private func setViews() {
+        view.addSubview(containersButton)
         view.addSubview(topSafeAreaView)
         view.addSubview(imageView)
         view.addSubview(titleLabel)
@@ -118,7 +129,7 @@ final class WelcomeViewController: UIViewController {
             make.top.equalTo(titleLabel.snp.bottom).offset(LayoutConstants.topInset)
             make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
         }
-
+        
         endpointsTextField.snp.makeConstraints { make in
             make.top.equalTo(instructionsLabel.snp.bottom).offset(LayoutConstants.topInset / 2)
             make.leading.trailing.equalToSuperview().inset(LayoutConstants.sideInset)
@@ -131,6 +142,13 @@ final class WelcomeViewController: UIViewController {
             make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
             make.height.equalTo(LayoutConstants.buttonHeight)
         }
+        
+        containersButton.snp.makeConstraints { make in
+            make.top.equalTo(scanButton.snp.bottom).offset(LayoutConstants.topInset)
+            make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
+            make.height.equalTo(LayoutConstants.buttonHeight)
+        }
+        
     }
     
     private func buttonAnimation(button: UIButton) {
@@ -152,6 +170,12 @@ final class WelcomeViewController: UIViewController {
         if let url = endpointsTextField.getText() {
             presenter?.startScanning(url)
         }
+    }
+    
+    @objc private func containersButtonTapped(sender: UIButton!) {
+        buttonAnimation(button: sender)
+        
+        presenter?.showContainers()
     }
     
 }
