@@ -4,6 +4,7 @@ private enum LayoutConstants {
     static let topBottomInset: CGFloat = 0
     static let leadingTrailingInset: CGFloat = 0
     static let containerImageViewSize: CGSize = CGSize(width: 50, height: 50)
+    static let insent10: CGFloat = 10
     static let serialNumberLabelSize: CGSize = CGSize(width: 200, height: 60)
     static let containerImageViewInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
     static let serialNumberLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 20)
@@ -24,7 +25,7 @@ final class ScanViewController: UIViewController {
     }()
     
     private lazy var lastFrameImageView: UIImageView = {
-       var imageView = UIImageView()
+        var imageView = UIImageView()
         imageView.backgroundColor = .clear
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -108,14 +109,14 @@ final class ScanViewController: UIViewController {
         }
         
         lastFrameImageView.snp.makeConstraints { make in
-            make.leading.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.leading.equalTo(view.safeAreaLayoutGuide).inset(LayoutConstants.insent10)
             make.bottom.equalTo(serialNumberLabel.snp.top)
-            make.width.lessThanOrEqualToSuperview().inset(10)
+            make.width.lessThanOrEqualToSuperview().inset(LayoutConstants.insent10)
         }
         
         serialNumberLabel.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview().inset(10)
+            make.leading.trailing.equalToSuperview().inset(LayoutConstants.insent10)
         }
     }
     
@@ -131,7 +132,7 @@ extension ScanViewController: CameraFeedManagerDelegate {
     
     func didOutput(pixelBuffer: CVPixelBuffer) {
         guard !self.isInferenceQueueBusy else { return }
-    
+        
         inferenceQueue.async {
             self.isInferenceQueueBusy = true
             self.presenter?.detect(pixelBuffer: pixelBuffer)
@@ -144,13 +145,13 @@ extension ScanViewController: CameraFeedManagerDelegate {
             title: S.Screens.Scan.CameraPermissionDenied.allertTitle,
             message: S.Screens.Scan.CameraPermissionDenied.allertMessage,
             preferredStyle: .alert)
-
+        
         let cancelAction = UIAlertAction.cancelAction
         let settingsAction = UIAlertAction.settingAction
-
+        
         alertController.addAction(cancelAction)
         alertController.addAction(settingsAction)
-
+        
         present(alertController, animated: true, completion: nil)
     }
     
@@ -161,7 +162,7 @@ extension ScanViewController: CameraFeedManagerDelegate {
             preferredStyle: .alert)
         let okAction = UIAlertAction.okAction
         alertController.addAction(okAction)
-
+        
         present(alertController, animated: true, completion: nil)
     }
     

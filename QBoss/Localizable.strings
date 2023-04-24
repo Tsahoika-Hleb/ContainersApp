@@ -16,6 +16,8 @@
 "Screens.ContainerList.notIdentifiedButtonTitle" = "Not Identified";
 "Screens.ContainerList.rightSwipeActionTitle" = "Send to server";
 
+"Screens.EndpointsList.deleteSwipeActionTitle" = "Delete";
+
 "Screens.Scan.CameraPermissionDenied.allertTitle" = "Camera Permissions Denied";
 "Screens.Scan.CameraPermissionDenied.allertMessage" = "Camera permissions have been denied for this app. You can change this by going to Settings";
 "Screens.Scan.PresentVideoError.allertTitle" = "Configuration Failed";
@@ -26,3 +28,9 @@
 "AlertAction.settings" = "Settings";
 "AlertAction.ok" = "OK";
 "AlertAction.cancel" = "Cancel";
+
+"Screens.Views.ScannedContainerCell.sentToServerLabel" = "sent to server:";
+"Screens.Views.ScannedContainerCell.latitudeLabel" = "lat: ";
+"Screens.Views.ScannedContainerCell.longitudeLabel" = "lon: ";
+"Screens.Views.ScannedContainerCell.isIdentifiedLabel" = "isIdentified:";
+

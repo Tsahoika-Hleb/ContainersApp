@@ -9,6 +9,7 @@
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="scannedType" attributeType="String" customClassName="ScannedModelType"/>
+        <attribute name="session" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="sizeCodeStr" optional="YES" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
     </entity>

@@ -3,7 +3,7 @@ import CoreData
 
 @objc(Container)
 public class Container: NSManagedObject {
-
+    
 }
 
 extension Container {

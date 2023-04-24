@@ -43,9 +43,9 @@ extension UserDefaults {
         
     }
 }
- 
+
 extension UserDefaults.Key {
     static var urls: UserDefaults.Key<[String]> {
-        return .init(name: Constansts.userDefaultsKey)
+        return .init(name: "Urls")
     }
 }

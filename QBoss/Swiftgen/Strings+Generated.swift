@@ -37,6 +37,10 @@ internal enum S {
       /// Enter a valid URL
       internal static let textFieldDefaultPlaceholder = S.tr("Localizable", "Screens.ContainerList.textFieldDefaultPlaceholder", fallback: "Enter a valid URL")
     }
+    internal enum EndpointsList {
+      /// Delete
+      internal static let deleteSwipeActionTitle = S.tr("Localizable", "Screens.EndpointsList.deleteSwipeActionTitle", fallback: "Delete")
+    }
     internal enum Scan {
       internal enum CameraPermissionDenied {
         /// Camera permissions have been denied for this app. You can change this by going to Settings
@@ -55,6 +59,18 @@ internal enum S {
         internal static let allertMessage = S.tr("Localizable", "Screens.Scan.PresentVideoError.allertMessage", fallback: "Configuration of camera has failed")
         /// Configuration Failed
         internal static let allertTitle = S.tr("Localizable", "Screens.Scan.PresentVideoError.allertTitle", fallback: "Configuration Failed")
+      }
+    }
+    internal enum Views {
+      internal enum ScannedContainerCell {
+        /// isIdentified:
+        internal static let isIdentifiedLabel = S.tr("Localizable", "Screens.Views.ScannedContainerCell.isIdentifiedLabel", fallback: "isIdentified:")
+        /// lat: 
+        internal static let latitudeLabel = S.tr("Localizable", "Screens.Views.ScannedContainerCell.latitudeLabel", fallback: "lat: ")
+        /// lon: 
+        internal static let longitudeLabel = S.tr("Localizable", "Screens.Views.ScannedContainerCell.longitudeLabel", fallback: "lon: ")
+        /// sent to server:
+        internal static let sentToServerLabel = S.tr("Localizable", "Screens.Views.ScannedContainerCell.sentToServerLabel", fallback: "sent to server:")
       }
     }
     internal enum Welcome {

@@ -7,23 +7,25 @@ protocol DataUploadManagerProtocol {
 class DataUploadManager: DataUploadManagerProtocol {
     
     func upload(_ model: RequestScannedObjectDto, completionHandler: @escaping (Bool) -> ()) {
-        guard let url = URL(string: "https://webhook.site/13172e89-9c7f-4f9b-ae8b-3d365b9701f5") else {
+        guard let urlString = UserDefaults.standard[.urls, default: []].last, let url = URL(string: urlString) else {
+            completionHandler(false)
             return
         }
-
+        print(url)
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-
+        
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         let encoder = JSONEncoder()
         guard let jsonData = try? encoder.encode(model) else {
             print("Ошибка при кодировании модели в JSON") // TODO: Add handling
             return
         }
-
+        
         request.httpBody = jsonData
-
+        
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if let error {
@@ -43,7 +45,7 @@ class DataUploadManager: DataUploadManagerProtocol {
                     print("Ответ сервера: \(responseString)")
                 }
             }
-
+            
             completionHandler(false)
         }
         task.resume()

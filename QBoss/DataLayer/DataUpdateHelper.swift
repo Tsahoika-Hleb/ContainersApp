@@ -38,6 +38,8 @@ final class DataUpdateHelper {
         }
     }
     
+    func sendToServer(at url: URL, containerModel: ScannedContainerModel, completion: ((Bool) -> Void)? = nil) {}
+    
     func sendToServer(containerModel: ScannedContainerModel, completion: ((Bool) -> Void)? = nil) {
         networkManager?.upload(RequestScannedObjectDto(from: containerModel)) { [weak self] result in
             guard result else { return }

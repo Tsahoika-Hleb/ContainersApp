@@ -10,7 +10,7 @@ extension CVPixelBuffer {
         let bytesPerRow = CVPixelBufferGetBytesPerRow(self)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
-
+        
         guard let context = CGContext(data: baseAddress,
                                       width: width,
                                       height: height,
@@ -19,10 +19,14 @@ extension CVPixelBuffer {
                                       space: colorSpace,
                                       bitmapInfo: bitmapInfo.rawValue),
               let cgImage = context.makeImage() else { return nil }
-
+        
         let image = UIImage(cgImage: cgImage, scale: 1, orientation: .right)
         CVPixelBufferUnlockBaseAddress(self, .readOnly)
-
+        
         return image
+    }
+    
+    func getData() -> Data? {
+        self.getImage()?.getData()
     }
 }

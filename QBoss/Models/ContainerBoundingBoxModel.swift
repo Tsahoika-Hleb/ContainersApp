@@ -7,7 +7,7 @@ enum ContainerOrientationType: String, Codable {
 }
 
 struct ContainerBoundingBoxModel {
-
+    
     enum CodingKeys: String, CaseIterable {
         case vertical
         case horizontal
@@ -36,7 +36,7 @@ struct ContainerBoundingBoxModel {
             }
         }
     }
-
+    
     func getContainerOrientation() -> ContainerOrientationType {
         let isContainsVertical: Bool = overlays.contains(where: { $0.key == .vertical })
         let isContainsHorizontal: Bool = overlays.contains(where: { $0.key == .horizontal })

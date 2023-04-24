@@ -4,20 +4,20 @@ import TensorFlowLiteTaskVision
 final class DetectionProcessorHelper {
     
     private let colors = [
-      UIColor.red,
-      UIColor(displayP3Red: 90.0 / 255.0, green: 200.0 / 255.0, blue: 250.0 / 255.0, alpha: 1.0),
-      UIColor.green,
-      UIColor.orange,
-      UIColor.blue,
-      UIColor.purple,
-      UIColor.magenta,
-      UIColor.yellow,
-      UIColor.cyan,
-      UIColor.brown,
+        UIColor.red,
+        UIColor(displayP3Red: 90.0 / 255.0, green: 200.0 / 255.0, blue: 250.0 / 255.0, alpha: 1.0),
+        UIColor.green,
+        UIColor.orange,
+        UIColor.blue,
+        UIColor.purple,
+        UIColor.magenta,
+        UIColor.yellow,
+        UIColor.cyan,
+        UIColor.brown,
     ]
-
+    
     func processDetections(_ detections: [Detection], imageSize: CGSize, viewBoundsRect: CGRect) -> [ObjectOverlay] {
-
+        
         var objectOverlays: [ObjectOverlay] = []
         
         for detection in detections {

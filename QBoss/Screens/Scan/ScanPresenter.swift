@@ -3,12 +3,12 @@ import TensorFlowLiteTaskVision
 
 final class ScanPresenter: ScanPresenterProtocol {
     // MARK: - Properties
-
+    
     var router: ScanRouterSpec?
     weak var delegate: ScanViewControllerDelegate?
     
     // MARK: - Private Properties
-
+    
     private var tfManager: TFManager?
     private let imageToTextProcessor: ImageToTextProcessor = .init()
     private let boundingBoxCalculator = BoundingBoxCalculator()
@@ -44,36 +44,36 @@ extension ScanPresenter: TFManagerDelegateProtocol {
                                          pixelBuffer: CVPixelBuffer) {
         delegate?.cleanOverlays()
         guard !detections.isEmpty, let viewBoundsRect = delegate?.view.bounds else { return }
-
+        
         let objectOverlays = detectionProcessorHelper.processDetections(detections,
                                                                         imageSize: imageSize,
                                                                         viewBoundsRect: viewBoundsRect)
         delegate?.drawOverlays(objectOverlays: objectOverlays)
-
+        
         let boundingBoxModel = ContainerBoundingBoxModel(models: objectOverlays)
         Task {
             let recognisedTextPairs = await getRecognisedTexts(boundingBoxModel: boundingBoxModel,
                                                                pixelBuffer: pixelBuffer,
                                                                viewBoundsRect: viewBoundsRect,
                                                                isVertical: boundingBoxModel.getContainerOrientation() == .vertical)
-
+            
             guard !recognisedTextPairs.isEmpty,
-                    let result = validator.handleResults(mainNumber: recognisedTextPairs.first,
+                  let result = validator.handleResults(mainNumber: recognisedTextPairs.first,
                                                        partialNumber: recognisedTextPairs.last) else { return }
             
             saveContainer(containerText: result.1,
                           isScannedSuccessfully: result.2,
-                          image: result.0.jpegData(compressionQuality: 0.5),
+                          image: result.0.getData(),
                           pixelBuffer: pixelBuffer,
                           scannedType: boundingBoxModel.getContainerOrientation())
-
+            
             Task { @MainActor in
                 delegate?.setLabel(text: result.1, rightCheckDigit: result.2)
                 delegate?.setImage(image: result.0)
             }
         }
     }
-
+    
     private func getRecognisedTexts(boundingBoxModel: ContainerBoundingBoxModel,
                                     pixelBuffer: CVPixelBuffer,
                                     viewBoundsRect: CGRect,
@@ -96,25 +96,25 @@ extension ScanPresenter: TFManagerDelegateProtocol {
             return await group.compactMap { $0 }.reduce(into: [], { $0.append($1) })
         }
     }
-
+    
     private func getRecognisedTextForImage(boundingBoxModel: ContainerBoundingBoxModel,
                                            pixelBuffer: CVPixelBuffer,
                                            viewBoundsRect: CGRect,
                                            isVertical: Bool) async -> ProcessedImageResult? {
-
+        
         guard let mainBox = boundingBoxModel.mainBox,
               let image = boundingBoxCalculator.getBoundingBoxImage(cropRect: mainBox.borderRect,
                                                                     viewBoundsRect: viewBoundsRect,
                                                                     pixelBuffer: pixelBuffer) else { return nil }
-
+        
         return await imageToTextProcessor.process(image: image)
     }
-
+    
     private func getRecognisedTextForImages(boundingBoxModel: ContainerBoundingBoxModel,
                                             pixelBuffer: CVPixelBuffer,
                                             viewBoundsRect: CGRect,
                                             isVertical: Bool) async -> ProcessedImageResult? {
-
+        
         var images: [UIImage] = []
         for box in boundingBoxModel.partialImageBoxes {
             guard let image = boundingBoxCalculator.getBoundingBoxImage(
@@ -137,10 +137,11 @@ extension ScanPresenter {
         let title = String(containerText.prefix(11))
         let sizeCode: String? = containerText.count > 11 ? String(containerText.suffix(4)) : nil
         
-        guard let imageData = pixelBuffer.getImage()?.jpegData(compressionQuality: 0.5), let image else { return }
+        guard let imageData = pixelBuffer.getData(), let image else { return }
         
         let container = ScannedContainerModel(
             title: title,
+            session: Constansts.sessionId,
             detectedTime: Date(),
             isScannedSuccessfully: isScannedSuccessfully,
             latitude: locationManager.currentLocation?.coordinate.latitude ?? 0,

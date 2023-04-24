@@ -2,12 +2,9 @@ import Foundation
 
 protocol WelcomePresenterProtocol: AnyObject {
     var delegate: WelcomeViewControllerDelegate? { get set }
-    var endpointsCount: Int { get }
     
     func setUpPresenter()
-    func addEndpoint(_ url: String)
-    func endpoint(for row: Int) -> String
-    func startScanning(_ urlString: String)
+    func startScanning(urlEstablished: Bool)
     func showContainers()
 }
 
@@ -15,11 +12,9 @@ final class WelcomePresenter: WelcomePresenterProtocol {
     
     // MARK: - Properties
     weak var delegate: WelcomeViewControllerDelegate?
-    var endpointsCount: Int { return endpoints.count }
     
     // MARK: - Private Properties
     private var router: WelcomeRouterSpec?
-    private var endpoints: [String] = []
     
     // MARK: - Initialization
     init(delegate: WelcomeViewControllerDelegate, router: WelcomeRouterSpec) {
@@ -29,7 +24,6 @@ final class WelcomePresenter: WelcomePresenterProtocol {
     
     // MARK: - Methods
     func setUpPresenter() {
-        fetchEndpoints()
         permissionRequest()
     }
     
@@ -37,45 +31,15 @@ final class WelcomePresenter: WelcomePresenterProtocol {
         PermissionManager.shared.requestAllPermissions()
     }
     
-    func addEndpoint(_ url: String) {
-        guard url.validate(idCase: .url) else {
-            delegate?.urlValidation(isSuccesful: false)
-            return
-        }
-        
-        guard !endpoints.contains(url) else {
-            return
-        }
-        
-        endpoints.append(url)
-        UserDefaults.standard[.urls, default: []].append(contentsOf: endpoints)
-        delegate?.urlValidation(isSuccesful: true)
-    }
-    
-    func endpoint(for row: Int) -> String {
-        endpoints[row]
-    }
-    
-    func startScanning(_ urlString: String) {
+    func startScanning(urlEstablished: Bool) {
         guard let delegate,
-                      !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
-                if endpoints.contains(urlString) {
-                    router?.showScanScreen()
-                } else if urlString.validate(idCase: .url) {
-                    UserDefaults.standard[.urls, default: []].append(urlString)
-                    router?.showScanScreen()
-                } else {
-                    delegate.urlValidation(isSuccesful: false)
+              !PermissionManager.shared.showAlertIfPermissionsDenied(viewController: delegate) else { return }
+        if urlEstablished {
+            router?.showScanScreen()
         }
     }
     
     func showContainers() {
         router?.showContainersList()
-    }
-    
-    // MARK: - Private Methods
-    private func fetchEndpoints() {
-        endpoints = UserDefaults.standard[.urls, default: []]
-        delegate?.showLastEndpoint(endpoints.last ?? "")
     }
 }

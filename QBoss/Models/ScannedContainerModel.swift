@@ -2,6 +2,7 @@ import Foundation
 
 struct ScannedContainerModel: Codable {
     let title: String
+    let session: Int
     let detectedTime: Date
     let isScannedSuccessfully: Bool
     let latitude: Double

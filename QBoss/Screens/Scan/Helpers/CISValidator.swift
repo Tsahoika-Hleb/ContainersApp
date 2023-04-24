@@ -10,10 +10,8 @@ final class CISValidator {
     func handleResults(mainNumber: ProcessedImageResult?, partialNumber: ProcessedImageResult?) -> (UIImage, String, Bool)? {
         
         if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1), mainResult.1 {
-            //print("Main box, text is valid: \(mainResult)")
             return (mainPair.0, mainResult.0, mainResult.1)
         } else if let partrialPair = partialNumber, let partialResult = getValidatedNumber(serialNumber: partrialPair.1), partialResult.1 {
-            //print("Partial box, text is valid: \(partialResult)")
             return (partrialPair.0, partialResult.0, partialResult.1)
         } else if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1) {
             return (mainPair.0, mainResult.0, mainResult.1)
@@ -29,9 +27,6 @@ final class CISValidator {
         var isValid = true
         var tempString = serialNumber
         tempString = tempString.filter({ $0.isLetter || $0.isNumber && !$0.isWhitespace })
-        
-//        print(serialNumber)
-        
         guard tempString.count >= 10 else { return nil }
         let hasCheckDigit = !(tempString.count == 10)
         let hasTypeCode = (tempString.count >= 15)
@@ -79,7 +74,7 @@ final class CISValidator {
         }
         
         tempString = codePart + digitsPart + checkDigitChar
-
+        
         // Calculate and add check if it is not recognized
         if tempString.count == 10, let checkDigit = countCheckDigit(serialNumber: tempString) {
             tempString += String(checkDigit)
@@ -94,7 +89,7 @@ final class CISValidator {
     private func charReplace(inputString: String, part: NumberPart) -> String {
         let lettersToDigits = ["O" : "0", "S" : "5", "Z" : "2", "I" : "1", "G" : "6"]
         let digitsToLetters = Dictionary(uniqueKeysWithValues: lettersToDigits.map { ($1, $0) })
-
+        
         var outputString = ""
         for char in inputString {
             let value = (part == .code) ? digitsToLetters[String(char)] : lettersToDigits[String(char)]

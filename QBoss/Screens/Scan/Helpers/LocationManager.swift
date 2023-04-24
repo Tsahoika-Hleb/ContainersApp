@@ -1,33 +1,3 @@
-//import CoreLocation
-//
-//class LocationManager: NSObject, CLLocationManagerDelegate {
-//
-//    private let locationManager = CLLocationManager()
-//    private var locationCompletionHandler: ((Double, Double)?, Error?) -> Void = { _,_  in }
-//    var location: (Double, Double)?
-//
-//    override init() {
-//        super.init()
-//        locationManager.delegate = self
-//    }
-//
-//    func getLocation(completion: @escaping ((Double, Double)?, Error?) -> Void) {
-//        locationCompletionHandler = completion
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.requestLocation()
-//    }
-//
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        if let location = locations.last {
-//            locationCompletionHandler((location.coordinate.latitude, location.coordinate.longitude), nil)
-//        }
-//    }
-//
-//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        locationCompletionHandler(nil, error)
-//    }
-//}
-
 import CoreLocation
 
 class LocationManager: NSObject, CLLocationManagerDelegate {

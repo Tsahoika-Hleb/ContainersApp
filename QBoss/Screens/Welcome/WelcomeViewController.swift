@@ -3,8 +3,6 @@ import SnapKit
 import IQKeyboardManagerSwift
 
 protocol WelcomeViewControllerDelegate: UIViewController {
-    func urlValidation(isSuccesful: Bool)
-    func showLastEndpoint(_ endpoint: String)
 }
 
 private enum LayoutConstants {
@@ -13,6 +11,7 @@ private enum LayoutConstants {
     static let textFieldHeight: CGFloat = 44
     static let buttonHeight: CGFloat = 40
     static let imageViewHeightMultiplier: CGFloat = 0.4
+    static let cornerRadius: CGFloat = 8
 }
 
 private enum AnimationConstants {
@@ -22,14 +21,13 @@ private enum AnimationConstants {
     static let highlightedAlpha: CGFloat = 0.8
 }
 
-final class WelcomeViewController: UIViewController {
+final class WelcomeViewController: UIViewController, WelcomeViewControllerDelegate {
     
     // MARK: - Properties
     var presenter: WelcomePresenterProtocol?
     
     private lazy var endpointsTextField: EndpointsTextField = {
         let view = EndpointsTextField()
-        view.delegate = self
         return view
     }()
     
@@ -48,7 +46,7 @@ final class WelcomeViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = UIFont.boldSystemFont20
         label.textColor = .black
         label.text = S.Screens.Welcome.title
         label.textAlignment = .center
@@ -57,7 +55,7 @@ final class WelcomeViewController: UIViewController {
     
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont16
         label.textColor = .gray
         label.text = S.Screens.Welcome.instructionsLabelText
         label.textAlignment = .center
@@ -69,7 +67,7 @@ final class WelcomeViewController: UIViewController {
         button.setTitle(S.Screens.Welcome.scanButtonTitle, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .blue
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = LayoutConstants.cornerRadius
         button.addTarget(self, action: #selector(scanButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -79,7 +77,7 @@ final class WelcomeViewController: UIViewController {
         button.setTitle(S.Screens.Welcome.containersButtonTitle, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .blue
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = LayoutConstants.cornerRadius
         button.addTarget(self, action: #selector(containersButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -114,17 +112,17 @@ final class WelcomeViewController: UIViewController {
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
-
+        
         imageView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(LayoutConstants.imageViewHeightMultiplier)
         }
-
+        
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(LayoutConstants.topInset)
             make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
         }
-
+        
         instructionsLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(LayoutConstants.topInset)
             make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
@@ -136,7 +134,7 @@ final class WelcomeViewController: UIViewController {
             make.height.equalTo(LayoutConstants.textFieldHeight)
         }
         endpointsTextField.updateTableView()
-
+        
         scanButton.snp.makeConstraints { make in
             make.top.equalTo(endpointsTextField.snp.bottom).offset(LayoutConstants.topInset)
             make.left.right.equalToSuperview().inset(LayoutConstants.sideInset)
@@ -167,52 +165,12 @@ final class WelcomeViewController: UIViewController {
     @objc private func scanButtonTapped(sender: UIButton!) {
         buttonAnimation(button: sender)
         
-        if let url = endpointsTextField.getText() {
-            presenter?.startScanning(url)
-        }
+        presenter?.startScanning(urlEstablished: endpointsTextField.isUrlEstablished())
     }
     
     @objc private func containersButtonTapped(sender: UIButton!) {
         buttonAnimation(button: sender)
         
         presenter?.showContainers()
-    }
-    
-}
-
-
-// MARK: - WelcomeViewControllerDelegate
-extension WelcomeViewController: WelcomeViewControllerDelegate {
-    
-    func showLastEndpoint(_ endpoint: String) {
-        endpointsTextField.setTextField(endpoint)
-    }
-    
-    func urlValidation(isSuccesful: Bool) {
-        endpointsTextField.urlValidationResult(isSuccesful)
-    }
-}
-
-
-// MARK: - EndpointsTextFieldDelegate
-extension WelcomeViewController: EndpointsTextFieldDelegate {
-    
-    func endpointsCount() -> Int {
-        guard let presenter = presenter else {
-            fatalError("No presenter")
-        }
-        return presenter.endpointsCount
-    }
-    
-    func endpointForRow(rowIndex: Int) -> String? {
-        guard let presenter = presenter else {
-            fatalError("No presenter")
-        }
-        return presenter.endpoint(for: rowIndex)
-        
-    }
-    
-    func addEndpoint(_ endpoint: String) {
-        presenter?.addEndpoint(endpoint)
     }
 }

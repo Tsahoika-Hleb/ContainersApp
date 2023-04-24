@@ -25,6 +25,9 @@
 		FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC29031729E064B5008FA328 /* OpenCVWrapper.mm */; };
 		FC29031D29E064B5008FA328 /* ImageTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */; };
 		FC29031E29E064B5008FA328 /* ImageToTextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC29031A29E064B5008FA328 /* ImageToTextProcessor.swift */; };
+		FC32819E29F6932900613E69 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC32819D29F6932900613E69 /* Colors.swift */; };
+		FC3281A029F6D26D00613E69 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC32819F29F6D26D00613E69 /* UIImage+Extension.swift */; };
+		FC3281A229F6D44B00613E69 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3281A129F6D44B00613E69 /* Date+Extension.swift */; };
 		FC3B236829DAF25300297529 /* ContainersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236729DAF25300297529 /* ContainersList.swift */; };
 		FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3B236A29DB116C00297529 /* EndpointsTextField.swift */; };
 		FC461E9829ECC01800B662DB /* RequestScannedObjectDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */; };
@@ -55,6 +58,7 @@
 		FC8091FB29D7147000D02816 /* StartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8091FA29D7147000D02816 /* StartHelper.swift */; };
 		FC80920229D8883C00D02816 /* AlertActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC80920129D8883C00D02816 /* AlertActions.swift */; };
 		FC87D36729E6B28400F63532 /* CISValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC87D36629E6B28400F63532 /* CISValidator.swift */; };
+		FC9017BE29F310BE004475C1 /* URLRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9017BD29F310BE004475C1 /* URLRepository.swift */; };
 		FCB114D129F1296700E18FD4 /* CVPixelBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D029F1296700E18FD4 /* CVPixelBuffer+Extension.swift */; };
 		FCB114D329F12C9300E18FD4 /* DataUpdateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D229F12C9300E18FD4 /* DataUpdateHelper.swift */; };
 		FCB114D529F1529800E18FD4 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB114D429F1529800E18FD4 /* LocationManager.swift */; };
@@ -87,6 +91,9 @@
 		FC29031929E064B5008FA328 /* ImageTextRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTextRecognizer.swift; sourceTree = "<group>"; };
 		FC29031A29E064B5008FA328 /* ImageToTextProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageToTextProcessor.swift; sourceTree = "<group>"; };
 		FC29031B29E064B5008FA328 /* OpenCVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
+		FC32819D29F6932900613E69 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		FC32819F29F6D26D00613E69 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		FC3281A129F6D44B00613E69 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		FC3B236729DAF25300297529 /* ContainersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainersList.swift; sourceTree = "<group>"; };
 		FC3B236A29DB116C00297529 /* EndpointsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsTextField.swift; sourceTree = "<group>"; };
 		FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestScannedObjectDto.swift; sourceTree = "<group>"; };
@@ -119,6 +126,7 @@
 		FC8091FA29D7147000D02816 /* StartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartHelper.swift; sourceTree = "<group>"; };
 		FC80920129D8883C00D02816 /* AlertActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertActions.swift; sourceTree = "<group>"; };
 		FC87D36629E6B28400F63532 /* CISValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CISValidator.swift; sourceTree = "<group>"; };
+		FC9017BD29F310BE004475C1 /* URLRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRepository.swift; sourceTree = "<group>"; };
 		FCB114D029F1296700E18FD4 /* CVPixelBuffer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Extension.swift"; sourceTree = "<group>"; };
 		FCB114D229F12C9300E18FD4 /* DataUpdateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUpdateHelper.swift; sourceTree = "<group>"; };
 		FCB114D429F1529800E18FD4 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -169,19 +177,9 @@
 			isa = PBXGroup;
 			children = (
 				FC0B308229ECA6DC00CBEB6D /* DataStoreManager.swift */,
-				FC0B308529ECA6F200CBEB6D /* Models */,
+				FC9017BD29F310BE004475C1 /* URLRepository.swift */,
 			);
 			path = Local;
-			sourceTree = "<group>";
-		};
-		FC0B308529ECA6F200CBEB6D /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				FC20157D29E9892900A75F71 /* QBoss.xcdatamodeld */,
-				FC0B308629ECA6FF00CBEB6D /* Container+CoreDataClass.swift */,
-				FC0B308829ECA6FF00CBEB6D /* Container+CoreDataProperties.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		FC0E1CA529DEFB14002EA33D /* Helpers */ = {
@@ -205,44 +203,21 @@
 			path = TFLite;
 			sourceTree = "<group>";
 		};
-		FC0EABAB29DC64F600FEE645 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				FC0121BF29DD7D95004D0B1A /* OverlayView */,
-				FC60D1FE29D6E64100A2359D /* CameraFeed */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		FC286BCD29EEC193001CCCF2 /* Remote */ = {
 			isa = PBXGroup;
 			children = (
-				FC286BCE29EEC1BC001CCCF2 /* Model */,
 				FC286BCF29EEC400001CCCF2 /* DataUploadManager.swift */,
 				FC286BD129EF6332001CCCF2 /* NetworkMonitor.swift */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
 		};
-		FC286BCE29EEC1BC001CCCF2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		FC3B236629DAF20400297529 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				FC60D1EF29D58A7600A2359D /* ScannedContainerTableViewCell.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		FC3B236929DB113C00297529 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				FC0121BF29DD7D95004D0B1A /* OverlayView */,
+				FC60D1FE29D6E64100A2359D /* CameraFeed */,
+				FC60D1EF29D58A7600A2359D /* ScannedContainerTableViewCell.swift */,
 				FC3B236729DAF25300297529 /* ContainersList.swift */,
 				FC3B236A29DB116C00297529 /* EndpointsTextField.swift */,
 			);
@@ -333,7 +308,6 @@
 			isa = PBXGroup;
 			children = (
 				FC0E1CA529DEFB14002EA33D /* Helpers */,
-				FC0EABAB29DC64F600FEE645 /* Views */,
 				FC60D1E329D4DD5200A2359D /* ScanViewController.swift */,
 				FC8091F629D7055200D02816 /* ScanPresenter.swift */,
 				FC8091F829D706E500D02816 /* ScanRouter.swift */,
@@ -345,7 +319,6 @@
 		FC60D1E529D4ED1F00A2359D /* ContainersList */ = {
 			isa = PBXGroup;
 			children = (
-				FC3B236629DAF20400297529 /* Views */,
 				FC60D1E629D4ED4F00A2359D /* ContainersListViewController.swift */,
 				FC60D1F729D5B7BD00A2359D /* ContainersListPresenter.swift */,
 				FC8091F229D6E82300D02816 /* ContainersListRouter.swift */,
@@ -356,6 +329,10 @@
 		FC60D1E829D4F5C500A2359D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FC20157D29E9892900A75F71 /* QBoss.xcdatamodeld */,
+				FC0B308629ECA6FF00CBEB6D /* Container+CoreDataClass.swift */,
+				FC0B308829ECA6FF00CBEB6D /* Container+CoreDataProperties.swift */,
+				FC461E9729ECC01800B662DB /* RequestScannedObjectDto.swift */,
 				FC60D1F129D58B1500A2359D /* ScannedContainerModel.swift */,
 				FCD6ACBA29E56C440021D9A3 /* ContainerBoundingBoxModel.swift */,
 			);
@@ -372,6 +349,9 @@
 				FCF74F1C29DB567E00A64908 /* UserDefault+Extension.swift */,
 				FC0121C229DD803D004D0B1A /* Fonts.swift */,
 				FCB114D029F1296700E18FD4 /* CVPixelBuffer+Extension.swift */,
+				FC32819D29F6932900613E69 /* Colors.swift */,
+				FC32819F29F6D26D00613E69 /* UIImage+Extension.swift */,
+				FC3281A129F6D44B00613E69 /* Date+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -539,6 +519,7 @@
 				FC8091F329D6E82300D02816 /* ContainersListRouter.swift in Sources */,
 				FC20157F29E9892900A75F71 /* QBoss.xcdatamodeld in Sources */,
 				FC60D1E129D49CA000A2359D /* WelcomeViewController.swift in Sources */,
+				FC32819E29F6932900613E69 /* Colors.swift in Sources */,
 				FCB114D329F12C9300E18FD4 /* DataUpdateHelper.swift in Sources */,
 				FC3B236829DAF25300297529 /* ContainersList.swift in Sources */,
 				FC80920229D8883C00D02816 /* AlertActions.swift in Sources */,
@@ -556,10 +537,13 @@
 				FCF74F1B29DB555F00A64908 /* PermissionManager.swift in Sources */,
 				FCD6ACBB29E56C440021D9A3 /* ContainerBoundingBoxModel.swift in Sources */,
 				FC3B236B29DB116C00297529 /* EndpointsTextField.swift in Sources */,
+				FC3281A029F6D26D00613E69 /* UIImage+Extension.swift in Sources */,
 				FCB114D529F1529800E18FD4 /* LocationManager.swift in Sources */,
+				FC3281A229F6D44B00613E69 /* Date+Extension.swift in Sources */,
 				FC0121C129DD7DC2004D0B1A /* BoundingBoxCalculator.swift in Sources */,
 				FC60D1F429D5AFBA00A2359D /* Images.swift in Sources */,
 				FC29031C29E064B5008FA328 /* OpenCVWrapper.mm in Sources */,
+				FC9017BE29F310BE004475C1 /* URLRepository.swift in Sources */,
 				FC87D36729E6B28400F63532 /* CISValidator.swift in Sources */,
 				FC0EABAA29DC608F00FEE645 /* TFManger.swift in Sources */,
 				FC286BD029EEC400001CCCF2 /* DataUploadManager.swift in Sources */,
@@ -627,6 +611,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -641,7 +626,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -688,6 +673,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -696,7 +682,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

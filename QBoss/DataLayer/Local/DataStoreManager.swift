@@ -9,7 +9,7 @@ protocol DataStoreManagerProtocol {
     func updateContainerSendFlag(model: ScannedContainerModel, completion: @escaping (Bool) -> Void)
 }
 class DataStoreManager: DataStoreManagerProtocol {
-
+    
     private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "QBoss")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -23,7 +23,7 @@ class DataStoreManager: DataStoreManagerProtocol {
     private func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
         persistentContainer.performBackgroundTask(block)
     }
-
+    
     func fetchAllContainers(onlyUnsent: Bool, completion: @escaping ([ScannedContainerModel]) -> Void) {
         let fetchRequest: NSFetchRequest<Container> = Container.fetchRequest()
         if onlyUnsent {
@@ -31,10 +31,10 @@ class DataStoreManager: DataStoreManagerProtocol {
         }
         fetchRequest.fetchLimit = 50
         var fetchOffset = 0
-
+        
         performBackgroundTask { context in
             var allContainers: [Container] = []
-
+            
             while true {
                 fetchRequest.fetchOffset = fetchOffset
                 do {
@@ -48,7 +48,7 @@ class DataStoreManager: DataStoreManagerProtocol {
                     return
                 }
             }
-
+            
             let models = allContainers.map { ScannedContainerModel(from: $0) }
             DispatchQueue.main.async { completion(models) }
         }
@@ -138,6 +138,7 @@ extension ScannedContainerModel {
     init(from container: Container) {
         title = container.title
         detectedTime = container.detectedTime
+        session = Int(container.session)
         isScannedSuccessfully = container.isScannedSuccessfully
         latitude = container.latitude
         longitude = container.longitude
@@ -154,6 +155,7 @@ extension Container {
         self.init(context: context)
         title = model.title
         detectedTime = model.detectedTime
+        session = Int64(model.session)
         isScannedSuccessfully = model.isScannedSuccessfully
         latitude = model.latitude
         longitude = model.longitude
