@@ -25,7 +25,7 @@ struct ContainerBoundingBoxModel {
     }
     
     var partialImageBoxes: [ObjectOverlay] {
-        let keysToInclude: [CodingKeys] = [.ownerCode, .groupCode, .registrationNumber, .checkDigit]
+        let keysToInclude: [CodingKeys] = [.ownerCode, .groupCode, .registrationNumber]
         return keysToInclude.compactMap { overlays[$0] }
     }
     
