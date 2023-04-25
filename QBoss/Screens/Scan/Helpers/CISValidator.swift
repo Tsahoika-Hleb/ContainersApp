@@ -1,12 +1,12 @@
 import Foundation
 
 final class CISValidator {
-
+    
     enum NumberPart {
         case code
         case digits
     }
-
+    
     func handleResults(mainNumber: ProcessedImageResult?, partialNumber: ProcessedImageResult?) -> (UIImage, String, Bool)? {
         if let mainPair = mainNumber, let mainResult = getValidatedNumber(serialNumber: mainPair.1), mainResult.1 {
             return (mainPair.0, mainResult.0, mainResult.1)
@@ -20,44 +20,44 @@ final class CISValidator {
             return nil
         }
     }
-
+    
     private func getValidatedNumber(serialNumber: String, isPartial: Bool = false) -> (String, Bool)? {
         var tempString = serialNumber.filter({ $0.isLetter || $0.isNumber && !$0.isWhitespace })
         guard tempString.count >= 10 else { return nil }
-
+        
         let hasTypeCode = tempString.count >= 15
-
+        
         let (isValid, codePart, digitsPart, checkDigitChar) = validateSerialNumberParts(tempString: tempString)
         guard isValid else { return nil }
-
+        
         let typeCode = processTypeCode(tempString: tempString, hasTypeCode: hasTypeCode)
         tempString = codePart + digitsPart + checkDigitChar
-
+        
         if tempString.count == 10, let checkDigit = countCheckDigit(serialNumber: tempString), isPartial {
             tempString += String(checkDigit)
         }
-
+        
         guard tempString.count > 10 else { return nil }
         let isCheckDigitValid = validateCheckDigit(serialNumber: tempString)
         tempString += typeCode
-
+        
         return (tempString, isCheckDigitValid)
     }
-
+    
     private func validateSerialNumberParts(tempString: String) -> (Bool, String, String, String) {
         let hasCheckDigit = tempString.count != 10
         let codePart = processCodePart(tempString: tempString)
         let digitsPart = processDigitsPart(tempString: tempString)
         let checkDigitChar = hasCheckDigit ? processCheckDigit(tempString: tempString) : ""
-
+        
         let isValid = codePart.validate(idCase: .letters)
         && digitsPart.validate(idCase: .digits)
         && (checkDigitChar.validate(idCase: .digits)
             || !hasCheckDigit)
-
+        
         return (isValid, codePart, digitsPart, checkDigitChar)
     }
-
+    
     private func processCodePart(tempString: String) -> String {
         var codePart = String(tempString.prefix(4))
         codePart = charReplace(inputString: codePart, part: .code)
@@ -65,26 +65,28 @@ final class CISValidator {
             codePart.removeLast()
             codePart += "U"
         }
-
+        
         return codePart
     }
-
+    
     private func processDigitsPart(tempString: String) -> String {
         let digitsPart = String(tempString.dropFirst(4).prefix(6))
         return charReplace(inputString: digitsPart, part: .digits)
     }
-
+    
     private func processCheckDigit(tempString: String) -> String {
         let checkDigitChar = String(tempString.dropFirst(10).first ?? Character(""))
         return charReplace(inputString: checkDigitChar, part: .digits)
     }
-
+    
     private func processTypeCode(tempString: String, hasTypeCode: Bool) -> String {
         guard hasTypeCode else { return "" }
-        let typeCode = String(tempString.dropFirst(11).prefix(2)) + "G1"
+        let startIndex = tempString.index(tempString.startIndex, offsetBy: 11)
+        let endIndex = tempString.index(tempString.startIndex, offsetBy: 12)
+        let typeCode = String(tempString[startIndex...endIndex]) + "G1"
         return typeCode
     }
-
+    
     private func charReplace(inputString: String, part: NumberPart) -> String {
         let lettersToDigits = ["O": "0", "S":"5", "Z": "2", "I": "1", "G": "6"]
         let digitsToLetters = Dictionary(uniqueKeysWithValues: lettersToDigits.map { ($1, $0) })
@@ -93,14 +95,14 @@ final class CISValidator {
             let value = (part == .code) ? digitsToLetters[String(char)] : lettersToDigits[String(char)]
             outputString += value ?? String(char)
         }
-
+        
         return outputString
     }
-
+    
     private func validateCheckDigit(serialNumber: String) -> Bool {
         var containerNumberForValidation = serialNumber
         let checkDigit = Int(String(containerNumberForValidation.removeLast()))
-
+        
         return checkDigit == countCheckDigit(serialNumber: containerNumberForValidation)
     }
     private func countCheckDigit(serialNumber: String) -> Int? {
@@ -147,10 +149,10 @@ final class CISValidator {
             }
             sum += digit * weights[i]
         }
-
+        
         var remainder = sum % 11
         remainder = remainder == 10 ? 0 : remainder
-
+        
         return remainder
     }
 }

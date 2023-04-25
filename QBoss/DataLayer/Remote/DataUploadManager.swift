@@ -20,7 +20,6 @@ class DataUploadManager: DataUploadManagerProtocol {
         
         let encoder = JSONEncoder()
         guard let jsonData = try? encoder.encode(model) else {
-            print("Ошибка при кодировании модели в JSON") // TODO: Add handling
             return
         }
         
@@ -29,12 +28,11 @@ class DataUploadManager: DataUploadManagerProtocol {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if let error {
-                print("ERRROORR: \(error.localizedDescription)")
+                print("\(error.localizedDescription)")
                 completionHandler(false)
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                print("Код ответа: \(httpResponse.statusCode)")
                 if httpResponse.statusCode == 200 {
                     completionHandler(true)
                 }
@@ -42,7 +40,7 @@ class DataUploadManager: DataUploadManagerProtocol {
             
             if let data = data {
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("Ответ сервера: \(responseString)")
+                    print("Server answer: \(responseString)")
                 }
             }
             

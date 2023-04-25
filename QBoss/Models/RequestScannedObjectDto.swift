@@ -35,7 +35,7 @@ struct CISParts {
         checkCodeStr = String(serialNumber[serialNumber.index(serialNumber.startIndex, offsetBy: 10)])
         
         if serialNumber.count > 11 {
-            let range = 11...15
+            let range = 12...15
             sizeCodeStr = String(serialNumber.prefix(range.upperBound).suffix(range.count))
         } else {
             sizeCodeStr = ""
