@@ -45,6 +45,7 @@ final class ContainersListViewController: UIViewController {
         UINavigationBar.appearance().barTintColor = .white
         let navItem = UINavigationItem(title: S.Screens.ContainerList.navigationTitle)
         let busketButton = UIBarButtonItem(image: UIImage.trashFill, style: .plain, target: self, action: #selector(deleteAllContainersButton))
+        busketButton.tintColor = .black
         navItem.rightBarButtonItem = busketButton
         bar.setItems([navItem], animated: false)
         return bar

@@ -14,9 +14,6 @@ final class ScanViewController: UIViewController {
     
     // MARK: - Properties
     var presenter: ScanPresenterProtocol?
-    private lazy var cameraFeedManager = CameraFeedManager(previewView: previewView) // TODO: Как привильно перенесть в presenter?
-    private let inferenceQueue = DispatchQueue(label: "inferencequeue")
-    private var isInferenceQueueBusy = false
     
     private lazy var overlayView: OverlayView = {
         let view = OverlayView()
@@ -60,13 +57,12 @@ final class ScanViewController: UIViewController {
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        cameraFeedManager.delegate = self
+        presenter?.setUp(previewView: previewView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        cameraFeedManager.checkCameraConfigurationAndStartSession()
-        
+        presenter?.checkCameraConfiguration()
     }
     
     override func viewWillLayoutSubviews() {
@@ -77,7 +73,7 @@ final class ScanViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        cameraFeedManager.stopSession()
+        presenter?.stopSession()
     }
     
     // MARK: - Private Methods
@@ -126,60 +122,6 @@ final class ScanViewController: UIViewController {
     }
 }
 
-
-// MARK: CameraFeedManagerDelegate Methods
-extension ScanViewController: CameraFeedManagerDelegate {
-    
-    func didOutput(pixelBuffer: CVPixelBuffer) {
-        guard !self.isInferenceQueueBusy else { return }
-        
-        inferenceQueue.async {
-            self.isInferenceQueueBusy = true
-            self.presenter?.detect(pixelBuffer: pixelBuffer)
-            self.isInferenceQueueBusy = false
-        }
-    }
-    
-    func presentCameraPermissionsDeniedAlert() {
-        let alertController = UIAlertController(
-            title: S.Screens.Scan.CameraPermissionDenied.allertTitle,
-            message: S.Screens.Scan.CameraPermissionDenied.allertMessage,
-            preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction.cancelAction
-        let settingsAction = UIAlertAction.settingAction
-        
-        alertController.addAction(cancelAction)
-        alertController.addAction(settingsAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    func presentVideoConfigurationErrorAlert() {
-        let alertController = UIAlertController(
-            title: S.Screens.Scan.PresentVideoError.allertTitle,
-            message: S.Screens.Scan.PresentVideoError.allertMessage,
-            preferredStyle: .alert)
-        let okAction = UIAlertAction.okAction
-        alertController.addAction(okAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    func sessionRunTimeErrorOccurred() {
-        
-    }
-    
-    func sessionWasInterrupted(canResumeManually resumeManually: Bool) {
-        
-    }
-    
-    func sessionInterruptionEnded() {
-        
-    }
-}
-
-
 // MARK: - ScanViewControllerDelegate
 extension ScanViewController: ScanViewControllerDelegate {
     
@@ -196,7 +138,6 @@ extension ScanViewController: ScanViewControllerDelegate {
     func cleanOverlays() {
         overlayView.objectOverlays = []
         overlayView.setNeedsDisplay()
-        //lastFrameImageView.image = nil
     }
     
     func drawOverlays(objectOverlays: [ObjectOverlay]) {

@@ -24,6 +24,7 @@ final class CISValidator {
     }
     
     private func getValidatedNumber(serialNumber: String) -> (String, Bool)? {
+        
         var isValid = true
         var tempString = serialNumber
         tempString = tempString.filter({ $0.isLetter || $0.isNumber && !$0.isWhitespace })

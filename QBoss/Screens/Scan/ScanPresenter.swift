@@ -2,6 +2,7 @@ import Foundation
 import TensorFlowLiteTaskVision
 
 final class ScanPresenter: ScanPresenterProtocol {
+        
     // MARK: - Properties
     
     var router: ScanRouterSpec?
@@ -17,6 +18,10 @@ final class ScanPresenter: ScanPresenterProtocol {
     private lazy var detectionProcessorHelper: DetectionProcessorHelper = .init()
     private let locationManager = LocationManager()
     
+    private var cameraFeedManager: CameraFeedManager? 
+    private let inferenceQueue = DispatchQueue(label: "inferencequeue")
+    private var isInferenceQueueBusy = false
+    
     // MARK: - Initialization
     init(delegate: ScanViewControllerDelegate, router: ScanRouterSpec,
          tfManager: TFManager, dataUpdateHelper: DataUpdateHelper) {
@@ -28,12 +33,25 @@ final class ScanPresenter: ScanPresenterProtocol {
     }
     
     // MARK: - Methods
+    func setUp(previewView: PreviewView) {
+        cameraFeedManager = CameraFeedManager(previewView: previewView)
+        cameraFeedManager?.delegate = self
+    }
+    
     func performContainersListScreen() {
         router?.showContainersList(dataUpdateHelper: dataUpdateHelper)
     }
     
     func detect(pixelBuffer: CVPixelBuffer) {
         tfManager?.detect(pixelBuffer: pixelBuffer)
+    }
+    
+    func stopSession() {
+        cameraFeedManager?.stopSession()
+    }
+    
+    func checkCameraConfiguration() {
+        cameraFeedManager?.checkCameraConfigurationAndStartSession()
     }
 }
 
@@ -153,5 +171,45 @@ extension ScanPresenter {
             sizeCodeStr: sizeCode)
         
         self.dataUpdateHelper.saveContainer(container)
+    }
+}
+
+// MARK: CameraFeedManagerDelegate Methods
+extension ScanPresenter: CameraFeedManagerDelegate {
+    
+    func didOutput(pixelBuffer: CVPixelBuffer) {
+        guard !self.isInferenceQueueBusy else { return }
+        
+        inferenceQueue.async {
+            self.isInferenceQueueBusy = true
+            self.detect(pixelBuffer: pixelBuffer)
+            self.isInferenceQueueBusy = false
+        }
+    }
+    
+    func presentCameraPermissionsDeniedAlert() {
+        let alertController = UIAlertController(
+            title: S.Screens.Scan.CameraPermissionDenied.allertTitle,
+            message: S.Screens.Scan.CameraPermissionDenied.allertMessage,
+            preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction.cancelAction
+        let settingsAction = UIAlertAction.settingAction
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(settingsAction)
+        
+        delegate?.present(alertController, animated: true, completion: nil)
+    }
+    
+    func presentVideoConfigurationErrorAlert() {
+        let alertController = UIAlertController(
+            title: S.Screens.Scan.PresentVideoError.allertTitle,
+            message: S.Screens.Scan.PresentVideoError.allertMessage,
+            preferredStyle: .alert)
+        let okAction = UIAlertAction.okAction
+        alertController.addAction(okAction)
+        
+        delegate?.present(alertController, animated: true, completion: nil)
     }
 }
