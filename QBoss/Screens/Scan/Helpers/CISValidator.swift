@@ -24,7 +24,6 @@ final class CISValidator {
     }
     
     private func getValidatedNumber(serialNumber: String) -> (String, Bool)? {
-        
         var isValid = true
         var tempString = serialNumber
         tempString = tempString.filter({ $0.isLetter || $0.isNumber && !$0.isWhitespace })
@@ -32,59 +31,69 @@ final class CISValidator {
         let hasCheckDigit = !(tempString.count == 10)
         let hasTypeCode = (tempString.count >= 15)
         
-        // Proccesing owner code and group code
-        var codePart = String(tempString[tempString.startIndex...tempString.index(tempString.startIndex, offsetBy: 3)])
-        codePart = charReplace(inputString: codePart, part: .code)
-        guard codePart.validate(idCase: .letters) else {
-            return nil
+        let codePart = processCodePart(tempString: tempString)
+        guard codePart.validate(idCase: .letters) else { return nil }
+        
+        let digitsPart = processDigitsPart(tempString: tempString)
+        guard digitsPart.validate(idCase: .digits) else { return nil }
+        
+        var checkDigitChar = ""
+        if hasCheckDigit {
+            checkDigitChar = processCheckDigit(tempString: tempString)
+            guard checkDigitChar.validate(idCase: .digits) else { return nil }
         }
         
-        // Group code one more time
+        let typeCode = processTypeCode(tempString: tempString, hasTypeCode: hasTypeCode)
+        
+        tempString = codePart + digitsPart + checkDigitChar
+        
+        if tempString.count == 10, let checkDigit = countCheckDigit(serialNumber: tempString) {
+            tempString += String(checkDigit)
+        }
+        isValid = validateCheckDigit(serialNumber: tempString) && hasCheckDigit
+        
+        tempString += typeCode
+        
+        return (tempString, isValid)
+    }
+
+    private func processCodePart(tempString: String) -> String {
+        var codePart = String(tempString[tempString.startIndex...tempString.index(tempString.startIndex, offsetBy: 3)])
+        codePart = charReplace(inputString: codePart, part: .code)
+        
         if let last = codePart.last, !["U", "J", "Z"].contains(last) {
             codePart.removeLast()
             codePart += "U"
         }
         
-        // Proccesing registration number
+        return codePart
+    }
+
+    private func processDigitsPart(tempString: String) -> String {
         let startIndex = tempString.index(tempString.startIndex, offsetBy: 4)
         let endIndex = tempString.index(tempString.startIndex, offsetBy: 9)
         var digitsPart = String(tempString[startIndex...endIndex])
         digitsPart = charReplace(inputString: digitsPart, part: .digits)
-        guard digitsPart.validate(idCase: .digits) else {
-            return nil
-        }
         
-        // Proccesing check digit
-        var checkDigitChar = ""
-        if hasCheckDigit {
-            let checkDigitIndex = tempString.index(tempString.startIndex, offsetBy: 10)
-            checkDigitChar = String(tempString[checkDigitIndex])
-            checkDigitChar = charReplace(inputString: checkDigitChar, part: .digits)
-            guard checkDigitChar.validate(idCase: .digits) else {
-                return nil
-            }
-        }
+        return digitsPart
+    }
+
+    private func processCheckDigit(tempString: String) -> String {
+        let checkDigitIndex = tempString.index(tempString.startIndex, offsetBy: 10)
+        var checkDigitChar = String(tempString[checkDigitIndex])
+        checkDigitChar = charReplace(inputString: checkDigitChar, part: .digits)
         
-        // Proccesing typeCode
-        var typeCode = ""
-        if hasTypeCode {
-            let startIndex = tempString.index(tempString.startIndex, offsetBy: 11)
-            let endIndex = tempString.index(tempString.startIndex, offsetBy: 12)
-            typeCode = String(tempString[startIndex...endIndex])
-            typeCode.append("G1")
-        }
+        return checkDigitChar
+    }
+
+    private func processTypeCode(tempString: String, hasTypeCode: Bool) -> String {
+        if !hasTypeCode { return "" }
+        let startIndex = tempString.index(tempString.startIndex, offsetBy: 11)
+        let endIndex = tempString.index(tempString.startIndex, offsetBy: 12)
+        var typeCode = String(tempString[startIndex...endIndex])
+        typeCode.append("G1")
         
-        tempString = codePart + digitsPart + checkDigitChar
-        
-        // Calculate and add check if it is not recognized
-        if tempString.count == 10, let checkDigit = countCheckDigit(serialNumber: tempString) {
-            tempString += String(checkDigit)
-        }
-        isValid = validateCheckDigit(serialNumber: tempString)
-        
-        tempString += (hasTypeCode ? typeCode : "")
-        
-        return (tempString, isValid)
+        return typeCode
     }
     
     private func charReplace(inputString: String, part: NumberPart) -> String {

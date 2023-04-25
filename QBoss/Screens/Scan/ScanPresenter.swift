@@ -174,7 +174,8 @@ extension ScanPresenter {
     }
 }
 
-// MARK: CameraFeedManagerDelegate Methods
+
+// MARK: - CameraFeedManagerDelegate Methods
 extension ScanPresenter: CameraFeedManagerDelegate {
     
     func didOutput(pixelBuffer: CVPixelBuffer) {
